@@ -12,6 +12,8 @@ import {
 
 const type = process.env.SERIES_TYPE;
 
+console.log(type);
+
 export async function getPopular(params) {
   const popular = await getPopularCommon(type, params);
   return showsMapper(popular);

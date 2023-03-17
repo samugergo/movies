@@ -10,7 +10,9 @@ import {
   searchCommon,
 } from '../services/commonService.js'; 
 
-const type = process.env.MOVIE_TYPE;
+const type = process.env.MOVIES_TYPE;
+
+console.log(type);
 
 export async function getPopular(params) {
   const popular = await getPopularCommon(type, params);
