@@ -10,19 +10,21 @@ import {
   searchCommon,
 } from '../services/commonService.js'; 
 
+const type = process.env.SERIES_TYPE;
+
 export async function getPopular(params) {
-  const popular = await getPopularCommon('tv', params);
+  const popular = await getPopularCommon(type, params);
   return showsMapper(popular);
 }
 
 export async function getTopRated(params) {
-  const topRated = await getTopRatedCommon('tv', params);
+  const topRated = await getTopRatedCommon(type, params);
   return showsMapper(topRated);
 }
 
 export async function getDetails(params) {
-  const details = await getDetailsCommon('tv', params);
-  const providers = await getProvidersCommon('tv', params);
+  const details = await getDetailsCommon(type, params);
+  const providers = await getProvidersCommon(type, params);
 
   const mappedProviders = providerMapper(providers);
 
@@ -30,16 +32,16 @@ export async function getDetails(params) {
 }
 
 export async function getRecomendations(params) {
-  const recommendations = await getRecomendationsCommon('tv', params);
+  const recommendations = await getRecomendationsCommon(type, params);
   return showsMapper(recommendations);
 }
 
 export async function getCast(params) {
-  const cast = await getCastCommon('tv', params);
+  const cast = await getCastCommon(type, params);
   return castMapper(cast);
 }
 
 export async function searchSeries(params) {
-  const search = await searchCommon('tv', params);
+  const search = await searchCommon(type, params);
   return search.msg ? search : showsMapper(search);
 }
