@@ -1,6 +1,7 @@
 import axios from '../plugins/axios.js';
 import dotenv from 'dotenv';
-import { castMapper, movieMapper, moviesMapper, providerMapper } from '../mappers/movieMapper.js';
+import { movieMapper, moviesMapper } from '../mappers/movieMapper.js';
+import { castMapper, providerMapper } from '../mappers/commonMapper.js';
 
 dotenv.config();
 
@@ -47,7 +48,7 @@ async function getProviders(id, region) {
 }
 
 export async function getRecomendations({id, lang = 'hu-HU', page = 1}) {
-const popular = await axios.get(
+  const popular = await axios.get(
     `/movie/${id}/recommendations?` + 
     `api_key=${process.env.API_KEY}&` +
     `language=${lang}&` +
@@ -73,7 +74,7 @@ export async function searchMovie({query, lang = 'hu-HU', page = 1}) {
       `/search/movie?` +
       `api_key=${process.env.API_KEY}&` +
       `page=${page}&` +
-      `lang=${lang}&` +
+      `language=${lang}&` +
       `query=${query}`
     );
     return moviesMapper(search.data);
