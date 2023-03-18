@@ -1,4 +1,4 @@
-class MovieModel {
+class DisplayModel {
   final int id;
   final String title;
   final String release;
@@ -6,7 +6,7 @@ class MovieModel {
   final String image;
   final String cover;
 
-  MovieModel({
+  DisplayModel({
     required this.id,
     required this.title,
     required this.release,
@@ -15,14 +15,19 @@ class MovieModel {
     required this.cover
   });
 
-  factory MovieModel.fromJson(Map<String, dynamic> json) {
-    return MovieModel(
+  factory DisplayModel.fromJson(Map<String, dynamic> json) {
+    return DisplayModel(
       id: json['id'], 
       title: json['title'], 
       release: json['release'], 
       percent: json['percent'], 
-      image: json['image'], 
-      cover: json['cover']
+      image: json['image'] ?? '', 
+      cover: json['cover'] ?? '',
     );
+  }
+
+  @override
+  String toString() {
+    return '$id $title $release';
   }
 }
