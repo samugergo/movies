@@ -10,9 +10,10 @@ class FilterSheet extends StatelessWidget {
     final appState = context.watch<MainAppState>();
     const items = OrderEnum.values;
 
-    onClick(order) {
+    onClick(order, context) {
       appState.setOrder(order);
       appState.loadByOrder(order);
+      Navigator.pop(context);
     }
 
     return SizedBox(
@@ -43,7 +44,7 @@ class FilterSheet extends StatelessWidget {
                     ),
                     activeColor: Colors.white,
                     groupValue: appState.order, 
-                    onChanged: onClick
+                    onChanged: (order) => onClick(order, context)
                   ),
                 ),
               ],
