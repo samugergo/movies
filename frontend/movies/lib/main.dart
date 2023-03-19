@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:movies/pages/container.dart';
 import 'package:movies/services/service.dart';
 
@@ -25,12 +26,12 @@ class _MainAppState extends State<MainApp> {
   fetch(type) {
     if (type == 0) {
       if(movies.isEmpty) {
-        fetchMovies(moviePage, updateMovies);
+        fetchMovies(moviePage, order, updateMovies);
         moviePage++;
       }
     } else {
       if(shows.isEmpty) {
-        fetchShows(showPage, updateShows);
+        fetchShows(showPage, order, updateShows);
         showPage++;
       }
     }
@@ -38,12 +39,29 @@ class _MainAppState extends State<MainApp> {
 
   fetchMore(type) {
     if(type == 0) {
-      fetchMovies(moviePage, updateMovies);
+      fetchMovies(moviePage, order, updateMovies);
       moviePage++;
     } else {
-      fetchShows(showPage, updateShows);
+      fetchShows(showPage, order, updateShows);
       showPage++;
     }
+  }
+
+  onOrderChange(type, order) {
+    moviePage = 0;
+    fetchMovies(moviePage, order, (list) => {
+      setState(() {
+        movies = chunkList(list);
+      })
+    });
+    moviePage++;
+    showPage = 0;
+    fetchShows(showPage, order, (list) => {
+      setState(() {
+        shows = chunkList(list);
+      })
+    });
+    showPage++;
   }
 
   chunkList(list) {
@@ -75,6 +93,9 @@ class _MainAppState extends State<MainApp> {
   }
   updateOrder(order) {
     setState(() {
+      if (order != this.order) {
+        onOrderChange(type, order);
+      }
       this.order = order;
     });
   }
@@ -82,12 +103,15 @@ class _MainAppState extends State<MainApp> {
   @override
   void initState() {
     super.initState();
-    fetchMovies(moviePage, updateMovies);
+    fetchMovies(moviePage, order, updateMovies);
     moviePage++;
   }
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Color(0xff292A37),
+    ));
     return MaterialApp(
       theme: ThemeData(
         useMaterial3: true,
@@ -102,7 +126,7 @@ class _MainAppState extends State<MainApp> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            stops: [0, 1],
+            stops: [0.1, 1],
             colors: [Color(0xff292A37), Color(0xff0F1018)],
           ),
         ),
