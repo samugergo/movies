@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:movies/widgets/button_switch.dart';
+import 'package:movies/widgets/filter_sheet.dart';
 
 import '../widgets/image.dart';
 
 class XContainer extends StatefulWidget {
 
   final int type;
+  final int order;
   final Function updateType;
+  final Function updateOrder;
   final Function loadMore;
   final List<dynamic> list;
 
   XContainer({
     super.key,
     required this.type,
+    required this.order,
+    required this.updateOrder,
     required this.updateType,
     required this.loadMore,
     required this.list,
@@ -25,20 +30,34 @@ class XContainer extends StatefulWidget {
 
 class _ContainerState extends State<XContainer> {
   
-  final List items = [
+  final List types = [
     'Filmek', 'Sorozatok'
   ];
+
+  final List orders = [
+    'Legnépszereűbb', 'Legjobbra értékelt'
+  ];
+
+  show() {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (context) => FilterSheet(
+        order: widget.order,
+        updateOrder: widget.updateOrder,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10),
+          padding: const EdgeInsets.only(left: 14.0, right: 14, top: 10),
           child: Column(
             children: [
               Text(
-                items[widget.type].toUpperCase(),
+                types[widget.type].toUpperCase(),
                 style: TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
@@ -47,7 +66,7 @@ class _ContainerState extends State<XContainer> {
               ),
               SizedBox(height: 10),
               ButtonSwitch(
-                items: items,
+                items: types,
                 active: widget.type,
                 onPressed: widget.updateType,
               ),
@@ -56,16 +75,24 @@ class _ContainerState extends State<XContainer> {
                 child: Row(
                   children: [
                     Icon(
-                      FontAwesomeIcons.arrowDownShortWide,
+                      FontAwesomeIcons.arrowDownWideShort,
                       color: Colors.white,
                       size: 14,
                     ),
                     SizedBox(width: 10),
                     Text(
-                      'Legnépszerűbbek',
+                      orders[widget.order],
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 14,
+                      ),
+                    ),
+                    Spacer(),
+                    IconButton(
+                      onPressed: () => show(), 
+                      icon: Icon(
+                        Icons.filter_list,
+                        color: Colors.white,
                       ),
                     ),
                   ],
@@ -86,7 +113,7 @@ class _ContainerState extends State<XContainer> {
           ]
         )).toList(),
         Padding(
-          padding: const EdgeInsets.all(14.0),
+          padding: const EdgeInsets.only(left: 14, right: 14, bottom: 14),
           child: ElevatedButton.icon(
             onPressed: () => widget.loadMore(widget.type), 
             style: ButtonStyle(

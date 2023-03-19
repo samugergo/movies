@@ -18,6 +18,8 @@ class _MainAppState extends State<MainApp> {
   var shows = [];
   var moviePage = 0;
   var showPage = 0;
+  // filters
+  var order = 0;
   var type = 0;
 
   fetch(type) {
@@ -58,19 +60,22 @@ class _MainAppState extends State<MainApp> {
       movies.addAll(chunkList(list));
     });
   }
-
   updateShows(list) {
     setState(() {
       shows.addAll(chunkList(list));
     });
   }
-
   updateType(type) {
     setState(() {
       if (type != this.type) {
         fetch(type);
       }
       this.type = type;
+    });
+  }
+  updateOrder(order) {
+    setState(() {
+      this.order = order;
     });
   }
 
@@ -86,7 +91,11 @@ class _MainAppState extends State<MainApp> {
     return MaterialApp(
       theme: ThemeData(
         useMaterial3: true,
-        scaffoldBackgroundColor: Colors.transparent
+        scaffoldBackgroundColor: Colors.transparent,
+        bottomSheetTheme: BottomSheetThemeData(
+          backgroundColor: Color(0xff2B2B38),
+          modalElevation: 0
+        )
       ),
       home: Container(
         decoration: BoxDecoration(
@@ -100,6 +109,8 @@ class _MainAppState extends State<MainApp> {
         child: Scaffold(
           body: XContainer(
             type: type,
+            order: order,
+            updateOrder: updateOrder,
             updateType: updateType,
             loadMore: fetchMore,
             list: type == 0 ? movies : shows,
