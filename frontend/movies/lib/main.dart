@@ -24,11 +24,23 @@ class _MainAppState extends State<MainApp> {
     if (type == 0) {
       if(movies.isEmpty) {
         fetchMovies(moviePage, updateMovies);
+        moviePage++;
       }
     } else {
       if(shows.isEmpty) {
         fetchShows(showPage, updateShows);
+        showPage++;
       }
+    }
+  }
+
+  fetchMore(type) {
+    if(type == 0) {
+      fetchMovies(moviePage, updateMovies);
+      moviePage++;
+    } else {
+      fetchShows(showPage, updateShows);
+      showPage++;
     }
   }
 
@@ -66,6 +78,7 @@ class _MainAppState extends State<MainApp> {
   void initState() {
     super.initState();
     fetchMovies(moviePage, updateMovies);
+    moviePage++;
   }
 
   @override
@@ -81,13 +94,14 @@ class _MainAppState extends State<MainApp> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             stops: [0, 1],
-            colors: [Color(0xff292A37),Color(0xff0F1018)],
+            colors: [Color(0xff292A37), Color(0xff0F1018)],
           ),
         ),
         child: Scaffold(
           body: XContainer(
             type: type,
             updateType: updateType,
+            loadMore: fetchMore,
             list: type == 0 ? movies : shows,
           ),
         ),

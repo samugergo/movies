@@ -23,16 +23,16 @@ class _XImageState extends State<XImage> {
         borderRadius: BorderRadius.circular(10.0),
         child: SizedBox(
           width: 180,
-          height: 260,
+          height: 270,
           child: widget.url != '' 
           ? Image.network(
             widget.url,
-            height: 260,
+            height: 270,
             fit: BoxFit.fill,
           )
           : Image.asset(
             'assets/images/default.png',
-            height: 260,
+            height: 270,
             fit: BoxFit.fill,
           )
         )
