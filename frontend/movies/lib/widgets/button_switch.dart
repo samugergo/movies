@@ -1,27 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:movies/enums/type_enum.dart';
+import 'package:movies/main.dart';
+import 'package:provider/provider.dart';
 
 var active = Color(0xff343643);
 var background = Color(0xff2B2B38); 
 
-class ButtonSwitch extends StatefulWidget  {
+class ButtonSwitch extends StatelessWidget  {
 
-  final List items;
-  final int active;
-  final Function onPressed;
-
-  ButtonSwitch({
-    required this.items,
-    required this.active,
-    required this.onPressed
-  });
-
-  @override
-  State<ButtonSwitch> createState() => _ButtonSwitchState();
-}
-
-class _ButtonSwitchState extends State<ButtonSwitch> {
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<MainAppState>();
+    const items = TypeEnum.values;
+
+    onClick(type) {
+      appState.setType(type);
+      if (appState.isEmptyByType(type)) {
+        appState.loadByType(type);
+      }
+    }
+
     return Card(
       color: background,
       shape: RoundedRectangleBorder(
@@ -32,18 +30,18 @@ class _ButtonSwitchState extends State<ButtonSwitch> {
         padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
         child: Row(
           children: [
-            ...widget.items.asMap().entries.map((entry) => 
+            ...items.map((item) => 
               Expanded(
-                child: widget.active == entry.key 
+                child: appState.type == item 
                 ? _ActiveButton(
-                  onPressed: widget.onPressed, 
-                  text: entry.value,
-                  value: entry.key,
+                  onPressed: onClick, 
+                  text: item.title,
+                  value: item,
                 )
                 : _InactiveButton(
-                  onPressed: widget.onPressed, 
-                  text: entry.value,
-                  value: entry.key,
+                  onPressed: onClick, 
+                  text: item.title,
+                  value: item,
                 )
               ),
             ).toList(),
@@ -58,7 +56,7 @@ class _ActiveButton extends StatelessWidget  {
 
   final Function onPressed;
   final String text;
-  final int value;
+  final TypeEnum value;
 
   _ActiveButton({
     required this.onPressed,
@@ -93,7 +91,7 @@ class _InactiveButton extends StatelessWidget  {
 
   final Function onPressed;
   final String text;
-  final int value;
+  final TypeEnum value;
 
   _InactiveButton({
     required this.onPressed,

@@ -1,55 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:movies/enums/type_enum.dart';
+import 'package:movies/main.dart';
 import 'package:movies/widgets/button_switch.dart';
 import 'package:movies/widgets/filter_sheet.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/image.dart';
 
-class XContainer extends StatefulWidget {
-
-  final int type;
-  final int order;
-  final Function updateType;
-  final Function updateOrder;
-  final Function loadMore;
-  final List<dynamic> list;
-
-  XContainer({
-    super.key,
-    required this.type,
-    required this.order,
-    required this.updateOrder,
-    required this.updateType,
-    required this.loadMore,
-    required this.list,
-  });
-
-  @override
-  State<XContainer> createState() => _ContainerState();
-}
-
-class _ContainerState extends State<XContainer> {
-  
-  final List types = [
-    'Filmek', 'Sorozatok'
-  ];
-
-  final List orders = [
-    'Legnépszereűbb', 'Legjobbra értékelt'
-  ];
-
-  show() {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (context) => FilterSheet(
-        order: widget.order,
-        updateOrder: widget.updateOrder,
-      ),
-    );
-  }
+class XContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<MainAppState>();
+
+    List list = appState.type == TypeEnum.movie ? appState.movies : appState.shows;
+
+    show() {
+      showModalBottomSheet<void>(
+        context: context,
+        builder: (context) => FilterSheet(),
+      );
+    }
+
     return ListView(
       children: [
         Padding(
@@ -57,7 +30,7 @@ class _ContainerState extends State<XContainer> {
           child: Column(
             children: [
               Text(
-                types[widget.type].toUpperCase(),
+                appState.type.title.toUpperCase(),
                 style: TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
@@ -65,11 +38,7 @@ class _ContainerState extends State<XContainer> {
                 ),
               ),
               SizedBox(height: 10),
-              ButtonSwitch(
-                items: types,
-                active: widget.type,
-                onPressed: widget.updateType,
-              ),
+              ButtonSwitch(),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, top: 8.0),
                 child: Row(
@@ -81,7 +50,7 @@ class _ContainerState extends State<XContainer> {
                     ),
                     SizedBox(width: 10),
                     Text(
-                      orders[widget.order],
+                      appState.order.title,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 14,
@@ -101,7 +70,7 @@ class _ContainerState extends State<XContainer> {
             ],
           ),
         ),
-        ...widget.list.map((pair) => Row(
+        ...list.map((pair) => Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             pair[0] != null 
@@ -115,7 +84,7 @@ class _ContainerState extends State<XContainer> {
         Padding(
           padding: const EdgeInsets.only(left: 14, right: 14, bottom: 14),
           child: ElevatedButton.icon(
-            onPressed: () => widget.loadMore(widget.type), 
+            onPressed: appState.loadMore,
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Color(0xff343643)),
               foregroundColor: MaterialStateProperty.all(Colors.white),

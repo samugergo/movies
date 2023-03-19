@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:movies/enums/order_enum.dart';
+import 'package:movies/main.dart';
+import 'package:provider/provider.dart';
 
 class FilterSheet extends StatelessWidget {
 
-  final int order;
-  final Function updateOrder;
-
-  FilterSheet({
-    required this.order,
-    required this.updateOrder,
-  });
-
-  update(order) {
-    updateOrder(order);
-  }
-
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<MainAppState>();
+    const items = OrderEnum.values;
+
+    onClick(order) {
+      appState.setOrder(order);
+      appState.loadByOrder(order);
+    }
+
     return SizedBox(
       height: 200,
       child: Padding(
@@ -33,29 +32,19 @@ class FilterSheet extends StatelessWidget {
             SizedBox(height: 10),
             Column(
               children: [
-                RadioListTile(
-                  value: 0, 
-                  title: Text(
-                    'Legnépszerűbb',
-                    style: TextStyle(
-                      color: Colors.white,
+                ...items.map((item) => 
+                  RadioListTile(
+                    value: item, 
+                    title: Text(
+                      item.title,
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
                     ),
+                    activeColor: Colors.white,
+                    groupValue: appState.order, 
+                    onChanged: onClick
                   ),
-                  activeColor: Colors.white,
-                  groupValue: order, 
-                  onChanged: update
-                ),
-                RadioListTile(
-                  value: 1, 
-                  title: Text(
-                    'Legjobbra értékelt',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  activeColor: Colors.white,
-                  groupValue: order, 
-                  onChanged: update
                 ),
               ],
             )
