@@ -1,3 +1,5 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 chunkList(list) {
   var chunks = [];
   int chunkSize = 2;
@@ -7,4 +9,21 @@ chunkList(list) {
     }
   }
   return chunks;
+}
+
+imageLink(image) {
+  if(image != null) {
+    final imageUrl = dotenv.env['IMAGE_URL'];
+    return '$imageUrl$image';
+  }
+  return '';
+}
+
+percentFormat(number) {
+  final percent = (number * 10).round();
+  return '$percent%';
+}
+
+getFirstNotNull(List args) {
+  return args.firstWhere((element) => element != null);
 }

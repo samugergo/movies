@@ -16,6 +16,7 @@ dependencies:
   font_awesome_flutter: ^10.4.0
   http: ^0.13.5
   hidable: ^1.0.3
+  flutter_dotenv: ^5.0.2
 
 dev_dependencies:
   flutter_test:
@@ -26,3 +27,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - .env

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:movies/enums/type_enum.dart';
 import 'package:movies/main.dart';
 import 'package:movies/models/base/list_response.dart';
 import 'package:movies/services/service.dart';
@@ -19,39 +18,22 @@ class _SearchState extends State<Search> {
   int pages = 0;
   String value = "";
 
-  search(value, type) async {
+  _search(value, type) async {
     this.value = value;
     page = 0;
     total = 0;
-    ListResponse? lr;
-    switch (type) {
-      case TypeEnum.movie:
-        lr = await searchMovies(page, value);
-        break;
-      case TypeEnum.show:
-        lr = await searchShows(page, value);
-        break;
-    }
-    if(lr != null) {
-      setResults(lr.list);
-      updateTotal(lr.total);
-    }
+
+    ListResponse lr = await search(page, type, value);
+
+    setResults(lr.list);
+    updateTotal(lr.total);
   }
 
   loadMore(type) async {
-    ListResponse? lr;
-    switch (type) {
-      case TypeEnum.movie:
-        lr = await searchMovies(page, value);
-        break;
-      case TypeEnum.show:
-        lr = await searchShows(page, value);
-        break;
-    }
-    if(lr != null) {
-      updateResults(lr.list);
-      updateTotal(lr.total);
-    }
+    ListResponse lr = await search(page, type, value);
+
+    updateResults(lr.list);
+    updateTotal(lr.total);
   }
 
   setResults(list) {
@@ -96,7 +78,7 @@ class _SearchState extends State<Search> {
           title: TextField(
             textInputAction: TextInputAction.search,
             onSubmitted: (value) {
-              search(value, appState.type);
+              _search(value, appState.type);
             },
             style: TextStyle(
               color: Colors.white

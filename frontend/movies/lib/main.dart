@@ -7,9 +7,13 @@ import 'package:movies/enums/type_enum.dart';
 import 'package:movies/pages/container.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/utils/common_util.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
   Paint.enableDithering = true;
+
+  await dotenv.load(fileName: ".env");
+
   runApp(MainApp());
 }
 
@@ -18,10 +22,6 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scrollController = ScrollController();
-
-    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    //   statusBarColor: Color(0xff292A37),
-    // ));
 
     return ChangeNotifierProvider(
       create: (context) => MainAppState(),
@@ -120,19 +120,19 @@ class MainAppState extends ChangeNotifier {
   }
   // --- load fuctions ---
   loadMovies(callback) async {
-    final list = await fetchMovies(moviePage, order);
+    final list = await fetch(moviePage, type, order);
     callback(list);
   }
   loadShows(callback) async {
-    final list = await fetchShows(showPage, order);
+    final list = await fetch(showPage, type, order);
     callback(list);
   }
   loadByOrder(order) async {
     moviePage = 0;
     showPage = 0;
-    final m = await fetchMovies(moviePage, order);
+    final m = await fetch(moviePage, type, order);
     setMovies(m);
-    final s = await fetchShows(showPage, order);
+    final s = await fetch(showPage, type, order);
     setShows(s);
   }
   loadByType(type) {
