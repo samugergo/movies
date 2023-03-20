@@ -10,6 +10,12 @@ import '../widgets/image.dart';
 
 class XContainer extends StatelessWidget {
 
+  final ScrollController controller;
+
+  XContainer({
+    required this.controller,
+  });
+
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<MainAppState>();
@@ -24,6 +30,7 @@ class XContainer extends StatelessWidget {
     }
 
     return ListView(
+      controller: controller,
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 14.0, right: 14, top: 10),

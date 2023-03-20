@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hidable/hidable.dart';
+import 'package:movies/pages/search.dart';
+import 'package:movies/widgets/hidable_fab.dart';
 import 'package:provider/provider.dart'; 
 import 'package:movies/enums/order_enum.dart';
 import 'package:movies/enums/type_enum.dart';
@@ -8,6 +12,7 @@ import 'package:movies/services/service.dart';
 import 'package:movies/utils/common_util.dart';
 
 void main() {
+  Paint.enableDithering = true;
   runApp(MainApp());
 }
 
@@ -15,6 +20,8 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scrollController = ScrollController();
+
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Color(0xff292A37),
     ));
@@ -36,10 +43,16 @@ class MainApp extends StatelessWidget {
               end: Alignment.bottomCenter,
               stops: [0.1, 1],
               colors: [Color(0xff292A37), Color(0xff0F1018)],
+              tileMode: TileMode.mirror
             ),
           ),
           child: Scaffold(
-            body: XContainer(),
+            body: XContainer(
+              controller: scrollController,
+            ),
+            floatingActionButton: HidableFab(
+              controller: scrollController
+            ),
           ),
         ),
       )
