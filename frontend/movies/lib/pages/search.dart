@@ -4,6 +4,7 @@ import 'package:movies/main.dart';
 import 'package:movies/models/base/list_response.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/widgets/image.dart';
+import 'package:movies/widgets/load_button.dart';
 import 'package:provider/provider.dart';
 
 class Search extends StatefulWidget {
@@ -195,18 +196,7 @@ class _SearchState extends State<Search> {
                 )
               ),
               total != results.length
-              ? Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10, bottom: 14),
-                child: ElevatedButton.icon(
-                  onPressed: () => loadMore(appState.type),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Color(0xff343643)),
-                    foregroundColor: MaterialStateProperty.all(Colors.white),
-                  ),
-                  icon: FaIcon(FontAwesomeIcons.arrowRotateRight),
-                  label: Text('Több betöltése'),
-                ),
-              )
+              ? LoadButton(load: () => loadMore(appState.type))
               : SizedBox(),
             ],
           ),

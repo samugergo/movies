@@ -130,9 +130,9 @@ class MainAppState extends ChangeNotifier {
   loadByOrder(order) async {
     moviePage = 0;
     showPage = 0;
-    final m = await fetch(moviePage, type, order);
+    final m = await fetch(moviePage, TypeEnum.movie, order);
     setMovies(m);
-    final s = await fetch(showPage, type, order);
+    final s = await fetch(showPage, TypeEnum.show, order);
     setShows(s);
   }
   loadByType(type) {
