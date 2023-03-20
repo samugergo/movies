@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/main.dart';
+import 'package:movies/models/base/list_response.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/widgets/image.dart';
 import 'package:provider/provider.dart';
@@ -13,23 +15,49 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   List results = [];
   int page = 0;
+  int total = 0;
+  int pages = 0;
+  String value = "";
 
   search(value, type) async {
-    List list = [];
+    this.value = value;
+    page = 0;
+    total = 0;
+    ListResponse? lr;
     switch (type) {
       case TypeEnum.movie:
-        list = await searchMovies(page, value);
+        lr = await searchMovies(page, value);
         break;
       case TypeEnum.show:
-        list = await searchShows(page, value);
+        lr = await searchShows(page, value);
         break;
     }
-    setResults(list);
+    if(lr != null) {
+      setResults(lr.list);
+      updateTotal(lr.total);
+    }
+  }
+
+  loadMore(type) async {
+    ListResponse? lr;
+    switch (type) {
+      case TypeEnum.movie:
+        lr = await searchMovies(page, value);
+        break;
+      case TypeEnum.show:
+        lr = await searchShows(page, value);
+        break;
+    }
+    if(lr != null) {
+      updateResults(lr.list);
+      updateTotal(lr.total);
+    }
   }
 
   setResults(list) {
     setState(() {
       results = list;
+      page++;
     });
   }
 
@@ -37,6 +65,12 @@ class _SearchState extends State<Search> {
     setState(() {
       results.addAll(list);
       page++;
+    });
+  }
+
+  updateTotal(total) {
+    setState(() {
+      this.total = total;
     });
   }
 
@@ -98,6 +132,18 @@ class _SearchState extends State<Search> {
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: ListView(
             children: [
+              results.isNotEmpty 
+              ? Padding(
+                padding: const EdgeInsets.only(left: 10.0, top: 10),
+                child: Text(
+                  'Találatok száma: $total',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontStyle: FontStyle.italic
+                  ),
+                ),
+              )
+              : SizedBox(),
               SizedBox(height: 15),
               ...results.map((e) => 
                 Row(
@@ -165,7 +211,21 @@ class _SearchState extends State<Search> {
                     )
                   ],
                 )
+              ),
+              total != results.length
+              ? Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10, bottom: 14),
+                child: ElevatedButton.icon(
+                  onPressed: () => loadMore(appState.type),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Color(0xff343643)),
+                    foregroundColor: MaterialStateProperty.all(Colors.white),
+                  ),
+                  icon: FaIcon(FontAwesomeIcons.arrowRotateRight),
+                  label: Text('Több betöltése'),
+                ),
               )
+              : SizedBox(),
             ],
           ),
         )
