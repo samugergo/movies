@@ -8,6 +8,7 @@ export function moviesMapper(data) {
       title: m.title,
       release: m.release_date,
       percent: `${Math.round(m.vote_average * 10)}%`,
+      raw: m.vote_average,
       image: imageLink(m.poster_path),
       cover: imageLink(m.backdrop_path),
     }))
@@ -20,6 +21,7 @@ export function movieMapper(data, providers) {
     title: data.title,
     release: data.release_date,
     percent: `${Math.round(data.vote_average * 10)}%`,
+    raw: m.vote_average,
     image: imageLink(data.poster_path),
     cover: imageLink(data.backdrop_path),
     description: data.overview,

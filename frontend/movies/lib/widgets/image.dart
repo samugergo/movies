@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 
-class XImage extends StatefulWidget {
+// ignore: must_be_immutable
+class XImage extends StatelessWidget {
 
   final String url;
+  final double width;
+  final double height;
 
-  const XImage({
+  XImage({
     super.key,
     required this.url,
+    required this.width,
+    required this.height
   });
-
-  @override
-  State<XImage> createState() => _XImageState();
-}
-
-class _XImageState extends State<XImage> {
 
   @override
   Widget build(BuildContext context) {
@@ -22,17 +21,17 @@ class _XImageState extends State<XImage> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10.0),
         child: SizedBox(
-          width: 180,
-          height: 270,
-          child: widget.url != '' 
+          width: width,
+          height: height,
+          child: url != '' 
           ? Image.network(
-            widget.url,
-            height: 270,
+            url,
+            height: height,
             fit: BoxFit.fill,
           )
           : Image.asset(
             'assets/images/default.png',
-            height: 270,
+            height: height,
             fit: BoxFit.fill,
           )
         )

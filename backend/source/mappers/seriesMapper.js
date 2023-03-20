@@ -8,6 +8,7 @@ export function showsMapper(data) {
       title: m.name,
       release: m.first_air_date,
       percent: `${Math.round(m.vote_average * 10)}%`,
+      raw: Math.round(m.vote_average * 10),
       image: imageLink(m.poster_path),
       cover: imageLink(m.backdrop_path),
     }))
@@ -20,6 +21,7 @@ export function showMapper(data, providers) {
     title: data.name,
     release: data.first_air_date,
     percent: `${Math.round(data.vote_average * 10)}%`,
+    raw: Math.round(m.vote_average * 10),
     image: imageLink(data.poster_path),
     cover: imageLink(data.backdrop_path),
     description: data.overview,

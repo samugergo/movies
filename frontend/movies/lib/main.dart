@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hidable/hidable.dart';
-import 'package:movies/pages/search.dart';
 import 'package:movies/widgets/hidable_fab.dart';
+import 'package:movies/widgets/main_app_bar.dart';
 import 'package:provider/provider.dart'; 
 import 'package:movies/enums/order_enum.dart';
 import 'package:movies/enums/type_enum.dart';
@@ -22,9 +19,10 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final scrollController = ScrollController();
 
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Color(0xff292A37),
-    ));
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //   statusBarColor: Color(0xff292A37),
+    // ));
+
     return ChangeNotifierProvider(
       create: (context) => MainAppState(),
       child: MaterialApp(
@@ -47,6 +45,14 @@ class MainApp extends StatelessWidget {
             ),
           ),
           child: Scaffold(
+            appBar: AppBar(
+              title: MainAppBar(),
+              titleSpacing: 20,
+              centerTitle: true,
+              elevation: 0,
+              scrolledUnderElevation: 0,
+              backgroundColor: Color(0xff292A37),
+            ),
             body: XContainer(
               controller: scrollController,
             ),

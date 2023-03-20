@@ -33,3 +33,31 @@ fetchShows(int page, OrderEnum order) async {
     print(e);
   }
 }
+
+searchMovies(int page, String query) async {
+  try {
+    var p = page + 1;
+    var response = await http.get(Uri.parse('http://192.168.1.8:8081/movies/search?query=$query&page=$p'));
+
+    var json = jsonDecode(response.body);
+    var list = json['results'].map((r) => DisplayModel.fromJson(r)).toList();
+
+    return list;
+  } catch (e) {
+    print(e);
+  }
+}
+
+searchShows(int page, String query) async {
+  try {
+    var p = page + 1;
+    var response = await http.get(Uri.parse('http://192.168.1.8:8081/series/search?query=$query&page=$p'));
+
+    var json = jsonDecode(response.body);
+    var list = json['results'].map((r) => DisplayModel.fromJson(r)).toList();
+
+    return list;
+  } catch (e) {
+    print(e);
+  }
+}

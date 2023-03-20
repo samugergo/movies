@@ -36,15 +36,6 @@ class XContainer extends StatelessWidget {
           padding: const EdgeInsets.only(left: 14.0, right: 14, top: 10),
           child: Column(
             children: [
-              Text(
-                appState.type.title.toUpperCase(),
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white
-                ),
-              ),
-              SizedBox(height: 10),
               ButtonSwitch(),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, top: 8.0),
@@ -81,10 +72,18 @@ class XContainer extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             pair[0] != null 
-            ? XImage(url: pair[0].image)
+            ? XImage(
+              url: pair[0].image,
+              width: 180,
+              height: 270,
+            )
             : SizedBox(),
             pair[1] != null 
-            ? XImage(url: pair[1].image)
+            ? XImage(
+              url: pair[1].image,
+              width: 180,
+              height: 270,
+            )
             : SizedBox(),
           ]
         )).toList(),
