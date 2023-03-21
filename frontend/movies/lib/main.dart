@@ -4,7 +4,7 @@ import 'package:movies/widgets/main_app_bar.dart';
 import 'package:provider/provider.dart'; 
 import 'package:movies/enums/order_enum.dart';
 import 'package:movies/enums/type_enum.dart';
-import 'package:movies/pages/container.dart';
+import 'package:movies/pages/home/home_page.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';

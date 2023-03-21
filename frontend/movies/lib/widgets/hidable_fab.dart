@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hidable/hidable.dart';
-import 'package:movies/pages/search.dart';
+import 'package:movies/pages/search/search_page.dart';
 
 class HidableFab extends StatelessWidget {
 
