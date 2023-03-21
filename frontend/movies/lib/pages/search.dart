@@ -144,7 +144,6 @@ class _SearchState extends State<Search> {
                             padding: const EdgeInsets.only(left: 8.0),
                             child: Text(
                               e.title,
-                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold

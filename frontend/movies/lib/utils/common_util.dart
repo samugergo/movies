@@ -1,4 +1,5 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:intl/intl.dart';
 
 chunkList(list) {
   var chunks = [];
@@ -34,4 +35,9 @@ percentFormat(number) {
 
 getFirstNotNull(List args) {
   return args.firstWhere((element) => element != null);
+}
+
+year(String date) {
+  final DateTime dateTime = DateTime.parse(date);
+  return '${dateTime.year}';
 }
