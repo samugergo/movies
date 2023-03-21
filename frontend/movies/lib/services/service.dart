@@ -53,7 +53,6 @@ search(int page, TypeEnum type, String query) async {
     );
 
     var json = jsonDecode(response.body);
-    print(json);
     return ListResponse(
       list: json['results'].map((r) => DisplayModel.fromJson(r)).toList(),
       page: json['page'],

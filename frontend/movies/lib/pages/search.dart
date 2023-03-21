@@ -7,6 +7,7 @@ import 'package:movies/pages/show_page.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/widgets/image.dart';
 import 'package:movies/widgets/load_button.dart';
+import 'package:movies/widgets/result_card.dart';
 import 'package:provider/provider.dart';
 
 class Search extends StatefulWidget {
@@ -139,71 +140,18 @@ class _SearchState extends State<Search> {
               : SizedBox(),
               SizedBox(height: 15),
               ...results.map((e) => 
-                InkWell(
-                  onTap: () => goTo(e.id),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      XImage(
-                        url: e.image,
-                        width: 100,
-                        height: 150,
-                      ),
-                      Flexible(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: Text(
-                                e.title,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: Text(
-                                e.release,
-                                style: TextStyle(
-                                  color: Colors.white38,
-                                  fontSize: 12
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Card(
-                              elevation: 0,
-                              color: Colors.black.withAlpha(50),
-                              shape: CircleBorder(),
-                              child: Stack(
-                                children: [
-                                  CircularProgressIndicator(
-                                    value: e.raw / 10,
-                                    color: Color.lerp(Colors.red, Colors.green, e.raw / 10),
-                                    strokeWidth: 2,
-                                  ),
-                                  Positioned.fill(
-                                    child: Align(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        e.percent,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(10),
+                    onTap: () => goTo(e.id),
+                    child: ResultCard(
+                      image: e.image,
+                      title: e.title,
+                      release: e.release,
+                      percent: e.percent,
+                      raw: e.raw,
+                    ),
                   ),
                 )
               ),

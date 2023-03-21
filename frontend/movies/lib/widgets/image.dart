@@ -16,26 +16,23 @@ class XImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10.0),
-        child: SizedBox(
-          width: width,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10.0),
+      child: SizedBox(
+        width: width,
+        height: height,
+        child: url != '' 
+        ? Image.network(
+          url,
           height: height,
-          child: url != '' 
-          ? Image.network(
-            url,
-            height: height,
-            fit: BoxFit.fill,
-          )
-          : Image.asset(
-            'assets/images/default.png',
-            height: height,
-            fit: BoxFit.fill,
-          )
+          fit: BoxFit.fill,
         )
-      ),
+        : Image.asset(
+          'assets/images/default.png',
+          height: height,
+          fit: BoxFit.fill,
+        )
+      )
     );
   }
 }

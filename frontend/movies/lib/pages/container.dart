@@ -49,23 +49,31 @@ class XContainer extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             pair[0] != null 
-            ? InkWell(
-              onTap: () => goTo(pair[0].id),
-              child: XImage(
-                url: pair[0].image,
-                width: 180,
-                height: 270,
+            ? Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(10),
+                onTap: () => goTo(pair[0].id),
+                child: XImage(
+                  url: pair[0].image,
+                  width: 180,
+                  height: 270,
+                ),
               ),
             )
             : SizedBox(),
             pair[1] != null 
-            ? InkWell(
-              onTap: () => goTo(pair[1].id),
-              child: XImage(
-                url: pair[1].image,
-                width: 180,
-                height: 270,
-              )
+            ? Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(10),
+                onTap: () => goTo(pair[1].id),
+                child: XImage(
+                  url: pair[1].image,
+                  width: 180,
+                  height: 270,
+                )
+              ),
             )
             : SizedBox(),
           ]
