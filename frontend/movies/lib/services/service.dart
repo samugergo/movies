@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:movies/enums/order_enum.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/models/base/list_response.dart';
+import 'package:movies/models/detailed/movie_detailed_model.dart';
 
 import '../models/base/display_model.dart';
 
@@ -28,6 +29,20 @@ fetch(int page, TypeEnum type, OrderEnum order) async {
   }
 }
 
+fetchById(int id, TypeEnum type) async {
+  try {
+    var response = await http.get(
+      Uri.parse(
+        '$baseUrl/${type.value}/$id?$params'
+      )
+    );
+    var json = jsonDecode(response.body);
+    return MovieDetailedModel.fromJson(json);
+  } catch (e) {
+    print(e);
+  }
+}
+
 search(int page, TypeEnum type, String query) async {
   try {
     var response = await http.get(
@@ -40,24 +55,6 @@ search(int page, TypeEnum type, String query) async {
     print(json);
     return ListResponse(
       list: json['results'].map((r) => DisplayModel.fromJson(r)).toList(),
-      page: json['page'],
-      total: json['total_results'],
-      pages: json['total_pages'],
-    );
-  } catch (e) {
-    print(e);
-  }
-}
-
-fetchMovieById(id) async {
-  try {
-    var response = await http.get(Uri.parse('http://192.168.1.8:8081/movies/details/$id'));
-
-    var json = jsonDecode(response.body);
-    var list = json['results'].map((r) => DisplayModel.fromJson(r)).toList();
-
-    return ListResponse(
-      list: list,
       page: json['page'],
       total: json['total_results'],
       pages: json['total_pages'],

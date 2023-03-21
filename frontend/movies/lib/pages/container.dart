@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/main.dart';
+import 'package:movies/pages/movie_page.dart';
 import 'package:movies/widgets/button_switch.dart';
 import 'package:movies/widgets/filter_section.dart';
 import 'package:movies/widgets/load_button.dart';
@@ -38,17 +39,29 @@ class XContainer extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             pair[0] != null 
-            ? XImage(
-              url: pair[0].image,
-              width: 180,
-              height: 270,
+            ? InkWell(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MoviePage(id: pair[0].id)),
+              ),
+              child: XImage(
+                url: pair[0].image,
+                width: 180,
+                height: 270,
+              ),
             )
             : SizedBox(),
             pair[1] != null 
-            ? XImage(
-              url: pair[1].image,
-              width: 180,
-              height: 270,
+            ? InkWell(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MoviePage(id: pair[1].id)),
+              ),
+              child: XImage(
+                url: pair[1].image,
+                width: 180,
+                height: 270,
+              )
             )
             : SizedBox(),
           ]

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:movies/main.dart';
 import 'package:movies/models/base/list_response.dart';
 import 'package:movies/services/service.dart';
