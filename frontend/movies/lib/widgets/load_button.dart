@@ -25,5 +25,4 @@ class LoadButton extends StatelessWidget {
       ),
     );
   }
-
 }

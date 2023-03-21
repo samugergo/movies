@@ -1,3 +1,0 @@
-doApiRequest(url, params) {
-
-}

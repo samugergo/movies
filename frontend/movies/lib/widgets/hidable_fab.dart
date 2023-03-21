@@ -33,5 +33,4 @@ class HidableFab extends StatelessWidget {
       ),
     );
   }
-
 }
