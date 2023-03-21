@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:movies/enums/type_enum.dart';
-import 'package:movies/models/detailed/movie_detailed_model.dart';
+import 'package:movies/models/detailed/show_detailed_model.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/widgets/image.dart';
 
-class MoviePage extends StatefulWidget {
+class ShowPage extends StatefulWidget {
 
   final int id;
 
-  MoviePage({
+  ShowPage({
     super.key,
     required this.id
   });
 
   @override
-  State<MoviePage> createState() => _MoviePageState();
+  State<ShowPage> createState() => _ShowPageState();
 }
 
-class _MoviePageState extends State<MoviePage> {
-  MovieDetailedModel? movie;
+class _ShowPageState extends State<ShowPage> {
+  ShowDetailedModel? show;
 
   init() async {
-    var m = await fetchById(widget.id, TypeEnum.movie);
+    var s = await fetchById(widget.id, TypeEnum.show);
     setState(() {
-      movie = m;
+      show = s;
     });
   }
 
@@ -41,7 +41,7 @@ class _MoviePageState extends State<MoviePage> {
     ));
 
     return 
-      movie != null 
+      show != null 
       ? Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -66,7 +66,7 @@ class _MoviePageState extends State<MoviePage> {
                 },
                 blendMode: BlendMode.dstIn,
                 child: Image.network(
-                  movie!.cover,
+                  show!.cover,
                   fit: BoxFit.contain,
                 ),
               ),
@@ -78,7 +78,7 @@ class _MoviePageState extends State<MoviePage> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        XImage(url: movie!.image, width: 100, height: 150),
+                        XImage(url: show!.image, width: 100, height: 150),
                         Flexible(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,7 +86,7 @@ class _MoviePageState extends State<MoviePage> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0),
                                 child: Text(
-                                  movie!.title,
+                                  show!.title,
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold
@@ -96,7 +96,7 @@ class _MoviePageState extends State<MoviePage> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0),
                                 child: Text(
-                                  movie!.release,
+                                  show!.release,
                                   style: TextStyle(
                                     color: Colors.white38,
                                     fontSize: 12
@@ -111,15 +111,15 @@ class _MoviePageState extends State<MoviePage> {
                                 child: Stack(
                                   children: [
                                     CircularProgressIndicator(
-                                      value: movie!.raw / 10,
-                                      color: Color.lerp(Colors.red, Colors.green, movie!.raw / 10),
+                                      value: show!.raw / 10,
+                                      color: Color.lerp(Colors.red, Colors.green, show!.raw / 10),
                                       strokeWidth: 2,
                                     ),
                                     Positioned.fill(
                                       child: Align(
                                         alignment: Alignment.center,
                                         child: Text(
-                                          movie!.percent,
+                                          show!.percent,
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 12

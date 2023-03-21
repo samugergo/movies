@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:movies/enums/type_enum.dart';
 import 'package:movies/main.dart';
 import 'package:movies/models/base/list_response.dart';
+import 'package:movies/pages/movie_page.dart';
+import 'package:movies/pages/show_page.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/widgets/image.dart';
 import 'package:movies/widgets/load_button.dart';
@@ -59,6 +62,14 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<MainAppState>();
+
+    goTo(id) {
+      final Widget to = appState.type == TypeEnum.movie ? MoviePage(id: id) : ShowPage(id: id);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => to),
+      );
+    } 
 
     return Container(
       decoration: BoxDecoration(
@@ -128,69 +139,72 @@ class _SearchState extends State<Search> {
               : SizedBox(),
               SizedBox(height: 15),
               ...results.map((e) => 
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    XImage(
-                      url: e.image,
-                      width: 100,
-                      height: 150,
-                    ),
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              e.title,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              e.release,
-                              style: TextStyle(
-                                color: Colors.white38,
-                                fontSize: 12
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Card(
-                            elevation: 0,
-                            color: Colors.black.withAlpha(50),
-                            shape: CircleBorder(),
-                            child: Stack(
-                              children: [
-                                CircularProgressIndicator(
-                                  value: e.raw / 10,
-                                  color: Color.lerp(Colors.red, Colors.green, e.raw / 10),
-                                  strokeWidth: 2,
+                InkWell(
+                  onTap: () => goTo(e.id),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      XImage(
+                        url: e.image,
+                        width: 100,
+                        height: 150,
+                      ),
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                e.title,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold
                                 ),
-                                Positioned.fill(
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      e.percent,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                e.release,
+                                style: TextStyle(
+                                  color: Colors.white38,
+                                  fontSize: 12
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Card(
+                              elevation: 0,
+                              color: Colors.black.withAlpha(50),
+                              shape: CircleBorder(),
+                              child: Stack(
+                                children: [
+                                  CircularProgressIndicator(
+                                    value: e.raw / 10,
+                                    color: Color.lerp(Colors.red, Colors.green, e.raw / 10),
+                                    strokeWidth: 2,
+                                  ),
+                                  Positioned.fill(
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        e.percent,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 )
               ),
               total != results.length

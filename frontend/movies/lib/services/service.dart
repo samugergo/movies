@@ -5,6 +5,7 @@ import 'package:movies/enums/order_enum.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/models/base/list_response.dart';
 import 'package:movies/models/detailed/movie_detailed_model.dart';
+import 'package:movies/models/detailed/show_detailed_model.dart';
 
 import '../models/base/display_model.dart';
 
@@ -37,7 +38,7 @@ fetchById(int id, TypeEnum type) async {
       )
     );
     var json = jsonDecode(response.body);
-    return MovieDetailedModel.fromJson(json);
+    return type == TypeEnum.movie ? MovieDetailedModel.fromJson(json) : ShowDetailedModel.fromJson(json);
   } catch (e) {
     print(e);
   }

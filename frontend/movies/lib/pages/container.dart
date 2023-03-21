@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/main.dart';
 import 'package:movies/pages/movie_page.dart';
+import 'package:movies/pages/show_page.dart';
+import 'package:movies/services/service.dart';
 import 'package:movies/widgets/button_switch.dart';
 import 'package:movies/widgets/filter_section.dart';
 import 'package:movies/widgets/load_button.dart';
@@ -23,6 +25,14 @@ class XContainer extends StatelessWidget {
 
     List list = appState.type == TypeEnum.movie ? appState.movies : appState.shows;
 
+    goTo(id) {
+      final Widget to = appState.type == TypeEnum.movie ? MoviePage(id: id) : ShowPage(id: id);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => to),
+      );
+    } 
+
     return ListView(
       controller: controller,
       children: [
@@ -40,10 +50,7 @@ class XContainer extends StatelessWidget {
           children: [
             pair[0] != null 
             ? InkWell(
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MoviePage(id: pair[0].id)),
-              ),
+              onTap: () => goTo(pair[0].id),
               child: XImage(
                 url: pair[0].image,
                 width: 180,
@@ -53,10 +60,7 @@ class XContainer extends StatelessWidget {
             : SizedBox(),
             pair[1] != null 
             ? InkWell(
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MoviePage(id: pair[1].id)),
-              ),
+              onTap: () => goTo(pair[1].id),
               child: XImage(
                 url: pair[1].image,
                 width: 180,
