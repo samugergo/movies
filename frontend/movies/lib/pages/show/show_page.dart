@@ -90,7 +90,14 @@ class _ShowPageState extends State<ShowPage> {
 
     return 
       isLoading()
-      ? LoadingAnimationWidget.fourRotatingDots(color: Colors.white, size: 50)
+      ? ImageGradientContainer(
+        image: null,
+        children: [
+          Center(
+            child: LoadingAnimationWidget.fourRotatingDots(color: Colors.white, size: 50)
+          ),
+        ]
+      )
       : ImageGradientContainer(
       image: coverImage,
       children: [

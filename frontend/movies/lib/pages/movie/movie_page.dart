@@ -90,7 +90,14 @@ class _MoviePageState extends State<MoviePage> {
 
     return 
       isLoading() 
-      ? LoadingAnimationWidget.fourRotatingDots(color: Colors.white, size: 50)
+      ? ImageGradientContainer(
+        image: null,
+        children: [
+          Center(
+            child: LoadingAnimationWidget.fourRotatingDots(color: Colors.white, size: 50)
+          ),
+        ]
+      )
       : ImageGradientContainer(
       image: coverImage,
       children: [
