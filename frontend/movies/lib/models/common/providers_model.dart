@@ -1,3 +1,4 @@
+import 'package:movies/enums/provider_enum.dart';
 import 'package:movies/utils/common_util.dart';
 
 class Providers {
@@ -10,6 +11,34 @@ class Providers {
     this.buy,
     this.streaming
   });
+
+  _isRent() {
+    return rent != null && rent!.isNotEmpty;
+  }
+
+  _isBuy() {
+    return buy != null && buy!.isNotEmpty;
+  }
+
+  _isStreaming() {
+    return streaming != null && streaming!.isNotEmpty;
+  }
+
+  getByEnum(ProviderEnum provider) {
+    switch (provider) {
+      case ProviderEnum.rent: return rent;
+      case ProviderEnum.buy: return buy;
+      case ProviderEnum.streaming: return streaming;
+    }
+  }
+
+  isNotNullByEnum(ProviderEnum provider) {
+    switch (provider) {
+      case ProviderEnum.rent: return _isRent();
+      case ProviderEnum.buy: return _isBuy();
+      case ProviderEnum.streaming: return _isStreaming();
+    }
+  }
 
   factory Providers.fromJson(Map<String, dynamic> json) {
     return Providers(
