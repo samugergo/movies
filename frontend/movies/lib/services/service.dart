@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:movies/enums/order_enum.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/models/base/list_response.dart';
+import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/movie_detailed_model.dart';
 import 'package:movies/models/detailed/show_detailed_model.dart';
 
@@ -40,6 +41,23 @@ fetchById(int id, TypeEnum type) async {
     var json = jsonDecode(response.body);
     return type == TypeEnum.movie ? MovieDetailedModel.fromJson(json) : ShowDetailedModel.fromJson(json);
   } catch (e) {
+    print(e);
+  }
+}
+
+fetchProviders(int id, TypeEnum type) async {
+  try {
+    var response = await http.get(
+      Uri.parse(
+        '$baseUrl/${type.value}/$id/watch/providers?$params'
+      )
+    );
+    var json = jsonDecode(response.body);
+    if(json["results"]["HU"] != null) {
+      return Providers.fromJson(json["results"]["HU"]);
+    }
+    return Providers();
+  } catch(e) {
     print(e);
   }
 }

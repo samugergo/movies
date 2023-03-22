@@ -1,19 +1,21 @@
+import 'package:movies/utils/common_util.dart';
+
 class Providers {
-  final List<Provider> rent;
-  final List<Provider> buy;
-  final List<Provider> streaming;  
+  List? rent = [];
+  List? buy = [];
+  List? streaming = [];  
 
   Providers({
-    required this.rent,
-    required this.buy,
-    required this.streaming
+    this.rent,
+    this.buy,
+    this.streaming
   });
 
   factory Providers.fromJson(Map<String, dynamic> json) {
     return Providers(
-      rent: json['rent'].map((r) => Provider.fromJson(r)), 
-      buy: json['buy'].map((b) => Provider.fromJson(b)),  
-      streaming: json['streaming'].map((s) => Provider.fromJson(s))
+      rent: json['rent']?.map((r) => Provider.fromJson(r)).toList(), 
+      buy: json['buy']?.map((b) => Provider.fromJson(b)).toList(),  
+      streaming: json['flatrate']?.map((s) => Provider.fromJson(s)).toList()
     );
   }
 }
@@ -32,9 +34,9 @@ class Provider {
 
   factory Provider.fromJson(Map<String, dynamic> json) {
     return Provider(
-      id: json['id'], 
-      title: json['title'], 
-      image: json['image']
+      id: json['provider_id'], 
+      title: json['provider_name'], 
+      image: imageLink(json['logo_path'])
     );
   }
 }

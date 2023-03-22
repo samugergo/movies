@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:movies/enums/type_enum.dart';
+import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/show_detailed_model.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/widgets/containers/image_gradient_container.dart';
+import 'package:movies/widgets/image.dart';
 import 'package:movies/widgets/result_card.dart';
 
 class ShowPage extends StatefulWidget {
@@ -21,12 +23,38 @@ class ShowPage extends StatefulWidget {
 
 class _ShowPageState extends State<ShowPage> {
   ShowDetailedModel? show;
-
+  Providers? providers;
+  
   init() async {
     var s = await fetchById(widget.id, TypeEnum.show);
+    var p = await fetchProviders(widget.id, TypeEnum.show);
     setState(() {
       show = s;
+      providers = p;
     });
+  }
+
+    getProvider() {
+    if (providers == null || providers!.streaming == null) {
+      return [];
+    }
+    return providers!.streaming?.map((e) => 
+      Column(
+        children: [
+          XImage(
+            url: e.image, 
+            width: 50, 
+            height: 50
+          ),
+          Text(
+            e.title,
+            style: TextStyle(
+              color: Colors.white
+            ),
+          )
+        ],
+      )
+    );
   }
 
   @override
@@ -60,6 +88,7 @@ class _ShowPageState extends State<ShowPage> {
                   percent: show!.percent, 
                   raw: show!.raw
                 ),
+                ...getProvider(),
               ],
             ),
           ),
