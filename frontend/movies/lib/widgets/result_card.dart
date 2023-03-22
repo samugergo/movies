@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies/widgets/image.dart';
 
+// ignore: must_be_immutable
 class ResultCard extends StatelessWidget {
 
   final String image;
@@ -8,13 +9,15 @@ class ResultCard extends StatelessWidget {
   final String release;
   final String percent;
   final double raw;
+  List? genres;
 
   ResultCard({
     required this.image,
     required this.title,
     required this.release,
     required this.percent,
-    required this.raw
+    required this.raw,
+    this.genres,
   });
 
   @override
@@ -81,7 +84,35 @@ class ResultCard extends StatelessWidget {
                     ],
                   ),
                 ),
-              )
+              ),
+              SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Wrap(
+                  children: 
+                    genres != null 
+                    ? genres!.map((e) => 
+                      Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        elevation: 0,
+                        color: Colors.white38,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text(
+                            e,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.black87
+                            ),
+                          ),
+                        ),
+                      ),
+                    ).toList()
+                  : [SizedBox()]
+                ),
+              ),
             ],
           ),
         ),

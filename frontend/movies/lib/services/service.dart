@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:movies/enums/order_enum.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/models/base/list_response.dart';
+import 'package:movies/models/common/cast_model.dart';
 import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/movie_detailed_model.dart';
 import 'package:movies/models/detailed/show_detailed_model.dart';
@@ -57,6 +58,40 @@ fetchProviders(int id, TypeEnum type) async {
       return Providers.fromJson(json["results"]["HU"]);
     }
     return Providers();
+  } catch(e) {
+    print(e);
+  }
+}
+
+fetchCast(int id, TypeEnum type) async {
+  try {
+    var response = await http.get(
+      Uri.parse(
+        '$baseUrl/${type.value}/$id/credits?$params'
+      )
+    );
+    var json = jsonDecode(response.body);
+    if(json["cast"] != null) {
+      return json['cast'].map((c) => CastModel.fromJson(c)).toList(); 
+    }
+    return [];
+  } catch(e) {
+    print(e);
+  }
+}
+
+fetchRecommendations(int id, TypeEnum type) async {
+  try {
+    var response = await http.get(
+      Uri.parse(
+        '$baseUrl/${type.value}/$id/recommendations?$params'
+      )
+    );
+    var json = jsonDecode(response.body);
+    if(json["results"] != null) {
+      return json['results'].map((c) => DisplayModel.fromJson(c)).toList(); 
+    }
+    return [];
   } catch(e) {
     print(e);
   }

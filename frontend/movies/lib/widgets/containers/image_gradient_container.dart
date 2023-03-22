@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ImageGradientContainer extends StatelessWidget {
 
-  final String image;
+  final Image? image;
   final List<Widget> children;
 
   ImageGradientContainer({
@@ -43,10 +43,7 @@ class ImageGradientContainer extends StatelessWidget {
                   );
                 },
                 blendMode: BlendMode.dstIn,
-                child: Image.network(
-                  image,
-                  fit: BoxFit.contain,
-                ),
+                child: image ?? SizedBox()
               ),
               ...children,
             ],
