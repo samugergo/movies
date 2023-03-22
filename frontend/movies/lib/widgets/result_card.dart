@@ -25,7 +25,8 @@ class ResultCard extends StatelessWidget {
         XImage(
           url: image, 
           width: 100, 
-          height: 150
+          height: 150,
+          radius: 10,
         ),
         Flexible(
           child: Column(

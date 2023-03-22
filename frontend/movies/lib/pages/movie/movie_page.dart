@@ -36,32 +36,6 @@ class _MoviePageState extends State<MoviePage> {
     });
   }
 
-  getProvider(ProviderEnum provider) {
-    if (providers == null || !providers?.isNotNullByEnum(provider)) {
-      return [
-        Text(
-          'Nem elérhető!',
-          style: TextStyle(
-            color: Colors.white38,
-            fontStyle: FontStyle.italic,
-            fontSize: 12
-          ),
-        ),
-      ];
-    }
-    return providers!.getByEnum(provider)?.map((e) => 
-      Row(
-        children: [
-          XImage(
-            url: e.image, 
-            width: 35, 
-            height: 35
-          ),
-        ],
-      )
-    );
-  }
-
   @override
   void initState() {
     super.initState();

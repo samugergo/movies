@@ -5,7 +5,6 @@ import 'package:movies/models/base/list_response.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/show/show_page.dart';
 import 'package:movies/services/service.dart';
-import 'package:movies/widgets/image.dart';
 import 'package:movies/widgets/load_button.dart';
 import 'package:movies/widgets/result_card.dart';
 import 'package:provider/provider.dart';

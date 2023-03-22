@@ -57,6 +57,7 @@ class XContainer extends StatelessWidget {
                   url: pair[0].image,
                   width: 180,
                   height: 270,
+                  radius: 10,
                 ),
               ),
             )
@@ -71,6 +72,7 @@ class XContainer extends StatelessWidget {
                   url: pair[1].image,
                   width: 180,
                   height: 270,
+                  radius: 10,
                 )
               ),
             )

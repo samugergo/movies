@@ -6,18 +6,20 @@ class XImage extends StatelessWidget {
   final String url;
   final double width;
   final double height;
+  final double radius;
 
   XImage({
     super.key,
     required this.url,
     required this.width,
-    required this.height
+    required this.height,
+    required this.radius
   });
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(10.0),
+      borderRadius: BorderRadius.circular(radius),
       child: SizedBox(
         width: width,
         height: height,

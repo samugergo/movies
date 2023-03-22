@@ -4,7 +4,8 @@ import 'package:movies/utils/common_util.dart';
 class Providers {
   List? rent = [];
   List? buy = [];
-  List? streaming = [];  
+  List? streaming = []; 
+  List available = [ProviderEnum.streaming];
 
   Providers({
     this.rent,
@@ -24,6 +25,19 @@ class Providers {
     return streaming != null && streaming!.isNotEmpty;
   }
 
+  isAvailable() {
+    return _isBuy() || _isRent() || _isStreaming();
+  }
+
+  _setAvailable() {
+    if(_isBuy()) {
+      available.add(ProviderEnum.buy);
+    }
+    if(_isRent()) {
+      available.add(ProviderEnum.rent);
+    }
+  }
+
   getByEnum(ProviderEnum provider) {
     switch (provider) {
       case ProviderEnum.rent: return rent;
@@ -41,11 +55,13 @@ class Providers {
   }
 
   factory Providers.fromJson(Map<String, dynamic> json) {
-    return Providers(
+    Providers providers = Providers(
       rent: json['rent']?.map((r) => Provider.fromJson(r)).toList(), 
       buy: json['buy']?.map((b) => Provider.fromJson(b)).toList(),  
       streaming: json['flatrate']?.map((s) => Provider.fromJson(s)).toList()
     );
+    providers._setAvailable();
+    return providers;
   }
 }
 

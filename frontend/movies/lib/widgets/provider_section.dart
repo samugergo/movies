@@ -14,12 +14,15 @@ class ProviderSection extends StatelessWidget {
   getProvider(ProviderEnum provider) {
     if (providers == null || !providers?.isNotNullByEnum(provider)) {
       return [
-        Text(
-          'Nem elérhető!',
-          style: TextStyle(
-            color: Colors.white38,
-            fontStyle: FontStyle.italic,
-            fontSize: 12
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            'Nem elérhető!',
+            style: TextStyle(
+              color: Colors.white38,
+              fontStyle: FontStyle.italic,
+              fontSize: 12
+            ),
           ),
         ),
       ];
@@ -30,7 +33,8 @@ class ProviderSection extends StatelessWidget {
         child: XImage(
           url: e.image, 
           width: 35, 
-          height: 35
+          height: 35,
+          radius: 10,
         ),
       ),
     ).toList();
@@ -39,7 +43,7 @@ class ProviderSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: ProviderEnum.values.map((e) => 
+      children: providers!.available.map((e) => 
         Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(6),
@@ -48,9 +52,9 @@ class ProviderSection extends StatelessWidget {
           elevation: 0,
           child: ClipPath(
             clipper: ShapeBorderClipper(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6)
-                )
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6)
+              )
             ),
             child: Stack(
               children: [
@@ -85,45 +89,6 @@ class ProviderSection extends StatelessWidget {
               ],
             ),
           ),
-          // IntrinsicHeight(
-          //   child: Row(
-          //     crossAxisAlignment: CrossAxisAlignment.stretch,
-          //     children: [
-          //       Padding(
-          //         padding: const EdgeInsets.only(top: 2.0),
-          //         child: Container(
-          //           decoration: BoxDecoration(
-          //             color: Colors.white10,
-          //             borderRadius: BorderRadius.only(
-          //               topLeft: Radius.circular(10.0),
-          //               bottomLeft: Radius.circular(10.0)
-          //             ),
-          //           ),
-          //           child: Center(
-          //             child: RotatedBox(
-          //               quarterTurns: 3,
-          //               child: Text(
-          //                 e.title,
-          //                 style: TextStyle(
-          //                   color: Colors.white,
-          //                   fontSize: 8
-          //                 ),
-          //               ),
-          //             ),
-          //           ),
-          //         ),
-          //       ),
-          //       SizedBox(width: 10),
-          //       Center(
-          //         child: Wrap(
-          //           children: [
-          //             ...getProvider(e),
-          //           ],
-          //         ),
-          //       ),
-          //     ]
-          //   )
-          // ),
         )
       ).toList(),
     );
