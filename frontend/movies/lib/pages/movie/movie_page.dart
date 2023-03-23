@@ -120,7 +120,9 @@ class _MoviePageState extends State<MoviePage> {
                 ),
               ),
               SizedBox(height: 10),
-              ProviderSection(providers: providers),
+              ProviderSection(
+                providers: providers
+              ),
               SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 6.0),
