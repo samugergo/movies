@@ -6,9 +6,11 @@ import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/show_detailed_model.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/widgets/containers/image_gradient_container.dart';
-import 'package:movies/widgets/image.dart';
-import 'package:movies/widgets/provider_section.dart';
+import 'package:movies/widgets/sections/provider_section.dart';
 import 'package:movies/widgets/result_card.dart';
+import 'package:movies/widgets/sections/cast_section.dart';
+import 'package:movies/widgets/sections/recommended_section.dart';
+import 'package:movies/widgets/sections/story_section.dart';
 
 class ShowPage extends StatefulWidget {
 
@@ -119,133 +121,31 @@ class _ShowPageState extends State<ShowPage> {
                   ),
                 ),
                 SizedBox(height: 10),
-                ProviderSection(providers: providers),
-                SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Történet'.toUpperCase(),
-                        style: TextStyle(
-                          color: Colors.white
-                        ),
-                      ),
-                      Divider(color: Colors.white24),
-                      Text(
-                        show!.description,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                        ),
-                      )
-                    ],
-                  ),
+                ProviderSection(
+                  providers: providers
                 ),
                 SizedBox(height: 10),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 6.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Szereplők'.toUpperCase(),
-                        style: TextStyle(
-                          color: Colors.white
-                        ),
-                      ),
-                      Divider(color: Colors.white24),
-                      SizedBox(
-                        height: 260,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: cast!.map((c) => 
-                            SizedBox(
-                              width: 125,
-                              child: Card(
-                                elevation: 0,
-                                color: Colors.white10,
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                    color: Colors.white12, 
-                                  ),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    XImage(
-                                      url: c.image, 
-                                      width: 125, 
-                                      height: 180, 
-                                      radius: 10
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 6, left: 6, right: 6),
-                                      child: Text(
-                                        c.name,
-                                        style: TextStyle(
-                                          fontSize: 12, 
-                                          color: Colors.white
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(height: 2),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 6),
-                                      child: Text(
-                                        c.role,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: 10,
-                                          color: Colors.white30
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ).toList(),
-                        ),
-                      )
-                    ],
+                  padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                  child: StorySection(
+                    description: show!.description
                   ),
                 ),
                 SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Ajánlott'.toUpperCase(),
-                        style: TextStyle(
-                          color: Colors.white
-                        ),
-                      ),
-                      Divider(color: Colors.white24),
-                      SizedBox(
-                        height: 180,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: recommendations!.map((e) => 
-                            Padding(
-                              padding: const EdgeInsets.only(right: 4, left: 4),
-                              child: XImage(
-                                url: e.image, 
-                                width: 120, 
-                                height: 180, 
-                                radius: 10
-                              ),
-                            )
-                          ).toList(),
-                        ),
-                      )
-                    ],
+                  child: CastSection(
+                    cast: cast!
                   ),
                 ),
+                SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                  child: RecommendedSection(
+                    recommendations: recommendations!
+                  )
+                ),
+                SizedBox(height: 10),
               ],
             ),
           ),
