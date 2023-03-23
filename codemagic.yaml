@@ -1,5 +1,8 @@
 workflows:
-  workflow-name:
+  sample-workflow:
+    name: Codemagic Sample Workflow
+    max_build_duration: 120
+    instance_type: mac_mini_m1
     environment:
       groups:
         - module_credentials
