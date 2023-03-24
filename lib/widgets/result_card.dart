@@ -41,7 +41,8 @@ class ResultCard extends StatelessWidget {
                   title,
                   style: TextStyle(
                     color: Colors.white,
-                    fontWeight: FontWeight.bold
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12
                   ),
                 ),
               ),

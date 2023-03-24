@@ -6,9 +6,10 @@ import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/show_detailed_model.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/widgets/containers/image_gradient_container.dart';
-import 'package:movies/widgets/sections/provider_section.dart';
-import 'package:movies/widgets/result_card.dart';
+import 'package:movies/widgets/display_app_bar.dart';
+import 'package:movies/widgets/my_image_app_bar.dart';
 import 'package:movies/widgets/sections/cast_section.dart';
+import 'package:movies/widgets/sections/provider_section.dart';
 import 'package:movies/widgets/sections/recommended_section.dart';
 import 'package:movies/widgets/sections/story_section.dart';
 
@@ -87,9 +88,8 @@ class _ShowPageState extends State<ShowPage> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.black,
+      statusBarColor: Color(0xff292A37),
     ));
-
     return 
       isLoading()
       ? ImageGradientContainer(
@@ -100,57 +100,76 @@ class _ShowPageState extends State<ShowPage> {
           ),
         ]
       )
-      : ImageGradientContainer(
-      image: coverImage,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 6.0),
-            child: ListView(
-              children: [
-                SizedBox(height: 150),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: ResultCard(
-                    image: show!.image, 
+      : Material(
+        child: SafeArea(
+          child: NestedScrollView(
+            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+              return [
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: MyImageAppBar(
+                    poster: show!.image, 
                     title: show!.title, 
                     release: show!.release, 
                     percent: show!.percent, 
-                    raw: show!.raw
+                    raw: show!.raw,
+                    genres: show!.genres, 
+                    cover: coverImage!
                   ),
                 ),
-                SizedBox(height: 10),
-                ProviderSection(
-                  providers: providers
+              ];
+            },
+            body: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: [0.5, 1],
+                  colors: [
+                    Color(0xff292A37), 
+                    Color(0xff0F1018)
+                  ],
+                  tileMode: TileMode.mirror
                 ),
-                SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                  child: StorySection(
-                    description: show!.description
-                  ),
-                ),
-                SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                  child: CastSection(
-                    cast: cast!
-                  ),
-                ),
-                SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                  child: RecommendedSection(
-                    recommendations: recommendations!
-                  )
-                ),
-                SizedBox(height: 10),
-              ],
-            ),
+              ),
+              child: Scaffold(
+                body: ListView(
+                  children: [
+                    SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                      child: ProviderSection(
+                        providers: providers
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: StorySection(
+                        description: show!.description
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: CastSection(
+                        cast: cast!
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: RecommendedSection(
+                        recommendations: recommendations!
+                      )
+                    ),
+                    SizedBox(height: 10),
+                  ],
+                )
+              )
+            )
           ),
         ),
-      ],
-    );
+      );
   }
 }

@@ -6,8 +6,8 @@ import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/movie_detailed_model.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/widgets/containers/image_gradient_container.dart';
+import 'package:movies/widgets/my_image_app_bar.dart';
 import 'package:movies/widgets/sections/provider_section.dart';
-import 'package:movies/widgets/result_card.dart';
 import 'package:movies/widgets/sections/cast_section.dart';
 import 'package:movies/widgets/sections/recommended_section.dart';
 import 'package:movies/widgets/sections/story_section.dart';
@@ -87,11 +87,10 @@ class _MoviePageState extends State<MoviePage> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.black,
+      statusBarColor: Color(0xff292A37),
     ));
 
-    return 
-      isLoading() 
+    return isLoading() 
       ? ImageGradientContainer(
         image: null,
         children: [
@@ -100,55 +99,78 @@ class _MoviePageState extends State<MoviePage> {
           ),
         ]
       )
-      : ImageGradientContainer(
-      image: coverImage,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: ListView(
-            children: [
-              SizedBox(height: 150),
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: ResultCard(
-                  image: movie!.image, 
-                  title: movie!.title, 
-                  release: movie!.release, 
-                  percent: movie!.percent, 
-                  raw: movie!.raw,
-                  genres: movie!.genres,
+      : Material(
+        child: SafeArea(
+          child: NestedScrollView(
+            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+              return [
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: MyImageAppBar(
+                    poster: movie!.image, 
+                    title: movie!.title, 
+                    release: movie!.release, 
+                    percent: movie!.percent, 
+                    raw: movie!.raw,
+                    genres: movie!.genres, 
+                    cover: coverImage!
+                  ),
+                ),
+              ];
+            },
+            body: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: [0.5, 1],
+                  colors: [
+                    Color(0xff292A37), 
+                    Color(0xff0F1018)
+                  ],
+                  tileMode: TileMode.mirror
                 ),
               ),
-              SizedBox(height: 10),
-              ProviderSection(
-                providers: providers
-              ),
-              SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                child: StorySection(
-                  description: movie!.description
-                ),
-              ),
-              SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                child: CastSection(
-                  cast: cast!
-                ),
-              ),
-              SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                child: RecommendedSection(
-                  recommendations: recommendations!
+              child: Scaffold(
+                body: SafeArea(
+                  child: ListView(
+                    children: [
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                        child: ProviderSection(
+                          providers: providers
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: StorySection(
+                          description: movie!.description
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: CastSection(
+                          cast: cast!
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: RecommendedSection(
+                          recommendations: recommendations!
+                        )
+                      ),
+                      SizedBox(height: 10),
+                    ],
+                  ),
                 )
-              ),
-              SizedBox(height: 10),
-            ],
+              )
+            )
           ),
         ),
-      ],
-    );
+      );
   }
 }

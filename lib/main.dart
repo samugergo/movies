@@ -53,47 +53,8 @@ class MainApp extends StatelessWidget {
               scrolledUnderElevation: 0,
               backgroundColor: Color(0xff292A37),
             ),
-            body: SingleChildScrollView(
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: FractionalOffset.bottomCenter,
-                    colors: [Color(0xff292A37), Color(0xff0F1018)],
-                    stops: [0.5, 1],
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    ShaderMask(
-                      shaderCallback: (rect) {
-                        return LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.black, 
-                            Colors.transparent
-                          ],
-                        ).createShader(
-                          Rect.fromLTRB(0, 0, rect.width, rect.height)
-                        );
-                      },
-                      blendMode: BlendMode.dstIn,
-                      child: Image.network('http://image.tmdb.org/t/p/original/jr8tSoJGj33XLgFBy6lmZhpGQNu.jpg'),
-                    ),
-                    ...List.generate(20, (ind) {
-                      return ListTile(
-                        title: Text(
-                          '$ind',
-                          style: TextStyle(
-                            color: Colors.white
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ]
-                ),
-              ),
+            body: XContainer(
+              controller: scrollController,
             ),
             floatingActionButton: HidableFab(
               controller: scrollController
