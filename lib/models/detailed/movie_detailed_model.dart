@@ -37,7 +37,7 @@ class MovieDetailedModel {
       percent: percentFormat(json['vote_average']), 
       raw: json['vote_average'].toDouble(),
       image: imageLink(json['poster_path']), 
-      cover: originalImageLink(json['backdrop_path']), 
+      cover: json['backdrop_path'], 
       description: json['overview'], 
       genres: json['genres'].map((g) => g['name']).toList(), 
       // providers: Providers.fromJson(json['providers']),

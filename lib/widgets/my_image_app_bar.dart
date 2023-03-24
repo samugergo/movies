@@ -10,6 +10,7 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
     required this.raw,
     required this.genres,
     required this.cover,
+    this.color = const Color(0xff292A37),
   });
 
   final String title;
@@ -18,13 +19,14 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
   final String percent;
   final double raw;
   final List genres;
-  final Image cover;
+  final Image? cover;
+  final Color? color;
 
 
   double? _topPadding;
   final double _coverHeight = 270;
   final double _posterHeight = 150;
-  final Color _background = Color(0xff292A37);
+  final Color textColor = Colors.white;
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -76,8 +78,8 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
             opacity: shrinkOffset / maxExtent,
             child: Container(
               decoration: BoxDecoration(
-                color: _background,
-                border: Border.all(color: _background, width:0),
+                color: color,
+                border: Border.all(color: color!, width:0),
               ),
             ),
           ),
@@ -95,7 +97,7 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                color: Colors.white,
+                color: textColor,
               ),
               Flexible(
                 child: Opacity(
@@ -110,8 +112,8 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
         return ClipRect(
           child: Container(
             decoration: BoxDecoration(
-              color: _background,
-              border: Border.all(color: _background, width:0),
+              color: color,
+              border: Border.all(color: color!, width:0),
             ),
             child: Stack(
               children: children
@@ -129,7 +131,7 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            _background, 
+            color!, 
             Colors.transparent
           ],
         ).createShader(
@@ -137,11 +139,13 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
         );
       },
       blendMode: BlendMode.dstIn,
-      child: Image(
-        image: cover.image,
+      child: cover != null 
+      ? Image(
+        image: cover!.image,
         height: _coverHeight,
         fit: BoxFit.cover,
       )
+      : SizedBox()
     );
   }
 
@@ -150,7 +154,7 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
       title,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
-        color: Colors.white,
+        color: textColor,
         fontSize: 18,
         fontWeight: FontWeight.bold
       ),
