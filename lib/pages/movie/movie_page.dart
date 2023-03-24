@@ -46,14 +46,21 @@ class _MoviePageState extends State<MoviePage> {
     _fetchProviders();
     _fetchCast();
     _fetchRecommends();
-    _preloadImage(lowImageLink(m.cover), null, (loaded) => {
-      _calcMainColor(loaded)
-    });
-    _preloadImage(originalImageLink(m.cover), () => setState(() => {
-      imageLoading = false
-    }), (loaded) => setState(() => {
-      coverImage = loaded
-    }));
+    if(m.cover != null && m.cover != '') {
+      _preloadImage(lowImageLink(m.cover), null, (loaded) => {
+        _calcMainColor(loaded)
+      });
+      _preloadImage(originalImageLink(m.cover), () => setState(() => {
+        imageLoading = false
+      }), (loaded) => setState(() => {
+        coverImage = loaded
+      }));
+    } else {
+      setState(() {
+        imageLoading = false;
+        mainColor = Color(0xff292A37);
+      });
+    }
   }
 
   _fetchProviders() async {
@@ -160,7 +167,7 @@ class _MoviePageState extends State<MoviePage> {
                     percent: movie!.percent, 
                     raw: movie!.raw,
                     genres: movie!.genres, 
-                    cover: coverImage!,
+                    cover: coverImage,
                     color: mainColor,
                   ),
                 ),

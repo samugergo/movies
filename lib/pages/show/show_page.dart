@@ -46,7 +46,6 @@ class _ShowPageState extends State<ShowPage> {
     _fetchProviders();
     _fetchCast();
     _fetchRecommends();
-    print(s);
     if(s.cover != null && s.cover != '') {
       _preloadImage(lowImageLink(s.cover), null, (loaded) => {
         _calcMainColor(loaded)
