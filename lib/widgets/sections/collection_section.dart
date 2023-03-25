@@ -29,11 +29,13 @@ class CollectionSection extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16),
                       child: ColorFiltered(
                         colorFilter: ColorFilter.mode(Colors.white60, BlendMode.modulate),
-                        child: Image.network(
+                        child: model!.cover != ''
+                        ? Image.network(
                           model!.cover,
                           fit: BoxFit.cover,
                           height: 180,
-                        ),
+                        )
+                        : SizedBox(height: 180)
                       ),
                     ),
                   ),

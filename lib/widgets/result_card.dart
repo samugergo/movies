@@ -22,6 +22,7 @@ class ResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List? list = genres != null && genres!.length > 3 ? genres!.sublist(0,3) : genres;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -42,7 +43,7 @@ class ResultCard extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 12
+                    fontSize: 14
                   ),
                 ),
               ),
@@ -92,7 +93,7 @@ class ResultCard extends StatelessWidget {
                 child: Wrap(
                   children: 
                     genres != null 
-                    ? genres!.map((e) => 
+                    ? list!.map((e) => 
                       Card(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(6),

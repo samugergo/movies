@@ -14,13 +14,17 @@ class Section extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title.toUpperCase(),
-          style: TextStyle(
-            color: Colors.white
-          )
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0, top: 16),
+          child: Text(
+            title,
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 16
+            )
+          ),
         ),
-        Divider(color: Colors.white24),
         ...children,
       ],
     );

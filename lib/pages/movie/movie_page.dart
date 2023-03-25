@@ -179,35 +179,30 @@ class _MoviePageState extends State<MoviePage> {
                 child: Scaffold(
                   body: ListView(
                     children: [
-                      SizedBox(height: 10),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: ProviderSection(
                           providers: providers
                         ),
                       ),
-                      SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: StorySection(
                           description: movie!.description
                         ),
                       ),
-                      SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: CastSection(
                           cast: cast!
                         ),
                       ),
-                      SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: CollectionSection(
                           model: movie!.collection,
                         ),
                       ),
-                      SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: RecommendedSection(
