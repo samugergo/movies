@@ -27,6 +27,14 @@ originalImageLink(image) {
   return '';
 }
 
+lowImageLink(image) {
+  if(image != null) {
+    final imageUrl = dotenv.env['IMAGE_URL_LOW'];
+    return '$imageUrl$image';
+  }
+  return '';
+}
+
 percentFormat(number) {
   final percent = (number * 10).round();
   return '$percent%';

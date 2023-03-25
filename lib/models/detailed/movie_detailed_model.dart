@@ -1,5 +1,4 @@
 import 'package:movies/models/common/collection_model.dart';
-import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/utils/common_util.dart';
 
 class MovieDetailedModel {
@@ -12,8 +11,7 @@ class MovieDetailedModel {
   final String cover;
   final String description;
   final List genres;
-  // final Providers providers;
-  // final Collection collection;
+  final CollectionModel? collection;
 
   MovieDetailedModel({
     required this.id,
@@ -25,8 +23,7 @@ class MovieDetailedModel {
     required this.cover,
     required this.description,
     required this.genres,
-    // required this.collection,
-    // required this.providers
+    required this.collection,
   });
 
   factory MovieDetailedModel.fromJson(Map<String, dynamic> json) {
@@ -37,11 +34,12 @@ class MovieDetailedModel {
       percent: percentFormat(json['vote_average']), 
       raw: json['vote_average'].toDouble(),
       image: imageLink(json['poster_path']), 
-      cover: originalImageLink(json['backdrop_path']), 
+      cover: json['backdrop_path'] ?? '', 
       description: json['overview'], 
       genres: json['genres'].map((g) => g['name']).toList(), 
-      // providers: Providers.fromJson(json['providers']),
-      // collection: Collection.fromJson(json['collection']), 
+      collection: json['belongs_to_collection'] != null 
+        ? CollectionModel.fromJson(json['belongs_to_collection']) 
+        : null, 
     );
   }
 }

@@ -37,47 +37,51 @@ class _CastMember extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      color: Colors.white10,
-      shape: RoundedRectangleBorder(
-        side: BorderSide(
-          color: Colors.white12, 
+    return SizedBox(
+      width: 133,
+      child: Card(
+        elevation: 0,
+        color: Colors.white10,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            color: Colors.white12, 
+          ),
+          borderRadius: BorderRadius.circular(10),
         ),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          XImage(
-            url: model.image, 
-            width: 125, 
-            height: 180, 
-            radius: 10
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 6, left: 6, right: 6),
-            child: Text(
-              model.name,
-              style: TextStyle(
-                fontSize: 12, 
-                color: Colors.white
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            XImage(
+              url: model.image, 
+              width: 125, 
+              height: 180, 
+              radius: 10
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 6, left: 6, right: 6),
+              child: Text(
+                model.name,
+                overflow: TextOverflow.visible,
+                style: TextStyle(
+                  fontSize: 12, 
+                  color: Colors.white
+                ),
               ),
             ),
-          ),
-          SizedBox(height: 2),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 6),
-            child: Text(
-              model.role,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 10,
-                color: Colors.white30
+            SizedBox(height: 2),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+              child: Text(
+                model.role,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 10,
+                  color: Colors.white30
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

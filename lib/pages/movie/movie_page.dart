@@ -5,12 +5,16 @@ import 'package:movies/enums/type_enum.dart';
 import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/movie_detailed_model.dart';
 import 'package:movies/services/service.dart';
+import 'package:movies/utils/color_util.dart';
+import 'package:movies/utils/common_util.dart';
 import 'package:movies/widgets/containers/image_gradient_container.dart';
+import 'package:movies/widgets/my_image_app_bar.dart';
+import 'package:movies/widgets/sections/collection_section.dart';
 import 'package:movies/widgets/sections/provider_section.dart';
-import 'package:movies/widgets/result_card.dart';
 import 'package:movies/widgets/sections/cast_section.dart';
 import 'package:movies/widgets/sections/recommended_section.dart';
 import 'package:movies/widgets/sections/story_section.dart';
+import 'package:palette_generator/palette_generator.dart';
 
 class MoviePage extends StatefulWidget {
 
@@ -32,41 +36,91 @@ class _MoviePageState extends State<MoviePage> {
   List? recommendations;
   Image? coverImage;
   bool imageLoading = true;
+  Color? mainColor;
 
   init() async {
     var m = await fetchById(widget.id, TypeEnum.movie);
-    var p = await fetchProviders(widget.id, TypeEnum.movie);
-    var c = await fetchCast(widget.id, TypeEnum.movie);
-    var r = await fetchRecommendations(widget.id, TypeEnum.movie);
-
-    preloadImage(m);
-
     setState(() {
       movie = m;
-      providers = p;
-      cast = c;
-      recommendations = r;
     });
-  }
 
-  preloadImage(movie) {
-    if(movie.cover == null || movie.cover == '') {
+    _fetchProviders();
+    _fetchCast();
+    _fetchRecommends();
+    if(m.cover != null && m.cover != '') {
+      _preloadImage(lowImageLink(m.cover), null, (loaded) => {
+        _calcMainColor(loaded)
+      });
+      _preloadImage(originalImageLink(m.cover), () => setState(() => {
+        imageLoading = false
+      }), (loaded) => setState(() => {
+        coverImage = loaded
+      }));
+    } else {
       setState(() {
         imageLoading = false;
+        mainColor = Color(0xff292A37);
       });
+    }
+  }
+
+  _fetchProviders() async {
+    var p = await fetchProviders(widget.id, TypeEnum.movie);
+    setState(() {
+      providers = p;
+    });
+  }
+  _fetchCast() async {
+    var c = await fetchCast(widget.id, TypeEnum.movie);
+    setState(() {
+      cast = c;
+    });
+  }
+  _fetchRecommends() async {
+    var r = await fetchRecommendations(widget.id, TypeEnum.movie);
+    setState(() {
+      recommendations = r;
+    });
+  } 
+  _preloadImage(image, Function? setLoading, Function callback) {
+    if(image == null || image == '') {
+      if(setLoading != null) {
+        setLoading();
+      }
       return;
     }
-    coverImage = Image.network(movie.cover);
-    if(coverImage != null) {
-      coverImage!.image.resolve(ImageConfiguration()).addListener(
-        ImageStreamListener(
-          (info, call) {
-            setState(() {
-              imageLoading = false;
-            });
-          },
-        ),
-      );
+    var loadedImage = Image.network(image);
+    loadedImage.image.resolve(ImageConfiguration()).addListener(
+      ImageStreamListener(
+        (info, call) {
+          if(setLoading != null) {
+            setLoading();
+          }
+          callback(loadedImage);
+        },
+      ),
+    );
+  }
+  
+  _checkColor(image) async {
+    bool isLight = ThemeData.estimateBrightnessForColor(mainColor!) == Brightness.light;
+    if(isLight) {
+      updateMainColor(color) => {
+        setState(() => {
+          mainColor = color
+        })
+      };
+      darken(mainColor!, updateMainColor);
+    }
+  }
+
+  _calcMainColor(image) async {
+    if(image != null) {
+      var color = await getImagePalette(image.image);
+      setState(() {
+        mainColor = color;
+      });
+      _checkColor(mainColor);
     }
   }
 
@@ -75,6 +129,7 @@ class _MoviePageState extends State<MoviePage> {
       || providers == null 
       || cast == null 
       || recommendations == null 
+      || mainColor == null
       || imageLoading;
   }
 
@@ -86,12 +141,7 @@ class _MoviePageState extends State<MoviePage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.black,
-    ));
-
-    return 
-      isLoading() 
+    return isLoading() 
       ? ImageGradientContainer(
         image: null,
         children: [
@@ -100,55 +150,78 @@ class _MoviePageState extends State<MoviePage> {
           ),
         ]
       )
-      : ImageGradientContainer(
-      image: coverImage,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: ListView(
-            children: [
-              SizedBox(height: 150),
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: ResultCard(
-                  image: movie!.image, 
-                  title: movie!.title, 
-                  release: movie!.release, 
-                  percent: movie!.percent, 
-                  raw: movie!.raw,
-                  genres: movie!.genres,
-                ),
-              ),
-              SizedBox(height: 10),
-              ProviderSection(
-                providers: providers
-              ),
-              SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                child: StorySection(
-                  description: movie!.description
-                ),
-              ),
-              SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                child: CastSection(
-                  cast: cast!
-                ),
-              ),
-              SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                child: RecommendedSection(
-                  recommendations: recommendations!
+      : Material(
+        child: AnnotatedRegion(
+          value: SystemUiOverlayStyle.light.copyWith(           
+            statusBarColor: mainColor ?? Color(0xff292A37),
+          ),
+          child: SafeArea(
+            child: NestedScrollView(
+              headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                return [
+                  SliverPersistentHeader(
+                    pinned: true,
+                    delegate: MyImageAppBar(
+                      poster: movie!.image, 
+                      title: movie!.title, 
+                      release: movie!.release, 
+                      percent: movie!.percent, 
+                      raw: movie!.raw,
+                      genres: movie!.genres, 
+                      cover: coverImage,
+                      color: mainColor,
+                    ),
+                  ),
+                ];
+              },
+              body: Container(
+                color: mainColor,
+                child: Scaffold(
+                  body: ListView(
+                    children: [
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                        child: ProviderSection(
+                          providers: providers
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: StorySection(
+                          description: movie!.description
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: CastSection(
+                          cast: cast!
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: CollectionSection(
+                          model: movie!.collection,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: RecommendedSection(
+                          recommendations: recommendations!
+                        )
+                      ),
+                      SizedBox(height: 10),
+                    ],
+                  )
                 )
-              ),
-              SizedBox(height: 10),
-            ],
+              )
+            ),
           ),
         ),
-      ],
-    );
+      );
   }
 }
