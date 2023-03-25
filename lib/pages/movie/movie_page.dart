@@ -9,6 +9,7 @@ import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/widgets/containers/image_gradient_container.dart';
 import 'package:movies/widgets/my_image_app_bar.dart';
+import 'package:movies/widgets/sections/collection_section.dart';
 import 'package:movies/widgets/sections/provider_section.dart';
 import 'package:movies/widgets/sections/cast_section.dart';
 import 'package:movies/widgets/sections/recommended_section.dart';
@@ -174,7 +175,7 @@ class _MoviePageState extends State<MoviePage> {
                 ];
               },
               body: Container(
-                color: mainColor!,
+                color: mainColor,
                 child: Scaffold(
                   body: ListView(
                     children: [
@@ -197,6 +198,13 @@ class _MoviePageState extends State<MoviePage> {
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: CastSection(
                           cast: cast!
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: CollectionSection(
+                          model: movie!.collection,
                         ),
                       ),
                       SizedBox(height: 10),

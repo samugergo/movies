@@ -1,22 +1,24 @@
-class Collection {
+import 'package:movies/utils/common_util.dart';
+
+class CollectionModel {
   final int id;
   final String title;
   final String image;
   final String cover;
 
-  Collection({
+  CollectionModel({
     required this.id,
     required this.title,
     required this.image,
     required this.cover,
   });
 
-  factory Collection.fromJson(Map<String, dynamic> json) {
-    return Collection(
+  factory CollectionModel.fromJson(Map<String, dynamic> json) {
+    return CollectionModel(
       id: json['id'], 
-      title: json['title'], 
-      image: json['image'], 
-      cover: json['cover'],
+      title: json['name'], 
+      image: imageLink(json['poster_path']), 
+      cover: originalImageLink(json['backdrop_path']),
     );
   }
 }
