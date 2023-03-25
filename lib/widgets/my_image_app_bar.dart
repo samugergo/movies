@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies/utils/color_util.dart';
 import 'package:movies/widgets/result_card.dart';
 
 class MyImageAppBar extends SliverPersistentHeaderDelegate {
@@ -22,15 +23,12 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
   final Image? cover;
   final Color? color;
 
-
-  double? _topPadding;
   final double _coverHeight = 270;
   final double _posterHeight = 150;
   final Color textColor = Colors.white;
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    _topPadding ??= MediaQuery.of(context).padding.top;
     return LayoutBuilder(
       builder: (BuildContext layoutCtx, BoxConstraints constraints) { 
         final List<Widget> children = <Widget>[];
@@ -86,10 +84,8 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
         ));
 
         // collapsed app bar
-        children.add(Positioned(
-          left: 0,
-          right: 10,
-          top: 6,
+        children.add(Align(
+          alignment: Alignment.topLeft,
           child: Row(
             children: [
               IconButton(
@@ -109,15 +105,12 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
           ),
         ));
 
-        return ClipRect(
-          child: Container(
-            decoration: BoxDecoration(
-              color: color,
-              border: Border.all(color: color!, width:0),
-            ),
-            child: Stack(
-              children: children
-            ),
+        return Container(
+          decoration: BoxDecoration(
+            color: color,
+          ),
+          child: Stack(
+            children: children
           ),
         );
       },
@@ -131,21 +124,27 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            color!, 
-            Colors.transparent
+            color!,
+            Colors.transparent, 
           ],
-        ).createShader(
-          Rect.fromLTRB(0, 0, rect.width, rect.height)
-        );
+        ).createShader(rect);
       },
-      blendMode: BlendMode.dstIn,
-      child: cover != null 
-      ? Image(
-        image: cover!.image,
-        height: _coverHeight,
-        fit: BoxFit.cover,
-      )
-      : SizedBox()
+      blendMode: BlendMode.darken,
+      child: Container(        
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: cover!.image,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+      // child: cover != null 
+      // ? Image(
+      //   image: cover!.image,
+      //   height: _coverHeight,
+      //   fit: BoxFit.cover,  
+      // )
+      // : SizedBox()
     );
   }
 

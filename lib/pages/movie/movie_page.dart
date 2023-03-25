@@ -140,10 +140,6 @@ class _MoviePageState extends State<MoviePage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: mainColor ?? Color(0xff292A37),
-    ));
-
     return isLoading() 
       ? ImageGradientContainer(
         image: null,
@@ -154,30 +150,33 @@ class _MoviePageState extends State<MoviePage> {
         ]
       )
       : Material(
-        child: SafeArea(
-          child: NestedScrollView(
-            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-              return [
-                SliverPersistentHeader(
-                  pinned: true,
-                  delegate: MyImageAppBar(
-                    poster: movie!.image, 
-                    title: movie!.title, 
-                    release: movie!.release, 
-                    percent: movie!.percent, 
-                    raw: movie!.raw,
-                    genres: movie!.genres, 
-                    cover: coverImage,
-                    color: mainColor,
+        child: AnnotatedRegion(
+          value: SystemUiOverlayStyle.light.copyWith(           
+            statusBarColor: mainColor ?? Color(0xff292A37),
+          ),
+          child: SafeArea(
+            child: NestedScrollView(
+              headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                return [
+                  SliverPersistentHeader(
+                    pinned: true,
+                    delegate: MyImageAppBar(
+                      poster: movie!.image, 
+                      title: movie!.title, 
+                      release: movie!.release, 
+                      percent: movie!.percent, 
+                      raw: movie!.raw,
+                      genres: movie!.genres, 
+                      cover: coverImage,
+                      color: mainColor,
+                    ),
                   ),
-                ),
-              ];
-            },
-            body: Container(
-              color: mainColor!,
-              child: Scaffold(
-                body: SafeArea(
-                  child: ListView(
+                ];
+              },
+              body: Container(
+                color: mainColor!,
+                child: Scaffold(
+                  body: ListView(
                     children: [
                       SizedBox(height: 10),
                       Padding(
@@ -209,10 +208,10 @@ class _MoviePageState extends State<MoviePage> {
                       ),
                       SizedBox(height: 10),
                     ],
-                  ),
+                  )
                 )
               )
-            )
+            ),
           ),
         ),
       );

@@ -140,9 +140,10 @@ class _ShowPageState extends State<ShowPage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: mainColor ?? Color(0xff292A37),
-    ));
+    // if(is)
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //   statusBarColor: mainColor ?? Color(0xff292A37),
+    // ));
     return 
       isLoading()
       ? ImageGradientContainer(
@@ -154,63 +155,68 @@ class _ShowPageState extends State<ShowPage> {
         ]
       )
       : Material(
-        child: SafeArea(
-          child: NestedScrollView(
-            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-              return [
-                SliverPersistentHeader(
-                  pinned: true,
-                  delegate: MyImageAppBar(
-                    poster: show!.image, 
-                    title: show!.title, 
-                    release: show!.release, 
-                    percent: show!.percent, 
-                    raw: show!.raw,
-                    genres: show!.genres, 
-                    cover: coverImage,
-                    color: mainColor,
+        child: AnnotatedRegion(
+          value: SystemUiOverlayStyle.light.copyWith(           
+            statusBarColor: mainColor ?? Color(0xff292A37),
+          ),
+          child: SafeArea(
+            child: NestedScrollView(
+              headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                return [
+                  SliverPersistentHeader(
+                    pinned: true,
+                    delegate: MyImageAppBar(
+                      poster: show!.image, 
+                      title: show!.title, 
+                      release: show!.release, 
+                      percent: show!.percent, 
+                      raw: show!.raw,
+                      genres: show!.genres, 
+                      cover: coverImage,
+                      color: mainColor,
+                    ),
                   ),
-                ),
-              ];
-            },
-            body: Container(
-              color: mainColor,
-              child: Scaffold(
-                body: ListView(
-                  children: [
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                      child: ProviderSection(
-                        providers: providers
+                ];
+              },
+              body: Container(
+                color: mainColor,
+                child: Scaffold(
+                  body: ListView(
+                    children: [
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                        child: ProviderSection(
+                          providers: providers
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: StorySection(
-                        description: show!.description
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: StorySection(
+                          description: show!.description
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: CastSection(
-                        cast: cast!
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: CastSection(
+                          cast: cast!
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: RecommendedSection(
-                        recommendations: recommendations!
-                      )
-                    ),
-                    SizedBox(height: 10),
-                  ],
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: RecommendedSection(
+                          recommendations: recommendations!
+                        )
+                      ),
+                      SizedBox(height: 10),
+                    ],
+                  )
                 )
               )
-            )
+            ),
           ),
         ),
       );
