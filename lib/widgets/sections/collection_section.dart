@@ -20,7 +20,7 @@ class CollectionSection extends StatelessWidget {
       );
     } 
 
-    return model != null
+    return model != null && model!.cover != ''
     ? Section(
       title: 'Gyűjtemény', 
       children: [

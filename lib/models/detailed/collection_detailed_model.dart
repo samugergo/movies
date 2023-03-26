@@ -22,9 +22,9 @@ class CollectionDetailedModel {
     return CollectionDetailedModel(
       id: json['id'], 
       title: json['name'], 
-      description: json['overview'],
-      image: imageLink(json['poster_path']), 
-      cover: json['backdrop_path'], 
+      description: json['overview'] ?? '',
+      image: imageLink(json['poster_path']) ?? '', 
+      cover: json['backdrop_path'] ?? '', 
       modelList: json['parts'].map((p) => DisplayModel.fromJson(p)).toList(),
     );
   }

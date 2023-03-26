@@ -10,7 +10,6 @@ import 'package:movies/widgets/containers/image_gradient_container.dart';
 import 'package:movies/widgets/image.dart';
 import 'package:movies/widgets/my_image_app_bar.dart';
 import 'package:movies/widgets/sections/common/section.dart';
-import 'package:movies/widgets/sections/story_section.dart';
 
 class CollectionPage extends StatefulWidget {
   CollectionPage({
@@ -31,6 +30,7 @@ class _CollectionPageState extends State<CollectionPage> {
 
   init() async {
     var c = await fetchCollection(widget.id);
+    print(c.cover);
     if(c.cover != null && c.cover != '') {
       _preloadImage(lowImageLink(c.cover), null, (loaded) => {
         _calcMainColor(loaded)
@@ -40,7 +40,7 @@ class _CollectionPageState extends State<CollectionPage> {
       }), (loaded) => setState(() => {
         coverImage = loaded
       }));
-    }
+    } 
     setState(() {
       collection = c;
     });
@@ -67,7 +67,7 @@ class _CollectionPageState extends State<CollectionPage> {
   }
 
   _calcMainColor(image) async {
-    if(image != null) {
+    if(image != null && image != '') {
       var color = await getImagePalette(image.image);
       setState(() {
         mainColor = color;
@@ -90,6 +90,9 @@ class _CollectionPageState extends State<CollectionPage> {
 
   
   isLoading() {
+    print('imageLoading: $imageLoading');
+    print('collection: $collection');
+    print('mainColor: $mainColor');
     return collection == null
       || imageLoading == true
       || mainColor == null;
