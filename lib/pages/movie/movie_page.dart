@@ -6,7 +6,8 @@ import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/movie_detailed_model.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/utils/common_util.dart';
-import 'package:movies/widgets/containers/image_gradient_container.dart';
+import 'package:movies/widgets/containers/gradient_container.dart';
+import 'package:movies/widgets/loader.dart';
 import 'package:movies/widgets/my_image_app_bar.dart';
 import 'package:movies/widgets/result_card.dart';
 import 'package:movies/widgets/sections/collection_section.dart';
@@ -85,14 +86,7 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
   @override
   Widget build(BuildContext context) {
     return isLoading() 
-      ? ImageGradientContainer(
-        image: null,
-        children: [
-          Center(
-            child: LoadingAnimationWidget.fourRotatingDots(color: Colors.white, size: 50)
-          ),
-        ]
-      )
+      ? Loader()
       : Material(
         child: AnnotatedRegion(
           value: SystemUiOverlayStyle.light.copyWith(           

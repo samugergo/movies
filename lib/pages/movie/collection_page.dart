@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:movies/models/base/display_model.dart';
 import 'package:movies/models/detailed/collection_detailed_model.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/utils/common_util.dart';
-import 'package:movies/widgets/containers/image_gradient_container.dart';
+import 'package:movies/widgets/loader.dart';
 import 'package:movies/widgets/image.dart';
 import 'package:movies/widgets/my_image_app_bar.dart';
 import 'package:movies/widgets/sections/common/section.dart';
@@ -54,14 +53,7 @@ class _CollectionPageState extends ImageColoredState<CollectionPage> {
       );
     } 
     return isLoading() 
-    ? ImageGradientContainer(
-        image: null,
-        children: [
-          Center(
-            child: LoadingAnimationWidget.fourRotatingDots(color: Colors.white, size: 50)
-          ),
-        ]
-      )
+    ? Loader()
     : Material(
       child: AnnotatedRegion(
         value: SystemUiOverlayStyle.light.copyWith(           

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/main.dart';
 import 'package:movies/models/base/display_model.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/show/show_page.dart';
 import 'package:movies/widgets/button_switch.dart';
+import 'package:movies/widgets/loader.dart';
 import 'package:movies/widgets/filter_section.dart';
 import 'package:movies/widgets/load_button.dart';
 import 'package:provider/provider.dart';
@@ -35,9 +35,7 @@ class XContainer extends StatelessWidget {
     } 
 
     return appState.isEmptyByType(appState.type) 
-    ? Center(
-      child: LoadingAnimationWidget.fourRotatingDots(color: Colors.white, size: 50)
-    )
+    ? Loader()
     : ListView(
       controller: controller,
       children: [
