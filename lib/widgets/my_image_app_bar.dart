@@ -1,28 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:movies/utils/color_util.dart';
-import 'package:movies/widgets/result_card.dart';
 
 class MyImageAppBar extends SliverPersistentHeaderDelegate {
   MyImageAppBar({
     required this.title,
-    required this.poster,
-    required this.release,
-    required this.percent,
-    required this.raw,
-    required this.genres,
     required this.cover,
+    required this.child,
+    this.onlyTitle = true,
     this.color = const Color(0xff292A37),
   });
 
   final String title;
-  final String poster;
-  final String release;
-  final String percent;
-  final double raw;
-  final List genres;
   final Image? cover;
   final Color? color;
+  final Widget child;
+  final bool onlyTitle;
 
   final double _coverHeight = 270;
   final double _posterHeight = 150;
@@ -57,15 +48,18 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
         ));
 
         // expanded data
-        children.add(Positioned(
-          top: _coverHeight - _posterHeight/2 - shrinkOffset,
-          left: 10,
-          right: 10,
-          child: Opacity(
-            opacity: opacity,
-            child: _buildExpandedData(),
-          ),
-        ));
+        children.add(!onlyTitle 
+          ? Positioned(
+            top: _coverHeight - _posterHeight/2 - shrinkOffset,
+            left: 10,
+            right: 10,
+            child: Opacity(
+              opacity: opacity,
+              child: child,
+            )
+          )
+          : SizedBox()
+        );
 
         // shade container
         children.add(Opacity(
@@ -86,7 +80,7 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
 
         // collapsed app bar
         children.add(Align(
-          alignment: Alignment.topLeft,
+          alignment: onlyTitle ? Alignment.bottomCenter : Alignment.topLeft,
           child: Row(
             children: [
               IconButton(
@@ -98,7 +92,7 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
               ),
               Flexible(
                 child: Opacity(
-                  opacity: shrinkOffset / maxExtent,
+                  opacity: onlyTitle ? 1 : shrinkOffset / maxExtent,
                   child: _buildTitle(),
                 ),
               ),
@@ -132,20 +126,17 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
       },
       blendMode: BlendMode.srcOver,
       child: Container(        
-        decoration: BoxDecoration(
+        decoration: cover != null
+        ? BoxDecoration(
           image: DecorationImage(
             image: cover!.image,
             fit: BoxFit.cover,
           ),
+        )
+        : BoxDecoration(
+          color: Color(0xff292A37),
         ),
       ),
-      // child: cover != null 
-      // ? Image(
-      //   image: cover!.image,
-      //   height: _coverHeight,
-      //   fit: BoxFit.cover,  
-      // )
-      // : SizedBox()
     );
   }
 
@@ -158,17 +149,6 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
         fontSize: 18,
         fontWeight: FontWeight.bold
       ),
-    );
-  }
-
-  _buildExpandedData() {
-    return ResultCard(
-      image: poster, 
-      title: title, 
-      release: release, 
-      percent: percent, 
-      raw: raw,
-      genres: genres,
     );
   }
 

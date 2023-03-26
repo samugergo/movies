@@ -6,6 +6,7 @@ import 'package:movies/enums/type_enum.dart';
 import 'package:movies/models/base/list_response.dart';
 import 'package:movies/models/common/cast_model.dart';
 import 'package:movies/models/common/providers_model.dart';
+import 'package:movies/models/detailed/collection_detailed_model.dart';
 import 'package:movies/models/detailed/movie_detailed_model.dart';
 import 'package:movies/models/detailed/show_detailed_model.dart';
 
@@ -96,6 +97,21 @@ fetchRecommendations(int id, TypeEnum type) async {
     print(e);
   }
 }
+
+fetchCollection(int id) async {
+  try {
+    var response = await http.get(
+      Uri.parse(
+        '$baseUrl/collection/$id?$params'
+      )
+    );
+    var json = jsonDecode(response.body);
+    return CollectionDetailedModel.fromJson(json);
+  } catch (e) {
+    print(e);
+  }
+}
+
 
 search(int page, TypeEnum type, String query) async {
   try {

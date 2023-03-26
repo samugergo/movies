@@ -9,6 +9,7 @@ import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/widgets/containers/image_gradient_container.dart';
 import 'package:movies/widgets/my_image_app_bar.dart';
+import 'package:movies/widgets/result_card.dart';
 import 'package:movies/widgets/sections/collection_section.dart';
 import 'package:movies/widgets/sections/provider_section.dart';
 import 'package:movies/widgets/sections/cast_section.dart';
@@ -162,14 +163,18 @@ class _MoviePageState extends State<MoviePage> {
                   SliverPersistentHeader(
                     pinned: true,
                     delegate: MyImageAppBar(
-                      poster: movie!.image, 
                       title: movie!.title, 
-                      release: movie!.release, 
-                      percent: movie!.percent, 
-                      raw: movie!.raw,
-                      genres: movie!.genres, 
                       cover: coverImage,
                       color: mainColor,
+                      onlyTitle: false,
+                      child: ResultCard(
+                        image: movie!.image, 
+                        title: movie!.title, 
+                        release: movie!.release, 
+                        percent: movie!.percent, 
+                        raw: movie!.raw,
+                        genres: movie!.genres,
+                      ),
                     ),
                   ),
                 ];
@@ -179,35 +184,30 @@ class _MoviePageState extends State<MoviePage> {
                 child: Scaffold(
                   body: ListView(
                     children: [
-                      SizedBox(height: 10),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: ProviderSection(
                           providers: providers
                         ),
                       ),
-                      SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: StorySection(
                           description: movie!.description
                         ),
                       ),
-                      SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: CastSection(
                           cast: cast!
                         ),
                       ),
-                      SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: CollectionSection(
                           model: movie!.collection,
                         ),
                       ),
-                      SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: RecommendedSection(

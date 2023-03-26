@@ -40,6 +40,7 @@ class _CastMember extends StatelessWidget {
     return SizedBox(
       width: 133,
       child: Card(
+        margin: EdgeInsets.only(right: 8),
         elevation: 0,
         color: Colors.white10,
         shape: RoundedRectangleBorder(

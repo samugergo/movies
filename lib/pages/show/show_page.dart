@@ -10,6 +10,7 @@ import 'package:movies/utils/common_util.dart';
 import 'package:movies/widgets/containers/image_gradient_container.dart';
 import 'package:movies/widgets/display_app_bar.dart';
 import 'package:movies/widgets/my_image_app_bar.dart';
+import 'package:movies/widgets/result_card.dart';
 import 'package:movies/widgets/sections/cast_section.dart';
 import 'package:movies/widgets/sections/provider_section.dart';
 import 'package:movies/widgets/sections/recommended_section.dart';
@@ -166,14 +167,18 @@ class _ShowPageState extends State<ShowPage> {
                   SliverPersistentHeader(
                     pinned: true,
                     delegate: MyImageAppBar(
-                      poster: show!.image, 
                       title: show!.title, 
-                      release: show!.release, 
-                      percent: show!.percent, 
-                      raw: show!.raw,
-                      genres: show!.genres, 
+                      onlyTitle: false,
                       cover: coverImage,
                       color: mainColor,
+                      child: ResultCard(
+                        image: show!.image, 
+                        title: show!.title, 
+                        release: show!.release, 
+                        percent: show!.percent, 
+                        raw: show!.raw,
+                        genres: show!.genres,
+                      ),
                     ),
                   ),
                 ];

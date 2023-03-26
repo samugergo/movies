@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movies/enums/provider_enum.dart';
 import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/widgets/image.dart';
+import 'package:movies/widgets/sections/common/section.dart';
 
 class ProviderSection extends StatelessWidget {
 
@@ -42,9 +43,11 @@ class ProviderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Section(
+      title: 'Elérhetőség',
       children: providers!.available.map((e) => 
         Card(
+          margin: EdgeInsets.symmetric(horizontal: 0, vertical: 4),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(6),
           ),

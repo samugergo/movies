@@ -36,30 +36,27 @@ class RecommendedSection extends StatelessWidget {
             children: recommendations.map((e) => 
               SizedBox(
                 width: 133,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 4, left: 4),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(10),
-                    onTap: () => goTo(e.id),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        XImage(
-                          url: e.image, 
-                          width: 125, 
-                          height: 180, 
-                          radius: 10
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  onTap: () => goTo(e.id),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      XImage(
+                        url: e.image, 
+                        width: 125, 
+                        height: 180, 
+                        radius: 10
+                      ),
+                      Text(
+                        e.title,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12
                         ),
-                        Text(
-                          e.title,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12
-                          ),
-                        )
-                      ],
-                    ),
+                      )
+                    ],
                   ),
                 ),
               )
