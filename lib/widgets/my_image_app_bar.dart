@@ -67,12 +67,6 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
           child: Container(
             decoration: BoxDecoration(
               color: color,
-              border: Border(
-                bottom: BorderSide(
-                  color: color!,
-                  width: 0
-                )
-              ),
               // border: Border.all(color: Colors.red,)
             ),
           ),
@@ -99,6 +93,19 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
             ],
           ),
         ));
+
+        children.add(
+          Positioned(
+            bottom: -8,
+            left: 0,
+            right: 0,
+            child: Opacity(
+              opacity: shrinkOffset/maxExtent,
+              child: Divider(
+                color: Colors.white,
+              ),
+            ),
+          ));
 
         return Container(
           decoration: BoxDecoration(
