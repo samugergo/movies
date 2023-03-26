@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:movies/models/base/display_model.dart';
 import 'package:movies/models/detailed/collection_detailed_model.dart';
+import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
@@ -90,9 +91,6 @@ class _CollectionPageState extends State<CollectionPage> {
 
   
   isLoading() {
-    print('imageLoading: $imageLoading');
-    print('collection: $collection');
-    print('mainColor: $mainColor');
     return collection == null
       || imageLoading == true
       || mainColor == null;
@@ -106,6 +104,13 @@ class _CollectionPageState extends State<CollectionPage> {
 
   @override
   Widget build(BuildContext context) {
+    goTo(id) {
+      final Widget to = MoviePage(id: id);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => to),
+      );
+    } 
     return isLoading() 
     ? ImageGradientContainer(
         image: null,
@@ -146,7 +151,7 @@ class _CollectionPageState extends State<CollectionPage> {
                     children: [
                       ...chunkList(collection!.modelList).map((pair) => _ImageRow(
                         pair: pair,
-                        goTo: () {},
+                        goTo: goTo,
                       )).toList(),
                     ] 
                   ),

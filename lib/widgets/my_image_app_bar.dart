@@ -126,11 +126,15 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
       },
       blendMode: BlendMode.srcOver,
       child: Container(        
-        decoration: BoxDecoration(
+        decoration: cover != null
+        ? BoxDecoration(
           image: DecorationImage(
             image: cover!.image,
             fit: BoxFit.cover,
           ),
+        )
+        : BoxDecoration(
+          color: Color(0xff292A37),
         ),
       ),
     );
