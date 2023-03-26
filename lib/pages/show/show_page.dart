@@ -5,10 +5,9 @@ import 'package:movies/enums/type_enum.dart';
 import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/show_detailed_model.dart';
 import 'package:movies/services/service.dart';
-import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/widgets/containers/image_gradient_container.dart';
-import 'package:movies/widgets/display_app_bar.dart';
+import 'package:movies/widgets/states/common/image_colored_state.dart';
 import 'package:movies/widgets/my_image_app_bar.dart';
 import 'package:movies/widgets/result_card.dart';
 import 'package:movies/widgets/sections/cast_section.dart';
@@ -29,41 +28,13 @@ class ShowPage extends StatefulWidget {
   State<ShowPage> createState() => _ShowPageState();
 }
 
-class _ShowPageState extends State<ShowPage> {
+class _ShowPageState extends ImageColoredState<ShowPage> {
   ShowDetailedModel? show;
   Providers? providers;
   List? cast;
   List? recommendations;
-  Image? coverImage;
-  bool imageLoading = true;
-  Color? mainColor;
-  
-  init() async {
-    var s = await fetchById(widget.id, TypeEnum.show);
-    setState(() {
-      show = s;
-    });
 
-    _fetchProviders();
-    _fetchCast();
-    _fetchRecommends();
-    if(s.cover != null && s.cover != '') {
-      _preloadImage(lowImageLink(s.cover), null, (loaded) => {
-        _calcMainColor(loaded)
-      });
-      _preloadImage(originalImageLink(s.cover), () => setState(() => {
-        imageLoading = false
-      }), (loaded) => setState(() => {
-        coverImage = loaded
-      }));
-    } else {
-      setState(() {
-        imageLoading = false;
-        mainColor = Color(0xff292A37);
-      });
-    }
-  }
-
+  // fetch functions
   _fetchProviders() async {
     var p = await fetchProviders(widget.id, TypeEnum.show);
     setState(() {
@@ -81,49 +52,26 @@ class _ShowPageState extends State<ShowPage> {
     setState(() {
       recommendations = r;
     });
-  } 
-  _preloadImage(image, Function? setLoading, Function callback) {
-    if(image == null || image == '') {
-      if(setLoading != null) {
-        setLoading();
-      }
-      return;
-    }
-    var loadedImage = Image.network(image);
-    loadedImage.image.resolve(ImageConfiguration()).addListener(
-      ImageStreamListener(
-        (info, call) {
-          if(setLoading != null) {
-            setLoading();
-          }
-          callback(loadedImage);
-        },
-      ),
-    );
-  }
-  
-  _checkColor(image) async {
-    bool isLight = ThemeData.estimateBrightnessForColor(mainColor!) == Brightness.light;
-    if(isLight) {
-      updateMainColor(color) => {
-        setState(() => {
-          mainColor = color
-        })
-      };
-      darken(mainColor!, updateMainColor);
-    }
   }
 
-  _calcMainColor(image) async {
-    if(image != null) {
-      var color = await getImagePalette(image.image);
-      setState(() {
-        mainColor = color;
-      });
-      _checkColor(mainColor);
-    }
+  // init
+  @override
+  init() async {
+    var s = await fetchById(widget.id, TypeEnum.show);
+    setState(() {
+      show = s;
+    });
+
+    _fetchProviders();
+    _fetchCast();
+    _fetchRecommends();
+
+    preloadImageWithColor(lowImageLink(s.cover));
+    preloadImage(originalImageLink(s.cover));
   }
 
+  // loading
+  @override
   isLoading() {
     return show == null 
       || providers == null 
@@ -141,10 +89,6 @@ class _ShowPageState extends State<ShowPage> {
 
   @override
   Widget build(BuildContext context) {
-    // if(is)
-    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    //   statusBarColor: mainColor ?? Color(0xff292A37),
-    // ));
     return 
       isLoading()
       ? ImageGradientContainer(

@@ -5,12 +5,12 @@ import 'package:movies/models/base/display_model.dart';
 import 'package:movies/models/detailed/collection_detailed_model.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/services/service.dart';
-import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/widgets/containers/image_gradient_container.dart';
 import 'package:movies/widgets/image.dart';
 import 'package:movies/widgets/my_image_app_bar.dart';
 import 'package:movies/widgets/sections/common/section.dart';
+import 'package:movies/widgets/states/common/image_colored_state.dart';
 
 class CollectionPage extends StatefulWidget {
   CollectionPage({
@@ -23,83 +23,25 @@ class CollectionPage extends StatefulWidget {
   State<CollectionPage> createState() => _CollectionPageState();
 }
 
-class _CollectionPageState extends State<CollectionPage> {
+class _CollectionPageState extends ImageColoredState<CollectionPage> {
   CollectionDetailedModel? collection;
-  Image? coverImage;
-  Color? mainColor;
-  bool imageLoading = true;
 
+  @override
   init() async {
     var c = await fetchCollection(widget.id);
-    print(c.cover);
-    if(c.cover != null && c.cover != '') {
-      _preloadImage(lowImageLink(c.cover), null, (loaded) => {
-        _calcMainColor(loaded)
-      });
-      _preloadImage(originalImageLink(c.cover), () => setState(() => {
-        imageLoading = false
-      }), (loaded) => setState(() => {
-        coverImage = loaded
-      }));
-    } 
     setState(() {
       collection = c;
     });
+
+    preloadImageWithColor(lowImageLink(c.cover));
+    preloadImage(originalImageLink(c.cover));
   }
 
-  _preloadImage(image, Function? setLoading, Function callback) {
-    if(image == null || image == '') {
-      if(setLoading != null) {
-        setLoading();
-      }
-      return;
-    }
-    var loadedImage = Image.network(image);
-    loadedImage.image.resolve(ImageConfiguration()).addListener(
-      ImageStreamListener(
-        (info, call) {
-          if(setLoading != null) {
-            setLoading();
-          }
-          callback(loadedImage);
-        },
-      ),
-    );
-  }
-
-  _calcMainColor(image) async {
-    if(image != null && image != '') {
-      var color = await getImagePalette(image.image);
-      setState(() {
-        mainColor = color;
-      });
-      _checkColor(mainColor);
-    }
-  }
-
-  _checkColor(image) async {
-    bool isLight = ThemeData.estimateBrightnessForColor(mainColor!) == Brightness.light;
-    if(isLight) {
-      updateMainColor(color) => {
-        setState(() => {
-          mainColor = color
-        })
-      };
-      darken(mainColor!, updateMainColor);
-    }
-  }
-
-  
+  @override
   isLoading() {
     return collection == null
       || imageLoading == true
       || mainColor == null;
-  }
-
-  @override
-  void initState() {
-    init();
-    super.initState();
   }
 
   @override

@@ -12,7 +12,7 @@ chunkList(list) {
 }
 
 imageLink(image) {
-  if(image != null) {
+  if(image != null &&  image != '') {
     final imageUrl = dotenv.env['IMAGE_URL'];
     return '$imageUrl$image';
   }
@@ -20,7 +20,7 @@ imageLink(image) {
 }
 
 originalImageLink(image) {
-  if(image != null) {
+  if(image != null &&  image != '') {
     final imageUrl = dotenv.env['IMAGE_URL_ORIGINAL'];
     return '$imageUrl$image';
   }
@@ -28,7 +28,7 @@ originalImageLink(image) {
 }
 
 lowImageLink(image) {
-  if(image != null) {
+  if(image != null && image != '') {
     final imageUrl = dotenv.env['IMAGE_URL_LOW'];
     return '$imageUrl$image';
   }

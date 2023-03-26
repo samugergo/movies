@@ -36,7 +36,7 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
         
         // background image
         children.add(Positioned(
-          top: 0,
+          top: 0 - shrinkOffset/2,
           left: 0.0,
           right: 0.0,
           height: height,
