@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies/pages/movie/collection_page.dart';
 import 'package:movies/widgets/sections/common/section.dart';
 import 'package:movies/models/common/collection_model.dart';
 
@@ -11,6 +12,14 @@ class CollectionSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    goTo(id) {
+      final Widget to = CollectionPage(id: id);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => to),
+      );
+    } 
+
     return model != null
     ? Section(
       title: 'Gyűjtemény', 
@@ -46,7 +55,7 @@ class CollectionSection extends StatelessWidget {
               child: Align(
                 alignment: Alignment.center,
                 child: TextButton(
-                  onPressed: (){},
+                  onPressed: () => goTo(model!.id),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
                       Colors.black.withAlpha(120),

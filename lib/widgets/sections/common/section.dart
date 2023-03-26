@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class Section extends StatelessWidget {
   final String title;
   final List children;
+  final double titleLeftPadding;
 
   Section({
     required this.title,
-    required this.children
+    required this.children,
+    this.titleLeftPadding = 0.0,
   });
 
   @override
@@ -15,7 +17,7 @@ class Section extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(bottom: 8.0, top: 16),
+          padding: EdgeInsets.only(left: titleLeftPadding, bottom: 8.0, top: 16),
           child: Text(
             title,
             style: TextStyle(
