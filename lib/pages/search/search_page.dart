@@ -142,6 +142,7 @@ class _SearchState extends State<Search> {
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16),
                   child: InkWell(
+                    splashColor: Colors.transparent,
                     borderRadius: BorderRadius.circular(10),
                     onTap: () => goTo(e.id),
                     child: ResultCard(

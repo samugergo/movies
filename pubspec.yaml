@@ -17,6 +17,7 @@ dependencies:
   intl: ^0.18.0
   palette_generator: ^0.3.3+2
   loading_animation_widget: ^1.2.0+4
+  animations: ^2.0.7
 
 dev_dependencies:
   flutter_test:
