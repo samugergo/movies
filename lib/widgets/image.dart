@@ -16,6 +16,27 @@ class XImage extends StatelessWidget {
     required this.radius
   });
 
+  static Widget customRadius(String url, double width, double height, BorderRadius radius) {
+    return ClipRRect(
+      borderRadius: radius,
+      child: SizedBox(
+        width: width,
+        height: height,
+        child: url != '' 
+        ? Image.network(
+          url,
+          height: height,
+          fit: BoxFit.fill,
+        )
+        : Image.asset(
+          'assets/images/default.png',
+          height: height,
+          fit: BoxFit.fill,
+        )
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ClipRRect(

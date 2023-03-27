@@ -52,11 +52,13 @@ class _CastMember extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            XImage(
-              url: model.image, 
-              width: 125, 
-              height: 180, 
-              radius: 10
+            XImage.customRadius(
+              model.image, 
+              125, 180, 
+              BorderRadius.only(
+                topLeft: Radius.circular(10), 
+                topRight: Radius.circular(10)
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 6, left: 6, right: 6),
