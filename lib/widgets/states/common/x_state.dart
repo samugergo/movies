@@ -16,7 +16,6 @@ abstract class XState<T extends StatefulWidget> extends State<T> {
 
   @protected
   void preloadImage(image, [Function? updateImage, Function? updateImageLoading]) {
-    print(image);
     if(image == null || image == '') {
       _callOptionalFunction(updateImageLoading, false);
       return;
@@ -40,7 +39,6 @@ abstract class XState<T extends StatefulWidget> extends State<T> {
   /// 
   @protected
   void preloadImageWithColor(image, [Function? updateColor]) {
-    print(image);
     if(image == null || image == '') {
       _callOptionalFunction(updateColor, Color(0xff292A37));
       return;

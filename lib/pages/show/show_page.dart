@@ -8,6 +8,7 @@ import 'package:movies/services/service.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
 import 'package:movies/widgets/loader.dart';
+import 'package:movies/widgets/sections/season_section.dart';
 import 'package:movies/widgets/states/common/image_colored_state.dart';
 import 'package:movies/widgets/my_image_app_bar.dart';
 import 'package:movies/widgets/result_card.dart';
@@ -145,6 +146,13 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: CastSection(
                           cast: cast!
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: SeasonSection(
+                          list: show!.seasons
                         ),
                       ),
                       SizedBox(height: 10),

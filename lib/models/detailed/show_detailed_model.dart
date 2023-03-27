@@ -12,8 +12,7 @@ class ShowDetailedModel {
   final String cover;
   final String description;
   final List genres;
-  // final Providers providers;
-  // final List<SeasonModel> seasons;
+  final List seasons;
 
   ShowDetailedModel({
     required this.id,
@@ -25,8 +24,7 @@ class ShowDetailedModel {
     required this.cover,
     required this.description,
     required this.genres,
-    // required this.providers,
-    // required this.seasons
+    required this.seasons
   });
 
   factory ShowDetailedModel.fromJson(Map<String, dynamic> json) {
@@ -39,9 +37,8 @@ class ShowDetailedModel {
       image: imageLink(json['poster_path']), 
       cover: json['backdrop_path'] ?? '',
       description: json['overview'],
-      genres: json['genres'].map((g) => g['name']).toList(), 
-      // providers: Providers.fromJson(json['providers']),
-      // seasons: json['seasons'].map((s) => SeasonModel.fromJson(s)).toList()
+      genres: json['genres'].map((g) => g['name']).toList(),
+      seasons: json['seasons'].map((s) => SeasonModel.fromJson(s)).toList()
     );
   }
 }
