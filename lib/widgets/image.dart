@@ -37,6 +37,23 @@ class XImage extends StatelessWidget {
     );
   }
 
+  static Widget custom(String url, double width) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: url != '' 
+      ? Image.network(
+        url,
+        width: width,
+        fit: BoxFit.fill,
+      )
+      : Image.asset(
+        'assets/images/default.png',
+        width: width,
+        fit: BoxFit.fill,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ClipRRect(

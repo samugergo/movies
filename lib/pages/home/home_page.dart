@@ -40,7 +40,7 @@ class XContainer extends StatelessWidget {
       controller: controller,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 14.0, right: 14, top: 10),
+          padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
           child: Column(
             children: [
               ButtonSwitch(),
@@ -67,17 +67,27 @@ class _ImageRow extends StatelessWidget {
     required this.goTo
   });
 
+  final double _padding = 20;
+
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width/2 - _padding;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        pair.isNotEmpty 
-        ? _ImageCard(model: pair[0], goTo: goTo)
-        : SizedBox(),
-        pair.length > 1 
-        ? _ImageCard(model: pair[1], goTo: goTo)
-        : SizedBox()
+        Padding(
+          padding: EdgeInsets.only(right: 5),
+          child: pair.isNotEmpty 
+          ? _ImageCard(model: pair[0], goTo: goTo, width: width)
+          : SizedBox(),
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 5),
+          child: pair.length > 1 
+          ? _ImageCard(model: pair[1], goTo: goTo, width: width)
+          : SizedBox(width: width),
+        ),
       ],
     );
   }
@@ -87,24 +97,28 @@ class _ImageRow extends StatelessWidget {
 class _ImageCard extends StatelessWidget {
   final DisplayModel model;
   final Function goTo;
+  final double width;
 
   _ImageCard({
     required this.model,
-    required this.goTo
+    required this.goTo,
+    required this.width,
   });
 
+  final double _padding = 20;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {    
+    double width = MediaQuery.of(context).size.width/2 - _padding;
+
     return Padding(
-      padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16),
+      padding: const EdgeInsets.only(bottom: 10),
       child: InkWell(
         borderRadius: BorderRadius.circular(10),
         onTap: () => goTo(model.id),
-        child: XImage(
-          url: model.image,
-          width: 180,
-          height: 270,
-          radius: 10,
+        child: XImage.custom(
+          model.image,
+          width
         ),
       ),
     );
