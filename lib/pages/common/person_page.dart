@@ -148,7 +148,7 @@ class _PersonPageState extends ImageColoredState<PersonPage> {
                         ),
                         Section(
                           title: 'Filmek',
-                          titleLeftPadding: 10,
+                          titleLeftPadding: 15,
                           children: [
                             ...chunkList(movieList).map((pair) => _ImageRow(
                               pair: pair,
@@ -159,7 +159,7 @@ class _PersonPageState extends ImageColoredState<PersonPage> {
                         ),
                         Section(
                           title: 'Sorozatok & Tv',
-                          titleLeftPadding: 10,
+                          titleLeftPadding: 15,
                           children: [
                             ...chunkList(showList).map((pair) => _ImageRow(
                               pair: pair,
@@ -188,48 +188,63 @@ class _ImageRow extends StatelessWidget {
   _ImageRow({
     required this.pair,
     required this.goTo,
-    required this.type,
+    required this.type
   });
+
+  final double _padding = 20;
 
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width/2 - _padding;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        pair.isNotEmpty 
-        ? _ImageCard(model: pair[0], goTo: goTo, type: type)
-        : SizedBox(),
-        pair.length > 1 
-        ? _ImageCard(model: pair[1], goTo: goTo, type: type)
-        : SizedBox(width: 195)
+        Padding(
+          padding: EdgeInsets.only(right: 5),
+          child: pair.isNotEmpty 
+          ? _ImageCard(model: pair[0], goTo: goTo, width: width, type: 'movie')
+          : SizedBox(),
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 5),
+          child: pair.length > 1 
+          ? _ImageCard(model: pair[1], goTo: goTo, width: width, type: 'tv')
+          : SizedBox(width: width),
+        ),
       ],
     );
   }
+
 }
 
 class _ImageCard extends StatelessWidget {
   final DisplayModel model;
   final Function goTo;
+  final double width;
   final String type;
 
   _ImageCard({
     required this.model,
     required this.goTo,
-    required this.type,
+    required this.width,
+    required this.type
   });
 
+  final double _padding = 20;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {    
+    double width = MediaQuery.of(context).size.width/2 - _padding;
+
     return Padding(
-      padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16),
+      padding: const EdgeInsets.only(bottom: 10),
       child: InkWell(
         borderRadius: BorderRadius.circular(10),
         onTap: () => goTo(model.id, type),
-        child: XImage(
-          url: model.image,
-          width: 180,
-          height: 270,
-          radius: 10,
+        child: XImage.custom(
+          model.image,
+          width
         ),
       ),
     );
