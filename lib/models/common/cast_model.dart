@@ -14,6 +14,7 @@ class CastModel {
   });
 
   factory CastModel.fromJson(Map<String, dynamic> json) {
+    print(json["id"]);
     return CastModel(
       id: json['id'],
       name: json['name'],

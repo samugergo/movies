@@ -5,6 +5,7 @@ import 'package:movies/enums/order_enum.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/models/base/list_response.dart';
 import 'package:movies/models/common/cast_model.dart';
+import 'package:movies/models/common/person_model.dart';
 import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/collection_detailed_model.dart';
 import 'package:movies/models/detailed/movie_detailed_model.dart';
@@ -112,6 +113,33 @@ fetchCollection(int id) async {
   }
 }
 
+fetchPersonById(int id) async {
+  try {
+    var response = await http.get(
+      Uri.parse(
+        '$baseUrl/person/$id?$params'
+      )
+    );
+    var json = jsonDecode(response.body);
+    return PersonModel.fromJson(json);
+  } catch (e) {
+    print(e);
+  }
+}
+
+fetchPerform(int id, String type) async {
+  try {
+    var response = await http.get(
+      Uri.parse(
+        '$baseUrl/person/$id/${type}_credits?$params'
+      )
+    );
+    var json = jsonDecode(response.body);
+    return json['cast'].map((r) => DisplayModel.fromJson(r)).toList();
+  } catch (e) {
+    print(e);
+  }
+}
 
 search(int page, TypeEnum type, String query) async {
   try {
