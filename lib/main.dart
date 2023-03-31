@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies/states/movie_cubit.dart';
+import 'package:movies/states/movie_observer.dart';
 import 'package:movies/widgets/hidable_fab.dart';
 import 'package:movies/widgets/main_app_bar.dart';
 import 'package:provider/provider.dart'; 
@@ -13,6 +16,7 @@ void main() async {
   Paint.enableDithering = true;
 
   await dotenv.load(fileName: ".env");
+  // Bloc.observer = MovieObserver();
 
   runApp(MainApp());
 }

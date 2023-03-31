@@ -27,8 +27,39 @@ darkenSync(Color c) {
   );
 }
 
-getImagePalette (ImageProvider imageProvider) async {
+getImagePalette(ImageProvider imageProvider) async {
   final PaletteGenerator paletteGenerator = await PaletteGenerator
       .fromImageProvider(imageProvider);
   return paletteGenerator.dominantColor?.color ?? Color(0xff292A37);
+}
+
+Color checkColor(Color color) {
+  bool isLight = ThemeData.estimateBrightnessForColor(color) == Brightness.light;
+  if(isLight) {
+    return darkenSync(color);
+  }
+  return Colors.black;
+}
+
+void calcMainColor(Image? image, Function callback) async {
+  if(image != null) {
+    var c = await getImagePalette(image.image);
+    var color = checkColor(c);
+    print(color);
+    callback(color);
+  }
+}
+
+getColorFromImage(String? image, Function callback) async {
+  if (image == null || image == '') {
+    callback(Colors.black);
+  }
+  var loadedImage = Image.network(image!);
+  loadedImage.image.resolve(ImageConfiguration()).addListener(
+    ImageStreamListener(
+      (info, call) {
+        calcMainColor(loadedImage, callback);
+      },
+    ),
+  );
 }

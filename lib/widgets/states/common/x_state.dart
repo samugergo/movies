@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies/utils/color_util.dart';
 
-abstract class XState<T extends StatefulWidget> extends State<T> {
+abstract class  XState<T extends StatefulWidget> extends State<T> {
   Function _callOptionalFunction = (function, param) => {
     if(function != null) {
       function(param)

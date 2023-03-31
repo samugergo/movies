@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/main.dart';
 import 'package:movies/models/base/display_model.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/show/show_page.dart';
+import 'package:movies/states/movie_cubit.dart';
+import 'package:movies/states/movie_state.dart';
+import 'package:movies/states/state_loader.dart';
 import 'package:movies/widgets/button_switch.dart';
 import 'package:movies/widgets/loader.dart';
 import 'package:movies/widgets/filter_section.dart';
@@ -34,27 +38,32 @@ class XContainer extends StatelessWidget {
       );
     } 
 
-    return appState.isEmptyByType(appState.type) 
-    ? Loader()
-    : ListView(
-      controller: controller,
+    return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-          child: Column(
-            children: [
-              ButtonSwitch(),
-              FilterSection(),
-            ],
-          ),
-        ),
-        ...list.map((pair) => _ImageRow(
-          pair: pair,
-          goTo: goTo,
-        )).toList(),
-        LoadButton(load: appState.loadMore),
-      ]
+        StateLoader(),
+      ],
     );
+    // return appState.isEmptyByType(appState.type) 
+    // ? Loader()
+    // : ListView(
+    //   controller: controller,
+    //   children: [
+    //     Padding(
+    //       padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+    //       child: Column(
+    //         children: [
+    //           ButtonSwitch(),
+    //           FilterSection(),
+    //         ],
+    //       ),
+    //     ),
+    //     ...list.map((pair) => _ImageRow(
+    //       pair: pair,
+    //       goTo: goTo,
+    //     )).toList(),
+    //     LoadButton(load: appState.loadMore),
+    //   ]
+    // );
   }
 }
 
