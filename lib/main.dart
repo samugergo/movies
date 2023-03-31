@@ -99,16 +99,24 @@ class MainAppState extends ChangeNotifier {
   // --- setter functions ---
   setMovies(movies) {
     this.movies = movies;
-    moviePage = 1;
+    moviePage = 2;
     notifyListeners();
   }
   setShows(shows) {
     this.shows = shows;
-    showPage = 1;
+    showPage = 2;
     notifyListeners();
   }
   setType(type) {
     this.type = type;
+    var list = type == TypeEnum.movie ? movies : shows;
+    if(list.isNotEmpty) {
+      if(type == TypeEnum.movie) {
+        setMovies(list.sublist(0, 40));
+      } else {
+        setShows(list.sublist(0, 40));
+      }
+    }
     notifyListeners();
   }
   setOrder(order) {
@@ -128,19 +136,29 @@ class MainAppState extends ChangeNotifier {
   }
   // --- load fuctions ---
   loadMovies(callback) async {
-    final list = await fetch(moviePage, type, order);
-    callback(list);
+    final list1 = await fetch(moviePage, type, order);
+    final list2 = await fetch(++moviePage, type, order);
+    moviePage++;
+    list1.addAll(list2);
+    callback(list1);
   }
   loadShows(callback) async {
-    final list = await fetch(showPage, type, order);
-    callback(list);
+    final list1 = await fetch(showPage, type, order);
+    final list2 = await fetch(++showPage, type, order);
+    showPage++;
+    list1.addAll(list2);
+    callback(list1);
   }
   loadByOrder(order) async {
     moviePage = 0;
     showPage = 0;
     final m = await fetch(moviePage, TypeEnum.movie, order);
+    final m2 = await fetch(++moviePage, TypeEnum.movie, order);
+    m.addAll(m2);
     setMovies(m);
     final s = await fetch(showPage, TypeEnum.show, order);
+    final s2 = await fetch(++showPage, TypeEnum.show, order);
+    s.addAll(s2);
     setShows(s);
   }
   loadByType(type) {

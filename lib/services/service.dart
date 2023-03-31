@@ -21,6 +21,7 @@ final region = dotenv.env['REGION'];
 final params = 'language=$lang&region=$region&api_key=$apiKey';
 
 fetch(int page, TypeEnum type, OrderEnum order) async {
+  print(page);
   try {
     var response = await http.get(
       Uri.parse(
