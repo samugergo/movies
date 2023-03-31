@@ -5,7 +5,9 @@ import 'package:movies/models/common/person_model.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/show/show_page.dart';
 import 'package:movies/services/service.dart';
+import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
+import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
 import 'package:movies/widgets/image.dart';
 import 'package:movies/widgets/loader.dart';
@@ -69,11 +71,17 @@ class _PersonPageState extends ImageColoredState<PersonPage> {
 
   @override
   Widget build(BuildContext context) {
-    goTo(id, type) {
-      final Widget to = type == 'movie' ? MoviePage(id: id) : ShowPage(id: id);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => to),
+    goColor(id, color, type) {
+      final Widget to = type == 'movie'
+        ? MoviePage(id: id, color: color) 
+        : ShowPage(id: id, color: color);
+      goTo(context, to);
+    }
+
+    go(model, type){
+      getColorFromImage(
+        lowImageLink(model.cover), 
+        (color) => goColor(model.id, color, type)
       );
     } 
 
@@ -152,7 +160,7 @@ class _PersonPageState extends ImageColoredState<PersonPage> {
                           children: [
                             ...chunkList(movieList).map((pair) => _ImageRow(
                               pair: pair,
-                              goTo: goTo,
+                              goTo: go,
                               type: 'movie'
                             )).toList(),
                           ],
@@ -163,7 +171,7 @@ class _PersonPageState extends ImageColoredState<PersonPage> {
                           children: [
                             ...chunkList(showList).map((pair) => _ImageRow(
                               pair: pair,
-                              goTo: goTo,
+                              goTo: go,
                               type: 'show'
                             )).toList(),
                           ],
@@ -241,7 +249,7 @@ class _ImageCard extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 10),
       child: InkWell(
         borderRadius: BorderRadius.circular(10),
-        onTap: () => goTo(model.id, type),
+        onTap: () => goTo(model, type),
         child: XImage.custom(
           model.image,
           width

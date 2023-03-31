@@ -6,6 +6,7 @@ import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/show_detailed_model.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/utils/common_util.dart';
+import 'package:movies/widgets/color_loader.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
 import 'package:movies/widgets/loader.dart';
 import 'package:movies/widgets/sections/season_section.dart';
@@ -20,10 +21,12 @@ import 'package:movies/widgets/sections/story_section.dart';
 class ShowPage extends StatefulWidget {
 
   final int id;
+  final Color color;
 
   ShowPage({
     super.key,
-    required this.id
+    required this.id,
+    required this.color,
   });
 
   @override
@@ -68,7 +71,6 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
     _fetchCast();
     _fetchRecommends();
 
-    preloadImageWithColor(lowImageLink(s.cover));
     preloadImage(originalImageLink(s.cover));
   }
 
@@ -79,7 +81,6 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
       || providers == null 
       || cast == null 
       || recommendations == null 
-      || mainColor == null
       || imageLoading;
   }
 
@@ -93,11 +94,11 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
   Widget build(BuildContext context) {
     return 
       isLoading()
-      ? Loader()
+      ? ColorLoader(color: widget.color)
       : Material(
         child: AnnotatedRegion(
           value: SystemUiOverlayStyle.light.copyWith(           
-            statusBarColor: mainColor ?? Color(0xff292A37),
+            statusBarColor: widget.color,
           ),
           child: SafeArea(
             child: NestedScrollView(
@@ -109,7 +110,7 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
                       title: show!.title, 
                       onlyTitle: false,
                       cover: coverImage,
-                      color: mainColor,
+                      color: widget.color,
                       child: ResultCard(
                         image: show!.image, 
                         title: show!.title, 
@@ -123,7 +124,7 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
                 ];
               },
               body: Container(
-                color: mainColor,
+                color: widget.color,
                 child: Scaffold(
                   body: ListView(
                     children: [

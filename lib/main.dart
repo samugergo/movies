@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:movies/widgets/hidable_fab.dart';
 import 'package:movies/widgets/main_app_bar.dart';
 import 'package:provider/provider.dart'; 
@@ -44,20 +45,27 @@ class MainApp extends StatelessWidget {
               tileMode: TileMode.mirror
             ),
           ),
-          child: Scaffold(
-            appBar: AppBar(
-              title: MainAppBar(),
-              titleSpacing: 20,
-              centerTitle: true,
-              elevation: 0,
-              scrolledUnderElevation: 0,
-              backgroundColor: Color(0xff292A37),
+          child: AnnotatedRegion(
+            value: SystemUiOverlayStyle.light.copyWith(           
+              statusBarColor: Color(0xff292A37),
             ),
-            body: XContainer(
-              controller: scrollController,
-            ),
-            floatingActionButton: HidableFab(
-              controller: scrollController
+            child: SafeArea(
+              child: Scaffold(
+                appBar: AppBar(
+                  title: MainAppBar(),
+                  titleSpacing: 20,
+                  centerTitle: true,
+                  elevation: 0,
+                  scrolledUnderElevation: 0,
+                  backgroundColor: Color(0xff292A37),
+                ),
+                body: XContainer(
+                  controller: scrollController,
+                ),
+                floatingActionButton: HidableFab(
+                  controller: scrollController
+                ),
+              ),
             ),
           ),
         ),

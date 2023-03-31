@@ -5,6 +5,9 @@ import 'package:movies/models/base/list_response.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/show/show_page.dart';
 import 'package:movies/services/service.dart';
+import 'package:movies/utils/color_util.dart';
+import 'package:movies/utils/common_util.dart';
+import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/load_button.dart';
 import 'package:movies/widgets/result_card.dart';
 import 'package:provider/provider.dart';
@@ -63,11 +66,17 @@ class _SearchState extends State<Search> {
   Widget build(BuildContext context) {
     final appState = context.watch<MainAppState>();
 
-    goTo(id) {
-      final Widget to = appState.type == TypeEnum.movie ? MoviePage(id: id) : ShowPage(id: id);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => to),
+    goColor(id, color) {
+      final Widget to = appState.type == TypeEnum.movie 
+        ? MoviePage(id: id, color: color) 
+        : ShowPage(id: id, color: color);
+      goTo(context, to);
+    }
+
+    go(model){
+      getColorFromImage(
+        lowImageLink(model.cover), 
+        (color) => goColor(model.id, color)
       );
     } 
 
@@ -144,7 +153,7 @@ class _SearchState extends State<Search> {
                   child: InkWell(
                     splashColor: Colors.transparent,
                     borderRadius: BorderRadius.circular(10),
-                    onTap: () => goTo(e.id),
+                    onTap: () => go(e),
                     child: ResultCard(
                       image: e.image,
                       title: e.title,

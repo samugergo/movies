@@ -18,7 +18,7 @@ class CollectionModel {
       id: json['id'], 
       title: json['name'], 
       image: imageLink(json['poster_path']), 
-      cover: originalImageLink(json['backdrop_path']),
+      cover: json['backdrop_path'] ?? '',
     );
   }
 }

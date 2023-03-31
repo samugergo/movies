@@ -6,6 +6,7 @@ import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/movie_detailed_model.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/utils/common_util.dart';
+import 'package:movies/widgets/color_loader.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
 import 'package:movies/widgets/loader.dart';
 import 'package:movies/widgets/my_image_app_bar.dart';
@@ -20,10 +21,12 @@ import 'package:movies/widgets/states/common/image_colored_state.dart';
 class MoviePage extends StatefulWidget {
 
   final int id;
+  final Color color;
 
   MoviePage({
     super.key,
-    required this.id
+    required this.id,
+    required this.color,
   });
 
   @override
@@ -68,7 +71,7 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
     _fetchCast();
     _fetchRecommends();
 
-    preloadImageWithColor(lowImageLink(m.cover));
+    // preloadImageWithColor(lowImageLink(m.cover));
     preloadImage(originalImageLink(m.cover));
   }
 
@@ -79,18 +82,17 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
       || providers == null 
       || cast == null 
       || recommendations == null 
-      || mainColor == null
       || imageLoading;
   }
 
   @override
   Widget build(BuildContext context) {
     return isLoading() 
-      ? Loader()
+      ? ColorLoader(color: widget.color)
       : Material(
         child: AnnotatedRegion(
           value: SystemUiOverlayStyle.light.copyWith(           
-            statusBarColor: mainColor ?? Color(0xff292A37),
+            statusBarColor: widget.color,
           ),
           child: SafeArea(
             child: NestedScrollView(
@@ -101,7 +103,7 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
                     delegate: MyImageAppBar(
                       title: movie!.title, 
                       cover: coverImage,
-                      color: mainColor,
+                      color: widget.color,
                       onlyTitle: false,
                       child: ResultCard(
                         image: movie!.image, 
@@ -116,7 +118,7 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
                 ];
               },
               body: Container(
-                color: mainColor,
+                color: widget.color,
                 child: Scaffold(
                   body: ListView(
                     children: [

@@ -3,6 +3,9 @@ import 'package:movies/enums/type_enum.dart';
 import 'package:movies/main.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/show/show_page.dart';
+import 'package:movies/utils/color_util.dart';
+import 'package:movies/utils/common_util.dart';
+import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/image.dart';
 import 'package:movies/widgets/sections/common/section.dart';
 import 'package:provider/provider.dart';
@@ -18,11 +21,17 @@ class RecommendedSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final appState = context.watch<MainAppState>();
 
-    goTo(id) {
-      final Widget to = appState.type == TypeEnum.movie ? MoviePage(id: id) : ShowPage(id: id);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => to),
+    goColor(id, color) {
+      final Widget to = appState.type == TypeEnum.movie 
+        ? MoviePage(id: id, color: color) 
+        : ShowPage(id: id, color: color);
+      goTo(context, to);
+    }
+
+    go(model){
+      getColorFromImage(
+        lowImageLink(model.cover), 
+        (color) => goColor(model.id, color)
       );
     } 
     
@@ -38,7 +47,7 @@ class RecommendedSection extends StatelessWidget {
                 width: 133,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(10),
-                  onTap: () => goTo(e.id),
+                  onTap: () => go(e),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

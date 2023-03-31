@@ -27,7 +27,7 @@ class DisplayModel {
       raw: json['vote_average'].toDouble(),
       percent: percentFormat(json['vote_average']), 
       image: imageLink(json['poster_path']), 
-      cover: imageLink(json['cover']),
+      cover: json['backdrop_path'] ?? '',
     );
   }
 

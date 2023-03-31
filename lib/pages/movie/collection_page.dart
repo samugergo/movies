@@ -4,7 +4,10 @@ import 'package:movies/models/base/display_model.dart';
 import 'package:movies/models/detailed/collection_detailed_model.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/services/service.dart';
+import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
+import 'package:movies/utils/navigation_util.dart';
+import 'package:movies/widgets/color_loader.dart';
 import 'package:movies/widgets/loader.dart';
 import 'package:movies/widgets/image.dart';
 import 'package:movies/widgets/my_image_app_bar.dart';
@@ -14,9 +17,11 @@ import 'package:movies/widgets/states/common/image_colored_state.dart';
 class CollectionPage extends StatefulWidget {
   CollectionPage({
     required this.id,
+    required this.color,
   });
 
   final int id; 
+  final Color color;
 
   @override
   State<CollectionPage> createState() => _CollectionPageState();
@@ -32,32 +37,35 @@ class _CollectionPageState extends ImageColoredState<CollectionPage> {
       collection = c;
     });
 
-    preloadImageWithColor(lowImageLink(c.cover));
     preloadImage(originalImageLink(c.cover));
   }
 
   @override
   isLoading() {
     return collection == null
-      || imageLoading == true
-      || mainColor == null;
+      || imageLoading == true;
   }
 
   @override
   Widget build(BuildContext context) {
-    goTo(id) {
-      final Widget to = MoviePage(id: id);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => to),
+    goColor(id, color) {
+      final Widget to = MoviePage(id: id, color: color);
+      goTo(context, to);
+    }
+
+    go(model){
+      getColorFromImage(
+        lowImageLink(model.cover), 
+        (color) => goColor(model.id, color)
       );
-    } 
+    }
+
     return isLoading() 
-    ? Loader()
+    ? ColorLoader(color: widget.color)
     : Material(
       child: AnnotatedRegion(
         value: SystemUiOverlayStyle.light.copyWith(           
-          statusBarColor: mainColor ?? Color(0xff292A37),
+          statusBarColor: widget.color,
         ),
         child: SafeArea(
           child: NestedScrollView(
@@ -68,7 +76,7 @@ class _CollectionPageState extends ImageColoredState<CollectionPage> {
                   delegate: MyImageAppBar(
                     title: collection!.title, 
                     cover: coverImage,
-                    color: mainColor,
+                    color: widget.color,
                     onlyTitle: true,
                     child: Text(collection!.title),
                   ),
@@ -76,7 +84,7 @@ class _CollectionPageState extends ImageColoredState<CollectionPage> {
               ];
             },
             body: Container(
-              color: mainColor,
+              color: widget.color,
               child: ListView(
                 children: [
                   Section(
@@ -85,7 +93,7 @@ class _CollectionPageState extends ImageColoredState<CollectionPage> {
                     children: [
                       ...chunkList(collection!.modelList).map((pair) => _ImageRow(
                         pair: pair,
-                        goTo: goTo,
+                        goTo: go,
                       )).toList(),
                     ] 
                   ),

@@ -4,11 +4,15 @@ import 'package:movies/main.dart';
 import 'package:movies/models/base/display_model.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/show/show_page.dart';
+import 'package:movies/utils/color_util.dart';
+import 'package:movies/utils/common_util.dart';
+import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/button_switch.dart';
 import 'package:movies/widgets/loader.dart';
 import 'package:movies/widgets/filter_section.dart';
 import 'package:movies/widgets/load_button.dart';
 import 'package:provider/provider.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '../../widgets/image.dart';
 
@@ -26,14 +30,19 @@ class XContainer extends StatelessWidget {
 
     List list = appState.type == TypeEnum.movie ? appState.movies : appState.shows;    
 
-    goTo(id) {
-      final Widget to = appState.type == TypeEnum.movie ? MoviePage(id: id) : ShowPage(id: id);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => to),
+    goColor(id, color) {
+      final Widget to = appState.type == TypeEnum.movie 
+        ? MoviePage(id: id, color: color) 
+        : ShowPage(id: id, color: color);
+      goTo(context, to);
+    }
+    go(model){
+      getColorFromImage(
+        lowImageLink(model.cover), 
+        (color) => goColor(model.id, color)
       );
     } 
-
+ 
     return appState.isEmptyByType(appState.type) 
     ? Loader()
     : ListView(
@@ -50,7 +59,7 @@ class XContainer extends StatelessWidget {
         ),
         ...list.map((pair) => _ImageRow(
           pair: pair,
-          goTo: goTo,
+          goTo: go,
         )).toList(),
         LoadButton(load: appState.loadMore),
       ]
@@ -115,7 +124,7 @@ class _ImageCard extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 10),
       child: InkWell(
         borderRadius: BorderRadius.circular(10),
-        onTap: () => goTo(model.id),
+        onTap: () => goTo(model),
         child: XImage.custom(
           model.image,
           width

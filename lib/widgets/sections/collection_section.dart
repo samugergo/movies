@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:movies/pages/movie/collection_page.dart';
+import 'package:movies/utils/color_util.dart';
+import 'package:movies/utils/common_util.dart';
+import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/sections/common/section.dart';
 import 'package:movies/models/common/collection_model.dart';
 
@@ -12,11 +15,15 @@ class CollectionSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    goTo(id) {
-      final Widget to = CollectionPage(id: id);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => to),
+    goColor(id, color) {
+      final Widget to = CollectionPage(id: id, color: color);
+      goTo(context, to);
+    }
+
+    go(model){
+      getColorFromImage(
+        lowImageLink(model.cover), 
+        (color) => goColor(model.id, color)
       );
     } 
 
@@ -40,7 +47,7 @@ class CollectionSection extends StatelessWidget {
                         colorFilter: ColorFilter.mode(Colors.white60, BlendMode.modulate),
                         child: model!.cover != ''
                         ? Image.network(
-                          model!.cover,
+                          originalImageLink(model!.cover),
                           fit: BoxFit.cover,
                           height: 180,
                         )
@@ -55,7 +62,7 @@ class CollectionSection extends StatelessWidget {
               child: Align(
                 alignment: Alignment.center,
                 child: TextButton(
-                  onPressed: () => goTo(model!.id),
+                  onPressed: () => go(model),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
                       Colors.black.withAlpha(120),
