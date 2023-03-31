@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:movies/main.dart';
-import 'package:movies/widgets/filter_sheet.dart';
+import 'package:movies/widgets/sections/filter/filter_sheet.dart';
 import 'package:provider/provider.dart';
 
 class FilterSection extends StatelessWidget {
