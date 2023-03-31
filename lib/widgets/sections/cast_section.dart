@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies/models/common/cast_model.dart';
 import 'package:movies/pages/common/person_page.dart';
+import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/others/image.dart';
 import 'package:movies/widgets/sections/common/section.dart';
 
@@ -38,17 +39,15 @@ class _CastMember extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    goTo(id) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => PersonPage(id: id)),
-      );
+    go(id) {
+      final to = PersonPage(id: id);
+      goTo(context, to);
     } 
 
     return SizedBox(
       width: 133,
       child: InkWell(
-        onTap: () => goTo(model.id),
+        onTap: () => go(model.id),
         child: Card(
           margin: EdgeInsets.only(right: 8),
           elevation: 0,

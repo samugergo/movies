@@ -22,6 +22,7 @@ class ButtonSwitch extends StatelessWidget  {
 
     return Card(
       color: background,
+      margin: EdgeInsets.zero,
       elevation: 0.0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),

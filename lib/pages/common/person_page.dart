@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:movies/enums/type_enum.dart';
 import 'package:movies/models/base/display_model.dart';
 import 'package:movies/models/common/person_model.dart';
 import 'package:movies/pages/movie/movie_page.dart';
@@ -9,10 +10,13 @@ import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
+import 'package:movies/widgets/loaders/color_loader.dart';
 import 'package:movies/widgets/others/image.dart';
 import 'package:movies/widgets/loaders/loader.dart';
 import 'package:movies/widgets/appbars/my_image_app_bar.dart';
+import 'package:movies/widgets/others/image_card.dart';
 import 'package:movies/widgets/sections/common/section.dart';
+import 'package:movies/widgets/sections/common/section_title.dart';
 import 'package:movies/widgets/states/common/image_colored_state.dart';
 
 class PersonPage extends StatefulWidget {
@@ -55,15 +59,13 @@ class _PersonPageState extends ImageColoredState<PersonPage> {
 
     _fetchMovieList();
     _fetchShowList();
-
-    // preloadImageWithColor(lowImageLink(p.image));
+    
     preloadImage(originalImageLink(p.image));
   }
 
   @override
   bool isLoading() {
     return person == null 
-      || mainColor == null
       || movieList == null
       || showList == null
       || imageLoading;
@@ -72,7 +74,7 @@ class _PersonPageState extends ImageColoredState<PersonPage> {
   @override
   Widget build(BuildContext context) {
     goColor(id, color, type) {
-      final Widget to = type == 'movie'
+      final Widget to = type == TypeEnum.movie
         ? MoviePage(id: id, color: color) 
         : ShowPage(id: id, color: color);
       goTo(context, to);
@@ -85,12 +87,19 @@ class _PersonPageState extends ImageColoredState<PersonPage> {
       );
     } 
 
+    final double width = MediaQuery.of(context).size.width;
+    const itemCount = 3;
+    const crossSpacing = 10.0;
+    const mainSpacing = 10.0;
+    final itemWidth = width/itemCount - itemCount * crossSpacing;
+    final itemHeight = itemWidth*1.5;
+
     return isLoading()
-      ? Loader()
+      ? ColorLoader(color: mainColor!)
       : Material(
         child: AnnotatedRegion(
           value: SystemUiOverlayStyle.light.copyWith(           
-            statusBarColor: mainColor ?? Color(0xff292A37),
+            statusBarColor: mainColor,
           ),
           child: SafeArea(
             child: NestedScrollView(
@@ -111,73 +120,90 @@ class _PersonPageState extends ImageColoredState<PersonPage> {
               body: GradientContainer(
                 children: [
                   Scaffold(
-                    body: ListView(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Section(
-                            title: 'Alap adatok', 
-                            children: [
-                              Card(
-                                margin: EdgeInsets.zero,
-                                elevation: 0,
-                                color: Colors.black26,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  side: BorderSide(color: Colors.white12, width: 1),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            person!.birthday,
-                                            style: TextStyle(
-                                              color: Colors.white70
+                    body: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Section(
+                              title: 'Alap adatok', 
+                              children: [
+                                Card(
+                                  margin: EdgeInsets.zero,
+                                  elevation: 0,
+                                  color: Colors.black26,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    side: BorderSide(color: Colors.white12, width: 1),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              person!.birthday,
+                                              style: TextStyle(
+                                                color: Colors.white70
+                                              ),
                                             ),
-                                          ),
-                                          Text(
-                                            person!.birthPlace,
-                                            style: TextStyle(
-                                              color: Colors.white70
+                                            Text(
+                                              person!.birthPlace,
+                                              style: TextStyle(
+                                                color: Colors.white70
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ]
-                          ),
-                        ),
-                        Section(
-                          title: 'Filmek',
-                          titleLeftPadding: 15,
-                          children: [
-                            ...chunkList(movieList).map((pair) => _ImageRow(
-                              pair: pair,
-                              goTo: go,
-                              type: 'movie'
-                            )).toList(),
+                              ]
+                            ),
+                            SectionTitle(
+                              titleLeftPadding: 0, 
+                              title: 'Filmek'
+                            ),
+                            GridView.count(
+                              physics: BouncingScrollPhysics(),
+                              shrinkWrap: true,
+                              crossAxisCount: itemCount,
+                              mainAxisSpacing: mainSpacing,
+                              crossAxisSpacing: crossSpacing,
+                              childAspectRatio: itemWidth/itemHeight,
+                              children: movieList!.map((pair) => ImageCard(
+                                model: pair,
+                                goTo: (model) {
+                                  go(model, TypeEnum.movie);
+                                },
+                              )).toList(),
+                            ),
+                            SectionTitle(
+                              titleLeftPadding: 0, 
+                              title: 'Sorozatok & Tv'
+                            ),
+                            GridView.count(
+                              physics: BouncingScrollPhysics(),
+                              shrinkWrap: true,
+                              crossAxisCount: itemCount,
+                              mainAxisSpacing: mainSpacing,
+                              crossAxisSpacing: crossSpacing,
+                              childAspectRatio: itemWidth/itemHeight,
+                              children: showList!.map((pair) => ImageCard(
+                                model: pair,
+                                goTo: (model) {
+                                  go(model, TypeEnum.show);
+                                },
+                              )).toList(),
+                            ),
                           ],
                         ),
-                        Section(
-                          title: 'Sorozatok & Tv',
-                          titleLeftPadding: 15,
-                          children: [
-                            ...chunkList(showList).map((pair) => _ImageRow(
-                              pair: pair,
-                              goTo: go,
-                              type: 'show'
-                            )).toList(),
-                          ],
-                        ),
-                      ],
-                    ),
+                      ),
+                    )
                   ),
                 ],
               ),
@@ -185,76 +211,5 @@ class _PersonPageState extends ImageColoredState<PersonPage> {
           )
         )
       );
-  }
-}
-
-class _ImageRow extends StatelessWidget {
-  final List pair; 
-  final Function goTo;
-  final String type;
-
-  _ImageRow({
-    required this.pair,
-    required this.goTo,
-    required this.type
-  });
-
-  final double _padding = 20;
-
-  @override
-  Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width/2 - _padding;
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(right: 5),
-          child: pair.isNotEmpty 
-          ? _ImageCard(model: pair[0], goTo: goTo, width: width, type: 'movie')
-          : SizedBox(),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 5),
-          child: pair.length > 1 
-          ? _ImageCard(model: pair[1], goTo: goTo, width: width, type: 'tv')
-          : SizedBox(width: width),
-        ),
-      ],
-    );
-  }
-
-}
-
-class _ImageCard extends StatelessWidget {
-  final DisplayModel model;
-  final Function goTo;
-  final double width;
-  final String type;
-
-  _ImageCard({
-    required this.model,
-    required this.goTo,
-    required this.width,
-    required this.type
-  });
-
-  final double _padding = 20;
-
-  @override
-  Widget build(BuildContext context) {    
-    double width = MediaQuery.of(context).size.width/2 - _padding;
-
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(10),
-        onTap: () => goTo(model, type),
-        child: XImage.custom(
-          model.image,
-          width
-        ),
-      ),
-    );
   }
 }

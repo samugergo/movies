@@ -9,6 +9,7 @@ import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/buttons/button_switch.dart';
 import 'package:movies/widgets/loaders/loader.dart';
+import 'package:movies/widgets/others/image_card.dart';
 import 'package:movies/widgets/sections/filter/filter_section.dart';
 import 'package:movies/widgets/buttons/load_button.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +28,7 @@ class XContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<MainAppState>();
+    final double width = MediaQuery.of(context).size.width;
 
     List list = appState.type == TypeEnum.movie ? appState.movies : appState.shows;    
 
@@ -42,92 +44,38 @@ class XContainer extends StatelessWidget {
         (color) => goColor(model.id, color)
       );
     } 
- 
+
+    const itemCount = 3;
+    const crossSpacing = 10.0;
+    const mainSpacing = 10.0;
+    final itemWidth = width/itemCount - itemCount * crossSpacing;
+    final itemHeight = itemWidth*1.5;
+
     return appState.isEmptyByType(appState.type) 
     ? Loader()
-    : ListView(
-      controller: controller,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-          child: Column(
-            children: [
-              ButtonSwitch(),
-              FilterSection(),
-            ],
-          ),
-        ),
-        ...list.map((pair) => _ImageRow(
-          pair: pair,
-          goTo: go,
-        )).toList(),
-        LoadButton(load: appState.loadMore),
-      ]
-    );
-  }
-}
-
-class _ImageRow extends StatelessWidget {
-  final List pair; 
-  final Function goTo;
-
-  _ImageRow({
-    required this.pair,
-    required this.goTo
-  });
-
-  final double _padding = 20;
-
-  @override
-  Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width/2 - _padding;
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(right: 5),
-          child: pair.isNotEmpty 
-          ? _ImageCard(model: pair[0], goTo: goTo, width: width)
-          : SizedBox(),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 5),
-          child: pair.length > 1 
-          ? _ImageCard(model: pair[1], goTo: goTo, width: width)
-          : SizedBox(width: width),
-        ),
-      ],
-    );
-  }
-
-}
-
-class _ImageCard extends StatelessWidget {
-  final DisplayModel model;
-  final Function goTo;
-  final double width;
-
-  _ImageCard({
-    required this.model,
-    required this.goTo,
-    required this.width,
-  });
-
-  final double _padding = 20;
-
-  @override
-  Widget build(BuildContext context) {    
-    double width = MediaQuery.of(context).size.width/2 - _padding;
-
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(10),
-        onTap: () => goTo(model),
-        child: XImage.custom(
-          model.image,
-          width
+    : Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: SingleChildScrollView(
+        controller: controller,
+        child: Column(
+          children: [
+            ButtonSwitch(),
+            FilterSection(),
+            GridView.count(
+              physics: BouncingScrollPhysics(),
+              shrinkWrap: true,
+              crossAxisCount: itemCount,
+              mainAxisSpacing: mainSpacing,
+              crossAxisSpacing: crossSpacing,
+              childAspectRatio: itemWidth/itemHeight,
+              children: list.map((pair) => ImageCard(
+                model: pair,
+                goTo: go,
+              )).toList(),
+            ),
+            SizedBox(height: 10),
+            LoadButton(load: appState.loadMore),
+          ],
         ),
       ),
     );

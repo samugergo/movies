@@ -11,7 +11,9 @@ import 'package:movies/widgets/loaders/color_loader.dart';
 import 'package:movies/widgets/loaders/loader.dart';
 import 'package:movies/widgets/others/image.dart';
 import 'package:movies/widgets/appbars/my_image_app_bar.dart';
+import 'package:movies/widgets/others/image_card.dart';
 import 'package:movies/widgets/sections/common/section.dart';
+import 'package:movies/widgets/sections/common/section_title.dart';
 import 'package:movies/widgets/states/common/image_colored_state.dart';
 
 class CollectionPage extends StatefulWidget {
@@ -60,6 +62,13 @@ class _CollectionPageState extends ImageColoredState<CollectionPage> {
       );
     }
 
+    final double width = MediaQuery.of(context).size.width;
+    const itemCount = 3;
+    const crossSpacing = 10.0;
+    const mainSpacing = 10.0;
+    final itemWidth = width/itemCount - itemCount * crossSpacing;
+    final itemHeight = itemWidth*1.5;
+
     return isLoading() 
     ? ColorLoader(color: widget.color)
     : Material(
@@ -85,84 +94,44 @@ class _CollectionPageState extends ImageColoredState<CollectionPage> {
             },
             body: Container(
               color: widget.color,
-              child: ListView(
-                children: [
-                  Section(
-                    title: 'Filmek',
-                    titleLeftPadding: 15,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ...chunkList(collection!.modelList).map((pair) => _ImageRow(
-                        pair: pair,
-                        goTo: go,
-                      )).toList(),
-                    ] 
+                      SectionTitle(
+                        titleLeftPadding: 0, 
+                        title: 'Filmek'
+                      ),
+                      GridView.count(
+                        physics: BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        crossAxisCount: itemCount,
+                        mainAxisSpacing: mainSpacing,
+                        crossAxisSpacing: crossSpacing,
+                        childAspectRatio: itemWidth/itemHeight,
+                        children: collection!.modelList.map((pair) => ImageCard(
+                          model: pair,
+                          goTo: go,
+                        )).toList(),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              )
+              // Section(
+              //   title: 'Filmek',
+              //   titleLeftPadding: 15,
+              //   children: [
+              //     ...chunkList(collection!.modelList).map((pair) => _ImageRow(
+              //       pair: pair,
+              //       goTo: go,
+              //     )).toList(),
+              //   ] 
+              // ),
             )
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ImageRow extends StatelessWidget {
-  final List pair; 
-  final Function goTo;
-
-  _ImageRow({
-    required this.pair,
-    required this.goTo
-  });
-
-  final double _padding = 20;
-
-  @override
-  Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width/2 - _padding;
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(right: 5),
-          child: pair.isNotEmpty 
-          ? _ImageCard(model: pair[0], goTo: goTo, width: width)
-          : SizedBox(),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 5),
-          child: pair.length > 1 
-          ? _ImageCard(model: pair[1], goTo: goTo, width: width)
-          : SizedBox(width: width),
-        ),
-      ],
-    );
-  }
-}
-
-class _ImageCard extends StatelessWidget {
-  final DisplayModel model;
-  final Function goTo;
-  final double width;
-
-  _ImageCard({
-    required this.model,
-    required this.goTo,
-    required this.width,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(10),
-        onTap: () => goTo(model.id),
-        child: XImage.custom(
-          model.image,
-          width
         ),
       ),
     );

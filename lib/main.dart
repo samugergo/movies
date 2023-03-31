@@ -98,12 +98,12 @@ class MainAppState extends ChangeNotifier {
   }
   // --- setter functions ---
   setMovies(movies) {
-    this.movies = chunkList(movies);
+    this.movies = movies;
     moviePage = 1;
     notifyListeners();
   }
   setShows(shows) {
-    this.shows = chunkList(shows);
+    this.shows = shows;
     showPage = 1;
     notifyListeners();
   }
@@ -117,12 +117,12 @@ class MainAppState extends ChangeNotifier {
   }
   // --- update functions ---
   updateMovies(movies) {
-    this.movies.addAll(chunkList(movies));
+    this.movies.addAll(movies);
     moviePage++;
     notifyListeners();
   } 
   updateShows(shows) {
-    this.shows.addAll(chunkList(shows));
+    this.shows.addAll(shows);
     showPage++;
     notifyListeners();
   }
