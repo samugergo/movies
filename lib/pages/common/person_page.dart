@@ -9,9 +9,9 @@ import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
-import 'package:movies/widgets/image.dart';
+import 'package:movies/widgets/others/image.dart';
 import 'package:movies/widgets/loaders/loader.dart';
-import 'package:movies/widgets/my_image_app_bar.dart';
+import 'package:movies/widgets/appbars/my_image_app_bar.dart';
 import 'package:movies/widgets/sections/common/section.dart';
 import 'package:movies/widgets/states/common/image_colored_state.dart';
 

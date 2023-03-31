@@ -7,14 +7,14 @@ import 'package:movies/pages/show/show_page.dart';
 import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
-import 'package:movies/widgets/button_switch.dart';
+import 'package:movies/widgets/buttons/button_switch.dart';
 import 'package:movies/widgets/loaders/loader.dart';
 import 'package:movies/widgets/sections/filter/filter_section.dart';
-import 'package:movies/widgets/load_button.dart';
+import 'package:movies/widgets/buttons/load_button.dart';
 import 'package:provider/provider.dart';
 import 'package:page_transition/page_transition.dart';
 
-import '../../widgets/image.dart';
+import '../../widgets/others/image.dart';
 
 class XContainer extends StatelessWidget {
 

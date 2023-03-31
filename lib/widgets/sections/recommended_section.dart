@@ -6,7 +6,7 @@ import 'package:movies/pages/show/show_page.dart';
 import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
-import 'package:movies/widgets/image.dart';
+import 'package:movies/widgets/others/image.dart';
 import 'package:movies/widgets/sections/common/section.dart';
 import 'package:provider/provider.dart';
 

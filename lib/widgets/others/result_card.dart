@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movies/widgets/image.dart';
+import 'package:movies/widgets/others/image.dart';
 
 // ignore: must_be_immutable
 class ResultCard extends StatelessWidget {

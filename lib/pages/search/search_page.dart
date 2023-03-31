@@ -8,8 +8,8 @@ import 'package:movies/services/service.dart';
 import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
-import 'package:movies/widgets/load_button.dart';
-import 'package:movies/widgets/result_card.dart';
+import 'package:movies/widgets/buttons/load_button.dart';
+import 'package:movies/widgets/others/result_card.dart';
 import 'package:provider/provider.dart';
 
 class Search extends StatefulWidget {
