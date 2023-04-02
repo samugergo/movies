@@ -93,10 +93,18 @@ class _SearchState extends State<Search> {
         appBar: AppBar(
           elevation: 0,
           scrolledUnderElevation: 0,
-          automaticallyImplyLeading: false,
-          backgroundColor: Color(0xff292A37),
+          titleSpacing: 0,
+          backgroundColor: Color(0xff343643),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_rounded),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            color: Colors.white,
+          ),
           title: TextField(
             textInputAction: TextInputAction.search,
+            autofocus: true,
             onSubmitted: (value) {
               _search(value, appState.type);
             },
@@ -116,14 +124,14 @@ class _SearchState extends State<Search> {
                 fontWeight: FontWeight.normal
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0xff292A37)),
-                borderRadius: BorderRadius.circular(50.0),
+                borderSide: BorderSide(color: Color(0xff343643)),
+                borderRadius: BorderRadius.circular(0),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0xff292A37)),
-                borderRadius: BorderRadius.circular(50.0),
+                borderSide: BorderSide(color: Color(0xff343643)),
+                borderRadius: BorderRadius.circular(0),
               ),
-              contentPadding: EdgeInsets.only(left: 20.0),
+              contentPadding: EdgeInsets.only(left: 0),
               constraints: BoxConstraints(
                 maxHeight: 50,
               )

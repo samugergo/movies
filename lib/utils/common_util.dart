@@ -48,3 +48,9 @@ year(String date) {
   final DateTime dateTime = DateTime.parse(date);
   return '${dateTime.year}';
 }
+
+timeFormat(int minutes) {
+  final hours = minutes ~/ 60;
+  final mins = minutes % 60;
+  return hours > 0 ? '$hours ó $mins p' : '$mins p';
+}

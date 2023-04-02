@@ -65,7 +65,7 @@ class XImage extends StatelessWidget {
         ? Image.network(
           url,
           height: height,
-          fit: BoxFit.fill,
+          fit: BoxFit.cover,
         )
         : Image.asset(
           'assets/images/default.png',

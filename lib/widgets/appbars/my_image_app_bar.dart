@@ -50,7 +50,7 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
         // expanded data
         children.add(!onlyTitle 
           ? Positioned(
-            top: _coverHeight - _posterHeight/2 - shrinkOffset,
+            bottom: 10,
             left: 10,
             right: 10,
             child: Opacity(
@@ -160,7 +160,7 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 350;
+  double get maxExtent => 400;
   
   @override
   double get minExtent => kToolbarHeight;

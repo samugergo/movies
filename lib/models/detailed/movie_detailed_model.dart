@@ -11,6 +11,7 @@ class MovieDetailedModel {
   final String cover;
   final String description;
   final List genres;
+  final int length;
   final CollectionModel? collection;
 
   MovieDetailedModel({
@@ -23,6 +24,7 @@ class MovieDetailedModel {
     required this.cover,
     required this.description,
     required this.genres,
+    required this.length,
     required this.collection,
   });
 
@@ -36,6 +38,7 @@ class MovieDetailedModel {
       image: imageLink(json['poster_path']), 
       cover: json['backdrop_path'] ?? '', 
       description: json['overview'], 
+      length: json['runtime'],
       genres: json['genres'].map((g) => g['name']).toList(), 
       collection: json['belongs_to_collection'] != null 
         ? CollectionModel.fromJson(json['belongs_to_collection']) 
