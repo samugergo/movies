@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:movies/utils/common_util.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class MyImageAppBar extends SliverPersistentHeaderDelegate {
   MyImageAppBar({

@@ -19,6 +19,7 @@ dependencies:
   loading_animation_widget: ^1.2.0+4
   animations: ^2.0.7
   page_transition: ^2.0.9
+  transparent_image: ^2.0.1
 
 dev_dependencies:
   flutter_test:
