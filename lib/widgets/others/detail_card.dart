@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:movies/models/detailed/movie_detailed_model.dart';
+import 'package:movies/models/detailed/detailed_model.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/widgets/others/image.dart';
 
 // ignore: must_be_immutable
-class MovieDetailCard extends StatelessWidget {
+class DetailCard extends StatelessWidget {
 
-  final MovieDetailedModel? model;
+  final DetailedModel? model;
 
-  MovieDetailCard({
+  DetailCard({
     required this.model
   });
 
@@ -81,12 +81,24 @@ class MovieDetailCard extends StatelessWidget {
               SizedBox(height: 8),
               Padding(
                 padding: EdgeInsets.only(left: 10.0),
-                child: Text(
-                  timeFormat(model!.length),
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 12,
-                  ),
+                child: Row(
+                  children: [
+                    Text(
+                      timeFormat(model!.length),
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 12,
+                      ),
+                    ),
+                    SizedBox(width: 20),
+                    Text(
+                      year(model!.release),
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 12,
+                      ),
+                    )
+                  ],
                 ),
               ),
               SizedBox(height: 8),

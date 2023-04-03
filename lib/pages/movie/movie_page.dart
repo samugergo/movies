@@ -10,8 +10,7 @@ import 'package:movies/widgets/loaders/color_loader.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
 import 'package:movies/widgets/loaders/loader.dart';
 import 'package:movies/widgets/appbars/my_image_app_bar.dart';
-import 'package:movies/widgets/others/movie_deatail_card.dart';
-import 'package:movies/widgets/others/result_card.dart';
+import 'package:movies/widgets/others/detail_card.dart';
 import 'package:movies/widgets/sections/collection_section.dart';
 import 'package:movies/widgets/sections/provider_section.dart';
 import 'package:movies/widgets/sections/cast_section.dart';
@@ -105,7 +104,7 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
                       cover: coverImage,
                       color: widget.color,
                       onlyTitle: false,
-                      child: MovieDetailCard(
+                      child: DetailCard(
                         model: movie!,
                       ),
                     ),

@@ -9,6 +9,7 @@ import 'package:movies/utils/common_util.dart';
 import 'package:movies/widgets/loaders/color_loader.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
 import 'package:movies/widgets/loaders/loader.dart';
+import 'package:movies/widgets/others/detail_card.dart';
 import 'package:movies/widgets/sections/season_section.dart';
 import 'package:movies/widgets/states/common/image_colored_state.dart';
 import 'package:movies/widgets/appbars/my_image_app_bar.dart';
@@ -111,13 +112,8 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
                       onlyTitle: false,
                       cover: coverImage,
                       color: widget.color,
-                      child: ResultCard(
-                        image: show!.image, 
-                        title: show!.title, 
-                        release: show!.release, 
-                        percent: show!.percent, 
-                        raw: show!.raw,
-                        genres: show!.genres,
+                      child: DetailCard(
+                        model: show!,
                       ),
                     ),
                   ),
