@@ -46,28 +46,41 @@ class XContainer extends StatelessWidget {
   }
 }
 
-class _ListView extends StatelessWidget {
+class _ListView extends StatefulWidget {
   _ListView({
     required this.key,
     required this.list,
     required this.controller,
   });
-
+  
   final ValueKey key;
   final List list;
   final ScrollController controller; 
+
+  @override
+  State<_ListView> createState() => _ListViewState();
+}
+
+class _ListViewState extends State<_ListView> {
+  bool calculating = false;
 
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<MainAppState>();
 
     goColor(id, color) {
+      setState(() {
+        calculating = false;
+      });
       final Widget to = appState.type == TypeEnum.movie 
         ? MoviePage(id: id, color: color) 
         : ShowPage(id: id, color: color);
       goTo(context, to);
     }
     go(model){
+      setState(() {
+        calculating = true;
+      });
       getColorFromImage(
         lowImageLink(model.cover), 
         (color) => goColor(model.id, color)
@@ -81,32 +94,38 @@ class _ListView extends StatelessWidget {
     final itemWidth = width/itemCount - itemCount * crossSpacing;
     final itemHeight = itemWidth*1.5;
 
-    return Padding(
-      key: key,
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: SingleChildScrollView(
-        controller: controller,
-        child: Column(
-          children: [
-            ButtonSwitch(),
-            FilterSection(),
-            GridView.count(
-              physics: BouncingScrollPhysics(),
-              shrinkWrap: true,
-              crossAxisCount: itemCount,
-              mainAxisSpacing: mainSpacing,
-              crossAxisSpacing: crossSpacing,
-              childAspectRatio: itemWidth/itemHeight,
-              children: list.map((pair) => ImageCard(
-                model: pair,
-                goTo: go,
-              )).toList(),
+    return Stack(
+      children: [
+        Padding(
+          key: widget.key,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: SingleChildScrollView(
+            controller: widget.controller,
+            child: Column(
+              children: [
+                ButtonSwitch(),
+                FilterSection(),
+                GridView.count(
+                  physics: BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  crossAxisCount: itemCount,
+                  mainAxisSpacing: mainSpacing,
+                  crossAxisSpacing: crossSpacing,
+                  childAspectRatio: itemWidth/itemHeight,
+                  children: widget.list.map((pair) => ImageCard(
+                    model: pair,
+                    goTo: go,
+                  )).toList(),
+                ),
+                SizedBox(height: 10),
+                LoadButton(load: appState.loadMore),
+              ],
             ),
-            SizedBox(height: 10),
-            LoadButton(load: appState.loadMore),
-          ],
+          ),
         ),
-      ),
+        if(calculating) ModalBarrier()
+        
+      ],
     );
   }
 }

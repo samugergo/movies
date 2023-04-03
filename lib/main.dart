@@ -33,7 +33,7 @@ class MainApp extends StatelessWidget {
           bottomSheetTheme: BottomSheetThemeData(
             backgroundColor: Color(0xff2B2B38),
             modalElevation: 0
-          )
+          ),
         ),
         home: Container(
           decoration: BoxDecoration(
