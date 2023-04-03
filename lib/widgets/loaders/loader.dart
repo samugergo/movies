@@ -6,14 +6,12 @@ class Loader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  GradientContainer(
-      children: [
-        Center(
-          child: LoadingAnimationWidget.fourRotatingDots(
-            color: Colors.white, 
-            size: 50
-          ),
+      child: Center(
+        child: LoadingAnimationWidget.fourRotatingDots(
+          color: Colors.white, 
+          size: 50
         ),
-      ]
+      ),
     );
   }
 }

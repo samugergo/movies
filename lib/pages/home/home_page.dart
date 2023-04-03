@@ -12,13 +12,12 @@ import 'package:movies/widgets/others/image_card.dart';
 import 'package:movies/widgets/sections/filter/filter_section.dart';
 import 'package:movies/widgets/buttons/load_button.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class XContainer extends StatelessWidget {
+class HomePage extends StatelessWidget {
 
   final ScrollController controller;
 
-  XContainer({
+  HomePage({
     required this.controller,
   });
 

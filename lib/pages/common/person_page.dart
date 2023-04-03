@@ -118,94 +118,92 @@ class _PersonPageState extends ImageColoredState<PersonPage> {
                 ];
               },
               body: GradientContainer(
-                children: [
-                  Scaffold(
-                    body: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Section(
-                              title: 'Alap adatok', 
-                              children: [
-                                Card(
-                                  margin: EdgeInsets.zero,
-                                  elevation: 0,
-                                  color: Colors.black26,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    side: BorderSide(color: Colors.white12, width: 1),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              person!.birthday,
-                                              style: TextStyle(
-                                                color: Colors.white70
-                                              ),
+                child: Scaffold(
+                  body: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Section(
+                            title: 'Alap adatok', 
+                            children: [
+                              Card(
+                                margin: EdgeInsets.zero,
+                                elevation: 0,
+                                color: Colors.black26,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide(color: Colors.white12, width: 1),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            person!.birthday,
+                                            style: TextStyle(
+                                              color: Colors.white70
                                             ),
-                                            Text(
-                                              person!.birthPlace,
-                                              style: TextStyle(
-                                                color: Colors.white70
-                                              ),
+                                          ),
+                                          Text(
+                                            person!.birthPlace,
+                                            style: TextStyle(
+                                              color: Colors.white70
                                             ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ]
-                            ),
-                            SectionTitle(
-                              titleLeftPadding: 0, 
-                              title: 'Filmek'
-                            ),
-                            GridView.count(
-                              physics: BouncingScrollPhysics(),
-                              shrinkWrap: true,
-                              crossAxisCount: itemCount,
-                              mainAxisSpacing: mainSpacing,
-                              crossAxisSpacing: crossSpacing,
-                              childAspectRatio: itemWidth/itemHeight,
-                              children: movieList!.map((pair) => ImageCard(
-                                model: pair,
-                                goTo: (model) {
-                                  go(model, TypeEnum.movie);
-                                },
-                              )).toList(),
-                            ),
-                            SectionTitle(
-                              titleLeftPadding: 0, 
-                              title: 'Sorozatok & Tv'
-                            ),
-                            GridView.count(
-                              physics: BouncingScrollPhysics(),
-                              shrinkWrap: true,
-                              crossAxisCount: itemCount,
-                              mainAxisSpacing: mainSpacing,
-                              crossAxisSpacing: crossSpacing,
-                              childAspectRatio: itemWidth/itemHeight,
-                              children: showList!.map((pair) => ImageCard(
-                                model: pair,
-                                goTo: (model) {
-                                  go(model, TypeEnum.show);
-                                },
-                              )).toList(),
-                            ),
-                          ],
-                        ),
+                              ),
+                            ]
+                          ),
+                          SectionTitle(
+                            titleLeftPadding: 0, 
+                            title: 'Filmek'
+                          ),
+                          GridView.count(
+                            physics: BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            crossAxisCount: itemCount,
+                            mainAxisSpacing: mainSpacing,
+                            crossAxisSpacing: crossSpacing,
+                            childAspectRatio: itemWidth/itemHeight,
+                            children: movieList!.map((pair) => ImageCard(
+                              model: pair,
+                              goTo: (model) {
+                                go(model, TypeEnum.movie);
+                              },
+                            )).toList(),
+                          ),
+                          SectionTitle(
+                            titleLeftPadding: 0, 
+                            title: 'Sorozatok & Tv'
+                          ),
+                          GridView.count(
+                            physics: BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            crossAxisCount: itemCount,
+                            mainAxisSpacing: mainSpacing,
+                            crossAxisSpacing: crossSpacing,
+                            childAspectRatio: itemWidth/itemHeight,
+                            children: showList!.map((pair) => ImageCard(
+                              model: pair,
+                              goTo: (model) {
+                                go(model, TypeEnum.show);
+                              },
+                            )).toList(),
+                          ),
+                        ],
                       ),
-                    )
-                  ),
-                ],
+                    ),
+                  )
+                ),
               ),
             ),
           )

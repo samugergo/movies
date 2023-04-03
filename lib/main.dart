@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:movies/widgets/buttons/hidable_fab.dart';
 import 'package:movies/widgets/appbars/main_app_bar.dart';
+import 'package:movies/widgets/containers/gradient_container.dart';
 import 'package:provider/provider.dart'; 
 import 'package:movies/enums/order_enum.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/pages/home/home_page.dart';
 import 'package:movies/services/service.dart';
-import 'package:movies/utils/common_util.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,41 +36,25 @@ class MainApp extends StatelessWidget {
             modalElevation: 0
           ),
         ),
-        home: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              stops: [0.1, 1],
-              colors: [Color(0xff292A37), Color(0xff0F1018)],
-              tileMode: TileMode.mirror
+        home: GradientContainer(
+          child: Scaffold(
+            appBar: AppBar(
+              title: MainAppBar(),
+              titleSpacing: 20,
+              centerTitle: true,
+              elevation: 0,
+              scrolledUnderElevation: 0,
+              backgroundColor: Color(0xff292A37),
             ),
-          ),
-          child: AnnotatedRegion(
-            value: SystemUiOverlayStyle.light.copyWith(           
-              statusBarColor: Color(0xff292A37),
+            body: HomePage(
+              controller: scrollController,
             ),
-            child: SafeArea(
-              child: Scaffold(
-                appBar: AppBar(
-                  title: MainAppBar(),
-                  titleSpacing: 20,
-                  centerTitle: true,
-                  elevation: 0,
-                  scrolledUnderElevation: 0,
-                  backgroundColor: Color(0xff292A37),
-                ),
-                body: XContainer(
-                  controller: scrollController,
-                ),
-                floatingActionButton: HidableFab(
-                  controller: scrollController
-                ),
-              ),
+            floatingActionButton: HidableFab(
+              controller: scrollController
             ),
           ),
         ),
-      )
+      ),
     );
   }
 }

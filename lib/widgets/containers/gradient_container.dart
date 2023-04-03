@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class GradientContainer extends StatelessWidget {
 
-  final List<Widget> children;
+  final Widget child;
 
   GradientContainer({
-    required this.children
+    required this.child
   });
 
   @override
@@ -23,14 +24,14 @@ class GradientContainer extends StatelessWidget {
           tileMode: TileMode.mirror
         ),
       ),
-      child: Scaffold(
-        body: SafeArea(
-          child: Stack(            
-            children: children,
-          )
+      child: AnnotatedRegion(
+        value: SystemUiOverlayStyle.light.copyWith(           
+          statusBarColor: Color(0xff292A37),
+        ),
+        child: SafeArea(
+          child: child,
         )
-      )
+      ),
     );
   }
-
 }
