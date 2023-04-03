@@ -35,7 +35,9 @@ class RecommendedSection extends StatelessWidget {
       );
     } 
     
-    return Section(
+    return recommendations.isEmpty 
+    ? SizedBox()
+    : Section(
       title: 'Ajánlott', 
       children: [
         SizedBox(

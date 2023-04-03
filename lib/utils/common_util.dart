@@ -45,8 +45,11 @@ getFirstNotNull(List args) {
 }
 
 year(String date) {
-  final DateTime dateTime = DateTime.parse(date);
-  return '${dateTime.year}';
+  if(date != '') {
+    final DateTime dateTime = DateTime.parse(date);
+    return '${dateTime.year}';
+  }
+  return '';
 }
 
 timeFormat(int minutes) {

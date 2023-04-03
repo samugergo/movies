@@ -14,7 +14,9 @@ class CastSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Section(
+    return cast.isEmpty 
+    ? SizedBox()
+    : Section(
       title: 'Szereplők', 
       children: [
         SizedBox(

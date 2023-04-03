@@ -10,7 +10,9 @@ class SeasonSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Section(
+    return list.isEmpty 
+    ? SizedBox()
+    : Section(
       title: 'Évadok',
       children: [
         SizedBox(

@@ -10,13 +10,16 @@ class StorySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Section(
+    return description == '' 
+    ? SizedBox()
+    : Section(
       title: 'Történet', 
       children: [
         Text(
           description,
+          textAlign: TextAlign.justify,
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.white70,
             fontSize: 12,
           ),
         )

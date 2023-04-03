@@ -124,35 +124,30 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
                 child: Scaffold(
                   body: ListView(
                     children: [
-                      SizedBox(height: 10),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: ProviderSection(
                           providers: providers
                         ),
                       ),
-                      SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: StorySection(
                           description: show!.description
                         ),
                       ),
-                      SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: CastSection(
                           cast: cast!
                         ),
                       ),
-                      SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: SeasonSection(
                           list: show!.seasons
                         ),
                       ),
-                      SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: RecommendedSection(
