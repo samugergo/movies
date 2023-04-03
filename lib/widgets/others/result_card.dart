@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movies/widgets/image.dart';
+import 'package:movies/widgets/others/image.dart';
 
 // ignore: must_be_immutable
 class ResultCard extends StatelessWidget {
@@ -75,7 +75,7 @@ class ResultCard extends StatelessWidget {
                         child: Align(
                           alignment: Alignment.center,
                           child: Text(
-                            percent,
+                            raw.toStringAsFixed(1),
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 12

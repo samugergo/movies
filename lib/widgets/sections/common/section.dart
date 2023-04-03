@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies/widgets/sections/common/section_title.dart';
 
 class Section extends StatelessWidget {
   final String title;
@@ -16,16 +17,9 @@ class Section extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: EdgeInsets.only(left: titleLeftPadding, bottom: 8.0, top: 16),
-          child: Text(
-            title,
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 16
-            )
-          ),
+        SectionTitle(
+          titleLeftPadding: titleLeftPadding, 
+          title: title
         ),
         ...children,
       ],

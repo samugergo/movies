@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:movies/models/common/cast_model.dart';
-import 'package:movies/widgets/image.dart';
+import 'package:movies/pages/common/person_page.dart';
+import 'package:movies/utils/navigation_util.dart';
+import 'package:movies/widgets/others/image.dart';
 import 'package:movies/widgets/sections/common/section.dart';
 
 class CastSection extends StatelessWidget {
@@ -12,7 +14,9 @@ class CastSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Section(
+    return cast.isEmpty 
+    ? SizedBox()
+    : Section(
       title: 'Szereplők', 
       children: [
         SizedBox(
@@ -37,51 +41,65 @@ class _CastMember extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    go(id) {
+      final to = PersonPage(id: id);
+      goTo(context, to);
+    } 
+
     return SizedBox(
       width: 133,
-      child: Card(
-        margin: EdgeInsets.only(right: 8),
-        elevation: 0,
-        color: Colors.white10,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            color: Colors.white12, 
-          ),
+      child: Padding(
+        padding: const EdgeInsets.only(right: 8.0),
+        child: InkWell(
           borderRadius: BorderRadius.circular(10),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            XImage(
-              url: model.image, 
-              width: 125, 
-              height: 180, 
-              radius: 10
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 6, left: 6, right: 6),
-              child: Text(
-                model.name,
-                overflow: TextOverflow.visible,
-                style: TextStyle(
-                  fontSize: 12, 
-                  color: Colors.white
-                ),
+          onTap: () => go(model.id),
+          child: Card(
+            margin: EdgeInsets.zero,
+            elevation: 0,
+            color: Colors.white10,
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                color: Colors.white12, 
               ),
+              borderRadius: BorderRadius.circular(10),
             ),
-            SizedBox(height: 2),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6),
-              child: Text(
-                model.role,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 10,
-                  color: Colors.white30
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                XImage.customRadius(
+                  model.image, 
+                  125, 180, 
+                  BorderRadius.only(
+                    topLeft: Radius.circular(10), 
+                    topRight: Radius.circular(10)
+                  ),
                 ),
-              ),
-            )
-          ],
+                Padding(
+                  padding: const EdgeInsets.only(top: 6, left: 6, right: 6),
+                  child: Text(
+                    model.name,
+                    overflow: TextOverflow.visible,
+                    style: TextStyle(
+                      fontSize: 12, 
+                      color: Colors.white
+                    ),
+                  ),
+                ),
+                SizedBox(height: 2),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  child: Text(
+                    model.role,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: Colors.white30
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );

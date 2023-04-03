@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/main.dart';
-import 'package:movies/models/base/display_model.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/show/show_page.dart';
-import 'package:movies/widgets/button_switch.dart';
-import 'package:movies/widgets/filter_section.dart';
-import 'package:movies/widgets/load_button.dart';
+import 'package:movies/utils/color_util.dart';
+import 'package:movies/utils/common_util.dart';
+import 'package:movies/utils/navigation_util.dart';
+import 'package:movies/widgets/buttons/button_switch.dart';
+import 'package:movies/widgets/loaders/loader.dart';
+import 'package:movies/widgets/others/image_card.dart';
+import 'package:movies/widgets/sections/filter/filter_section.dart';
+import 'package:movies/widgets/buttons/load_button.dart';
 import 'package:provider/provider.dart';
-
-import '../../widgets/image.dart';
 
 class XContainer extends StatelessWidget {
 
@@ -24,91 +25,107 @@ class XContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final appState = context.watch<MainAppState>();
 
-    List list = appState.type == TypeEnum.movie ? appState.movies : appState.shows;    
+    if(appState.isEmptyByType(appState.type)) {
+      return Loader();
+    } else {
+      return AnimatedSwitcher(
+        duration: Duration(milliseconds: 300),
+        child: appState.type == TypeEnum.movie 
+        ? _ListView(
+          key: ValueKey(1),
+          list: appState.movies, 
+          controller: controller
+        )
+        : _ListView(
+          key: ValueKey(2),
+          list: appState.shows, 
+          controller: controller
+        ),
+      );
+    }
+  }
+}
 
-    goTo(id) {
-      final Widget to = appState.type == TypeEnum.movie ? MoviePage(id: id) : ShowPage(id: id);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => to),
+class _ListView extends StatefulWidget {
+  _ListView({
+    required this.key,
+    required this.list,
+    required this.controller,
+  });
+  
+  final ValueKey key;
+  final List list;
+  final ScrollController controller; 
+
+  @override
+  State<_ListView> createState() => _ListViewState();
+}
+
+class _ListViewState extends State<_ListView> {
+  bool calculating = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final appState = context.watch<MainAppState>();
+
+    goColor(id, color) {
+      setState(() {
+        calculating = false;
+      });
+      final Widget to = appState.type == TypeEnum.movie 
+        ? MoviePage(id: id, color: color) 
+        : ShowPage(id: id, color: color);
+      goTo(context, to);
+    }
+    go(model){
+      setState(() {
+        calculating = true;
+      });
+      getColorFromImage(
+        lowImageLink(model.cover), 
+        (color) => goColor(model.id, color)
       );
     } 
 
-    return appState.isEmptyByType(appState.type) 
-    ? Center(
-      child: LoadingAnimationWidget.fourRotatingDots(color: Colors.white, size: 50)
-    )
-    : ListView(
-      controller: controller,
+    final double width = MediaQuery.of(context).size.width;
+    const itemCount = 3;
+    const crossSpacing = 10.0;
+    const mainSpacing = 10.0;
+    final itemWidth = width/itemCount - itemCount * crossSpacing;
+    final itemHeight = itemWidth*1.5;
+
+    return Stack(
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 14.0, right: 14, top: 10),
-          child: Column(
-            children: [
-              ButtonSwitch(),
-              FilterSection(),
-            ],
+          key: widget.key,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: SingleChildScrollView(
+            controller: widget.controller,
+            child: Column(
+              children: [
+                ButtonSwitch(),
+                FilterSection(),
+                GridView.count(
+                  physics: BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  crossAxisCount: itemCount,
+                  mainAxisSpacing: mainSpacing,
+                  crossAxisSpacing: crossSpacing,
+                  childAspectRatio: itemWidth/itemHeight,
+                  children: widget.list.map((pair) => ImageCard(
+                    model: pair,
+                    goTo: go,
+                  )).toList(),
+                ),
+                SizedBox(height: 10),
+                LoadButton(load: appState.loadMore),
+              ],
+            ),
           ),
         ),
-        ...list.map((pair) => _ImageRow(
-          pair: pair,
-          goTo: goTo,
-        )).toList(),
-        LoadButton(load: appState.loadMore),
-      ]
-    );
-  }
-}
-
-class _ImageRow extends StatelessWidget {
-  final List pair; 
-  final Function goTo;
-
-  _ImageRow({
-    required this.pair,
-    required this.goTo
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        pair.isNotEmpty 
-        ? _ImageCard(model: pair[0], goTo: goTo)
-        : SizedBox(),
-        pair.length > 1 
-        ? _ImageCard(model: pair[1], goTo: goTo)
-        : SizedBox()
+        if(calculating) ModalBarrier()
+        
       ],
-    );
-  }
-
-}
-
-class _ImageCard extends StatelessWidget {
-  final DisplayModel model;
-  final Function goTo;
-
-  _ImageCard({
-    required this.model,
-    required this.goTo
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(10),
-        onTap: () => goTo(model.id),
-        child: XImage(
-          url: model.image,
-          width: 180,
-          height: 270,
-          radius: 10,
-        ),
-      ),
     );
   }
 }

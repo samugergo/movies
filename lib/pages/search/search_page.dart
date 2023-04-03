@@ -5,8 +5,11 @@ import 'package:movies/models/base/list_response.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/show/show_page.dart';
 import 'package:movies/services/service.dart';
-import 'package:movies/widgets/load_button.dart';
-import 'package:movies/widgets/result_card.dart';
+import 'package:movies/utils/color_util.dart';
+import 'package:movies/utils/common_util.dart';
+import 'package:movies/utils/navigation_util.dart';
+import 'package:movies/widgets/buttons/load_button.dart';
+import 'package:movies/widgets/others/result_card.dart';
 import 'package:provider/provider.dart';
 
 class Search extends StatefulWidget {
@@ -63,11 +66,17 @@ class _SearchState extends State<Search> {
   Widget build(BuildContext context) {
     final appState = context.watch<MainAppState>();
 
-    goTo(id) {
-      final Widget to = appState.type == TypeEnum.movie ? MoviePage(id: id) : ShowPage(id: id);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => to),
+    goColor(id, color) {
+      final Widget to = appState.type == TypeEnum.movie 
+        ? MoviePage(id: id, color: color) 
+        : ShowPage(id: id, color: color);
+      goTo(context, to);
+    }
+
+    go(model){
+      getColorFromImage(
+        lowImageLink(model.cover), 
+        (color) => goColor(model.id, color)
       );
     } 
 
@@ -84,10 +93,18 @@ class _SearchState extends State<Search> {
         appBar: AppBar(
           elevation: 0,
           scrolledUnderElevation: 0,
-          automaticallyImplyLeading: false,
-          backgroundColor: Color(0xff292A37),
+          titleSpacing: 0,
+          backgroundColor: Color(0xff343643),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_rounded),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            color: Colors.white,
+          ),
           title: TextField(
             textInputAction: TextInputAction.search,
+            autofocus: true,
             onSubmitted: (value) {
               _search(value, appState.type);
             },
@@ -107,14 +124,14 @@ class _SearchState extends State<Search> {
                 fontWeight: FontWeight.normal
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0xff292A37)),
-                borderRadius: BorderRadius.circular(50.0),
+                borderSide: BorderSide(color: Color(0xff343643)),
+                borderRadius: BorderRadius.circular(0),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0xff292A37)),
-                borderRadius: BorderRadius.circular(50.0),
+                borderSide: BorderSide(color: Color(0xff343643)),
+                borderRadius: BorderRadius.circular(0),
               ),
-              contentPadding: EdgeInsets.only(left: 20.0),
+              contentPadding: EdgeInsets.only(left: 0),
               constraints: BoxConstraints(
                 maxHeight: 50,
               )
@@ -142,8 +159,9 @@ class _SearchState extends State<Search> {
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16),
                   child: InkWell(
+                    splashColor: Colors.transparent,
                     borderRadius: BorderRadius.circular(10),
-                    onTap: () => goTo(e.id),
+                    onTap: () => go(e),
                     child: ResultCard(
                       image: e.image,
                       title: e.title,

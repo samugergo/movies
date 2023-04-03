@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:movies/widgets/hidable_fab.dart';
-import 'package:movies/widgets/main_app_bar.dart';
+import 'package:flutter/services.dart';
+import 'package:movies/widgets/buttons/hidable_fab.dart';
+import 'package:movies/widgets/appbars/main_app_bar.dart';
 import 'package:provider/provider.dart'; 
 import 'package:movies/enums/order_enum.dart';
 import 'package:movies/enums/type_enum.dart';
@@ -32,7 +33,7 @@ class MainApp extends StatelessWidget {
           bottomSheetTheme: BottomSheetThemeData(
             backgroundColor: Color(0xff2B2B38),
             modalElevation: 0
-          )
+          ),
         ),
         home: Container(
           decoration: BoxDecoration(
@@ -44,20 +45,27 @@ class MainApp extends StatelessWidget {
               tileMode: TileMode.mirror
             ),
           ),
-          child: Scaffold(
-            appBar: AppBar(
-              title: MainAppBar(),
-              titleSpacing: 20,
-              centerTitle: true,
-              elevation: 0,
-              scrolledUnderElevation: 0,
-              backgroundColor: Color(0xff292A37),
+          child: AnnotatedRegion(
+            value: SystemUiOverlayStyle.light.copyWith(           
+              statusBarColor: Color(0xff292A37),
             ),
-            body: XContainer(
-              controller: scrollController,
-            ),
-            floatingActionButton: HidableFab(
-              controller: scrollController
+            child: SafeArea(
+              child: Scaffold(
+                appBar: AppBar(
+                  title: MainAppBar(),
+                  titleSpacing: 20,
+                  centerTitle: true,
+                  elevation: 0,
+                  scrolledUnderElevation: 0,
+                  backgroundColor: Color(0xff292A37),
+                ),
+                body: XContainer(
+                  controller: scrollController,
+                ),
+                floatingActionButton: HidableFab(
+                  controller: scrollController
+                ),
+              ),
             ),
           ),
         ),
@@ -90,17 +98,25 @@ class MainAppState extends ChangeNotifier {
   }
   // --- setter functions ---
   setMovies(movies) {
-    this.movies = chunkList(movies);
-    moviePage = 1;
+    this.movies = movies;
+    moviePage = 2;
     notifyListeners();
   }
   setShows(shows) {
-    this.shows = chunkList(shows);
-    showPage = 1;
+    this.shows = shows;
+    showPage = 2;
     notifyListeners();
   }
   setType(type) {
     this.type = type;
+    var list = type == TypeEnum.movie ? movies : shows;
+    if(list.isNotEmpty) {
+      if(type == TypeEnum.movie) {
+        setMovies(list.sublist(0, 40));
+      } else {
+        setShows(list.sublist(0, 40));
+      }
+    }
     notifyListeners();
   }
   setOrder(order) {
@@ -109,30 +125,40 @@ class MainAppState extends ChangeNotifier {
   }
   // --- update functions ---
   updateMovies(movies) {
-    this.movies.addAll(chunkList(movies));
+    this.movies.addAll(movies);
     moviePage++;
     notifyListeners();
   } 
   updateShows(shows) {
-    this.shows.addAll(chunkList(shows));
+    this.shows.addAll(shows);
     showPage++;
     notifyListeners();
   }
   // --- load fuctions ---
   loadMovies(callback) async {
-    final list = await fetch(moviePage, type, order);
-    callback(list);
+    final list1 = await fetch(moviePage, type, order);
+    final list2 = await fetch(++moviePage, type, order);
+    moviePage++;
+    list1.addAll(list2);
+    callback(list1);
   }
   loadShows(callback) async {
-    final list = await fetch(showPage, type, order);
-    callback(list);
+    final list1 = await fetch(showPage, type, order);
+    final list2 = await fetch(++showPage, type, order);
+    showPage++;
+    list1.addAll(list2);
+    callback(list1);
   }
   loadByOrder(order) async {
     moviePage = 0;
     showPage = 0;
     final m = await fetch(moviePage, TypeEnum.movie, order);
+    final m2 = await fetch(++moviePage, TypeEnum.movie, order);
+    m.addAll(m2);
     setMovies(m);
     final s = await fetch(showPage, TypeEnum.show, order);
+    final s2 = await fetch(++showPage, TypeEnum.show, order);
+    s.addAll(s2);
     setShows(s);
   }
   loadByType(type) {

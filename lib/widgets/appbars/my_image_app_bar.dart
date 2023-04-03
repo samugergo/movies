@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:movies/utils/common_util.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class MyImageAppBar extends SliverPersistentHeaderDelegate {
   MyImageAppBar({
@@ -36,10 +38,10 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
         
         // background image
         children.add(Positioned(
-          top: 0,
+          top: 0 - shrinkOffset/2,
           left: 0.0,
           right: 0.0,
-          height: height,
+          height: height - 50,
           child: Opacity(
             alwaysIncludeSemantics: true,
             opacity: opacity,
@@ -50,7 +52,7 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
         // expanded data
         children.add(!onlyTitle 
           ? Positioned(
-            top: _coverHeight - _posterHeight/2 - shrinkOffset,
+            bottom: 10,
             left: 10,
             right: 10,
             child: Opacity(
@@ -67,12 +69,6 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
           child: Container(
             decoration: BoxDecoration(
               color: color,
-              border: Border(
-                bottom: BorderSide(
-                  color: color!,
-                  width: 0
-                )
-              ),
               // border: Border.all(color: Colors.red,)
             ),
           ),
@@ -100,9 +96,26 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
           ),
         ));
 
+        children.add(
+          Positioned(
+            bottom: -8,
+            left: 0,
+            right: 0,
+            child: Divider(
+              color: color,
+            ),
+          ));
+
         return Container(
           decoration: BoxDecoration(
             color: color,
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: color!,
+                blurRadius: 1,
+                offset: Offset(0, 2),
+              ),
+            ],
           ),
           child: Stack(
             children: children
@@ -119,12 +132,12 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
+            color!,
             Colors.transparent, 
-            color!
           ],
         ).createShader(rect);
       },
-      blendMode: BlendMode.srcOver,
+      blendMode: BlendMode.dstIn,
       child: Container(        
         decoration: cover != null
         ? BoxDecoration(
@@ -153,7 +166,7 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 350;
+  double get maxExtent => 400;
   
   @override
   double get minExtent => kToolbarHeight;

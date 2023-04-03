@@ -5,66 +5,41 @@ import 'package:movies/enums/type_enum.dart';
 import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/movie_detailed_model.dart';
 import 'package:movies/services/service.dart';
-import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
-import 'package:movies/widgets/containers/image_gradient_container.dart';
-import 'package:movies/widgets/my_image_app_bar.dart';
-import 'package:movies/widgets/result_card.dart';
+import 'package:movies/widgets/loaders/color_loader.dart';
+import 'package:movies/widgets/containers/gradient_container.dart';
+import 'package:movies/widgets/loaders/loader.dart';
+import 'package:movies/widgets/appbars/my_image_app_bar.dart';
+import 'package:movies/widgets/others/detail_card.dart';
 import 'package:movies/widgets/sections/collection_section.dart';
 import 'package:movies/widgets/sections/provider_section.dart';
 import 'package:movies/widgets/sections/cast_section.dart';
 import 'package:movies/widgets/sections/recommended_section.dart';
 import 'package:movies/widgets/sections/story_section.dart';
-import 'package:palette_generator/palette_generator.dart';
+import 'package:movies/widgets/states/common/image_colored_state.dart';
 
 class MoviePage extends StatefulWidget {
 
   final int id;
+  final Color color;
 
   MoviePage({
     super.key,
-    required this.id
+    required this.id,
+    required this.color,
   });
 
   @override
   State<MoviePage> createState() => _MoviePageState();
 }
 
-class _MoviePageState extends State<MoviePage> {
+class _MoviePageState extends ImageColoredState<MoviePage> {
   MovieDetailedModel? movie;
   Providers? providers;
   List? cast;
   List? recommendations;
-  Image? coverImage;
-  bool imageLoading = true;
-  Color? mainColor;
 
-  init() async {
-    var m = await fetchById(widget.id, TypeEnum.movie);
-    setState(() {
-      movie = m;
-    });
-
-    _fetchProviders();
-    _fetchCast();
-    _fetchRecommends();
-    if(m.cover != null && m.cover != '') {
-      _preloadImage(lowImageLink(m.cover), null, (loaded) => {
-        _calcMainColor(loaded)
-      });
-      _preloadImage(originalImageLink(m.cover), () => setState(() => {
-        imageLoading = false
-      }), (loaded) => setState(() => {
-        coverImage = loaded
-      }));
-    } else {
-      setState(() {
-        imageLoading = false;
-        mainColor = Color(0xff292A37);
-      });
-    }
-  }
-
+  // fecth functions
   _fetchProviders() async {
     var p = await fetchProviders(widget.id, TypeEnum.movie);
     setState(() {
@@ -82,79 +57,41 @@ class _MoviePageState extends State<MoviePage> {
     setState(() {
       recommendations = r;
     });
-  } 
-  _preloadImage(image, Function? setLoading, Function callback) {
-    if(image == null || image == '') {
-      if(setLoading != null) {
-        setLoading();
-      }
-      return;
-    }
-    var loadedImage = Image.network(image);
-    loadedImage.image.resolve(ImageConfiguration()).addListener(
-      ImageStreamListener(
-        (info, call) {
-          if(setLoading != null) {
-            setLoading();
-          }
-          callback(loadedImage);
-        },
-      ),
-    );
-  }
-  
-  _checkColor(image) async {
-    bool isLight = ThemeData.estimateBrightnessForColor(mainColor!) == Brightness.light;
-    if(isLight) {
-      updateMainColor(color) => {
-        setState(() => {
-          mainColor = color
-        })
-      };
-      darken(mainColor!, updateMainColor);
-    }
   }
 
-  _calcMainColor(image) async {
-    if(image != null) {
-      var color = await getImagePalette(image.image);
-      setState(() {
-        mainColor = color;
-      });
-      _checkColor(mainColor);
-    }
+  // init
+  @override
+  init() async {
+    var m = await fetchById(widget.id, TypeEnum.movie);
+    setState(() {
+      movie = m;
+    });
+
+    _fetchProviders();
+    _fetchCast();
+    _fetchRecommends();
+
+    preloadImage(originalImageLink(m.cover));
   }
 
+  // loading
+  @override
   isLoading() {
     return movie == null 
       || providers == null 
       || cast == null 
-      || recommendations == null 
-      || mainColor == null
+      || recommendations == null
       || imageLoading;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    init();
   }
 
   @override
   Widget build(BuildContext context) {
     return isLoading() 
-      ? ImageGradientContainer(
-        image: null,
-        children: [
-          Center(
-            child: LoadingAnimationWidget.fourRotatingDots(color: Colors.white, size: 50)
-          ),
-        ]
-      )
+      ? ColorLoader(color: widget.color)
       : Material(
         child: AnnotatedRegion(
           value: SystemUiOverlayStyle.light.copyWith(           
-            statusBarColor: mainColor ?? Color(0xff292A37),
+            statusBarColor: widget.color,
           ),
           child: SafeArea(
             child: NestedScrollView(
@@ -165,22 +102,17 @@ class _MoviePageState extends State<MoviePage> {
                     delegate: MyImageAppBar(
                       title: movie!.title, 
                       cover: coverImage,
-                      color: mainColor,
+                      color: widget.color,
                       onlyTitle: false,
-                      child: ResultCard(
-                        image: movie!.image, 
-                        title: movie!.title, 
-                        release: movie!.release, 
-                        percent: movie!.percent, 
-                        raw: movie!.raw,
-                        genres: movie!.genres,
+                      child: DetailCard(
+                        model: movie!,
                       ),
                     ),
                   ),
                 ];
               },
               body: Container(
-                color: mainColor,
+                color: widget.color,
                 child: Scaffold(
                   body: ListView(
                     children: [

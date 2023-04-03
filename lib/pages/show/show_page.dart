@@ -5,12 +5,15 @@ import 'package:movies/enums/type_enum.dart';
 import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/show_detailed_model.dart';
 import 'package:movies/services/service.dart';
-import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
-import 'package:movies/widgets/containers/image_gradient_container.dart';
-import 'package:movies/widgets/display_app_bar.dart';
-import 'package:movies/widgets/my_image_app_bar.dart';
-import 'package:movies/widgets/result_card.dart';
+import 'package:movies/widgets/loaders/color_loader.dart';
+import 'package:movies/widgets/containers/gradient_container.dart';
+import 'package:movies/widgets/loaders/loader.dart';
+import 'package:movies/widgets/others/detail_card.dart';
+import 'package:movies/widgets/sections/season_section.dart';
+import 'package:movies/widgets/states/common/image_colored_state.dart';
+import 'package:movies/widgets/appbars/my_image_app_bar.dart';
+import 'package:movies/widgets/others/result_card.dart';
 import 'package:movies/widgets/sections/cast_section.dart';
 import 'package:movies/widgets/sections/provider_section.dart';
 import 'package:movies/widgets/sections/recommended_section.dart';
@@ -19,51 +22,25 @@ import 'package:movies/widgets/sections/story_section.dart';
 class ShowPage extends StatefulWidget {
 
   final int id;
+  final Color color;
 
   ShowPage({
     super.key,
-    required this.id
+    required this.id,
+    required this.color,
   });
 
   @override
   State<ShowPage> createState() => _ShowPageState();
 }
 
-class _ShowPageState extends State<ShowPage> {
+class _ShowPageState extends ImageColoredState<ShowPage> {
   ShowDetailedModel? show;
   Providers? providers;
   List? cast;
   List? recommendations;
-  Image? coverImage;
-  bool imageLoading = true;
-  Color? mainColor;
-  
-  init() async {
-    var s = await fetchById(widget.id, TypeEnum.show);
-    setState(() {
-      show = s;
-    });
 
-    _fetchProviders();
-    _fetchCast();
-    _fetchRecommends();
-    if(s.cover != null && s.cover != '') {
-      _preloadImage(lowImageLink(s.cover), null, (loaded) => {
-        _calcMainColor(loaded)
-      });
-      _preloadImage(originalImageLink(s.cover), () => setState(() => {
-        imageLoading = false
-      }), (loaded) => setState(() => {
-        coverImage = loaded
-      }));
-    } else {
-      setState(() {
-        imageLoading = false;
-        mainColor = Color(0xff292A37);
-      });
-    }
-  }
-
+  // fetch functions
   _fetchProviders() async {
     var p = await fetchProviders(widget.id, TypeEnum.show);
     setState(() {
@@ -81,55 +58,30 @@ class _ShowPageState extends State<ShowPage> {
     setState(() {
       recommendations = r;
     });
-  } 
-  _preloadImage(image, Function? setLoading, Function callback) {
-    if(image == null || image == '') {
-      if(setLoading != null) {
-        setLoading();
-      }
-      return;
-    }
-    var loadedImage = Image.network(image);
-    loadedImage.image.resolve(ImageConfiguration()).addListener(
-      ImageStreamListener(
-        (info, call) {
-          if(setLoading != null) {
-            setLoading();
-          }
-          callback(loadedImage);
-        },
-      ),
-    );
-  }
-  
-  _checkColor(image) async {
-    bool isLight = ThemeData.estimateBrightnessForColor(mainColor!) == Brightness.light;
-    if(isLight) {
-      updateMainColor(color) => {
-        setState(() => {
-          mainColor = color
-        })
-      };
-      darken(mainColor!, updateMainColor);
-    }
   }
 
-  _calcMainColor(image) async {
-    if(image != null) {
-      var color = await getImagePalette(image.image);
-      setState(() {
-        mainColor = color;
-      });
-      _checkColor(mainColor);
-    }
+  // init
+  @override
+  init() async {
+    var s = await fetchById(widget.id, TypeEnum.show);
+    setState(() {
+      show = s;
+    });
+
+    _fetchProviders();
+    _fetchCast();
+    _fetchRecommends();
+
+    preloadImage(originalImageLink(s.cover));
   }
 
+  // loading
+  @override
   isLoading() {
     return show == null 
       || providers == null 
       || cast == null 
       || recommendations == null 
-      || mainColor == null
       || imageLoading;
   }
 
@@ -141,24 +93,13 @@ class _ShowPageState extends State<ShowPage> {
 
   @override
   Widget build(BuildContext context) {
-    // if(is)
-    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    //   statusBarColor: mainColor ?? Color(0xff292A37),
-    // ));
     return 
       isLoading()
-      ? ImageGradientContainer(
-        image: null,
-        children: [
-          Center(
-            child: LoadingAnimationWidget.fourRotatingDots(color: Colors.white, size: 50)
-          ),
-        ]
-      )
+      ? ColorLoader(color: widget.color)
       : Material(
         child: AnnotatedRegion(
           value: SystemUiOverlayStyle.light.copyWith(           
-            statusBarColor: mainColor ?? Color(0xff292A37),
+            statusBarColor: widget.color,
           ),
           child: SafeArea(
             child: NestedScrollView(
@@ -170,46 +111,43 @@ class _ShowPageState extends State<ShowPage> {
                       title: show!.title, 
                       onlyTitle: false,
                       cover: coverImage,
-                      color: mainColor,
-                      child: ResultCard(
-                        image: show!.image, 
-                        title: show!.title, 
-                        release: show!.release, 
-                        percent: show!.percent, 
-                        raw: show!.raw,
-                        genres: show!.genres,
+                      color: widget.color,
+                      child: DetailCard(
+                        model: show!,
                       ),
                     ),
                   ),
                 ];
               },
               body: Container(
-                color: mainColor,
+                color: widget.color,
                 child: Scaffold(
                   body: ListView(
                     children: [
-                      SizedBox(height: 10),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: ProviderSection(
                           providers: providers
                         ),
                       ),
-                      SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: StorySection(
                           description: show!.description
                         ),
                       ),
-                      SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: CastSection(
                           cast: cast!
                         ),
                       ),
-                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: SeasonSection(
+                          list: show!.seasons
+                        ),
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: RecommendedSection(
