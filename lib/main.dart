@@ -9,6 +9,7 @@ import 'package:movies/pages/home/home_page.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   Paint.enableDithering = true;
@@ -79,12 +80,14 @@ class MainAppState extends ChangeNotifier {
   List shows = [];
   int moviePage = 0;
   int showPage = 0;
+  int itemCount = 3;
 
   TypeEnum type = TypeEnum.movie;
   OrderEnum order = OrderEnum.popular;
 
   MainAppState() {
     loadMovies(setMovies);
+    loadPreferences();
   }
 
   // --- getter functions ---
@@ -121,6 +124,14 @@ class MainAppState extends ChangeNotifier {
   }
   setOrder(order) {
     this.order = order;
+    notifyListeners();
+  }
+  setItemCount(itemCount) async {
+    this.itemCount = itemCount;
+    
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt('itemCount', itemCount);
+
     notifyListeners();
   }
   // --- update functions ---
@@ -180,5 +191,10 @@ class MainAppState extends ChangeNotifier {
         loadShows(updateShows);
         break;
     }
+  }
+  loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    final ic = prefs.get('itemCount');
+    setItemCount(ic ?? 3);
   }
 }

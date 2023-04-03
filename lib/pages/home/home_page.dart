@@ -12,6 +12,7 @@ import 'package:movies/widgets/others/image_card.dart';
 import 'package:movies/widgets/sections/filter/filter_section.dart';
 import 'package:movies/widgets/buttons/load_button.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class XContainer extends StatelessWidget {
 
@@ -67,6 +68,7 @@ class _ListViewState extends State<_ListView> {
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<MainAppState>();
+    final itemCount = appState.itemCount;
 
     goColor(id, color) {
       setState(() {
@@ -88,7 +90,6 @@ class _ListViewState extends State<_ListView> {
     } 
 
     final double width = MediaQuery.of(context).size.width;
-    const itemCount = 3;
     const crossSpacing = 10.0;
     const mainSpacing = 10.0;
     final itemWidth = width/itemCount - itemCount * crossSpacing;

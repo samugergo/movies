@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies/enums/grid_enum.dart';
 import 'package:movies/enums/order_enum.dart';
 import 'package:movies/main.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,7 @@ class FilterSheet extends StatelessWidget {
     }
 
     return SizedBox(
-      height: 200,
+      height: 450,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         child: Column(
@@ -48,7 +49,34 @@ class FilterSheet extends StatelessWidget {
                   ),
                 ),
               ],
-            )
+            ),
+            Text(
+              'Elrendezés',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white
+              ),
+            ),
+            SizedBox(height: 10),
+            Column(
+              children: [
+                ...GridEnum.values.map((item) => 
+                  RadioListTile(
+                    value: item.value, 
+                    title: Text(
+                      item.title,
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    activeColor: Colors.white,
+                    groupValue: appState.itemCount, 
+                    onChanged: (ic) => appState.setItemCount(ic)
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
