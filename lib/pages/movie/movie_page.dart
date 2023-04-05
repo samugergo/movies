@@ -6,6 +6,7 @@ import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/movie_detailed_model.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/utils/common_util.dart';
+import 'package:movies/widgets/animated_contaner.dart';
 import 'package:movies/widgets/loaders/color_loader.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
 import 'package:movies/widgets/loaders/loader.dart';
@@ -86,74 +87,71 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading() 
+    return XAnimatedContainer(
+      duration: 1000,
+      color: widget.color,
+      child: isLoading() 
       ? ColorLoader(color: widget.color)
-      : Material(
-        child: AnnotatedRegion(
-          value: SystemUiOverlayStyle.light.copyWith(           
-            statusBarColor: widget.color,
-          ),
-          child: SafeArea(
-            child: NestedScrollView(
-              headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-                return [
-                  SliverPersistentHeader(
-                    pinned: true,
-                    delegate: MyImageAppBar(
-                      title: movie!.title, 
-                      cover: coverImage,
-                      color: widget.color,
-                      onlyTitle: false,
-                      child: DetailCard(
-                        model: movie!,
-                      ),
+      : SafeArea(
+        child: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return [
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: MyImageAppBar(
+                  title: movie!.title, 
+                  cover: coverImage,
+                  color: widget.color,
+                  onlyTitle: false,
+                  child: DetailCard(
+                    model: movie!,
+                  ),
+                ),
+              ),
+            ];
+          },
+          body: Container(
+            color: widget.color,
+            child: Scaffold(
+              body: ListView(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: ProviderSection(
+                      providers: providers
                     ),
                   ),
-                ];
-              },
-              body: Container(
-                color: widget.color,
-                child: Scaffold(
-                  body: ListView(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: ProviderSection(
-                          providers: providers
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: StorySection(
-                          description: movie!.description
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: CastSection(
-                          cast: cast!
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: CollectionSection(
-                          model: movie!.collection,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: RecommendedSection(
-                          recommendations: recommendations!
-                        )
-                      ),
-                      SizedBox(height: 10),
-                    ],
-                  )
-                )
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: StorySection(
+                      description: movie!.description
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: CastSection(
+                      cast: cast!
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: CollectionSection(
+                      model: movie!.collection,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: RecommendedSection(
+                      recommendations: recommendations!
+                    )
+                  ),
+                  SizedBox(height: 10),
+                ],
               )
-            ),
-          ),
+            )
+          )
         ),
-      );
+      ),
+    );
   }
 }

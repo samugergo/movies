@@ -1,13 +1,10 @@
+import 'package:cupertino_back_gesture/cupertino_back_gesture.dart';
 import 'package:flutter/material.dart';
 import 'package:movies/pages/home/home_page.dart';
 import 'package:movies/theme/app_colors.dart';
-import 'package:movies/widgets/buttons/hidable_fab.dart';
-import 'package:movies/widgets/appbars/main_app_bar.dart';
-import 'package:movies/widgets/containers/gradient_container.dart';
 import 'package:provider/provider.dart'; 
 import 'package:movies/enums/order_enum.dart';
 import 'package:movies/enums/type_enum.dart';
-import 'package:movies/pages/home/base_container.dart';
 import 'package:movies/services/service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,19 +23,31 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => MainAppState(),
-      child: MaterialApp(
-        theme: ThemeData(
-          useMaterial3: true,
-          scaffoldBackgroundColor: Colors.transparent,
-          bottomSheetTheme: BottomSheetThemeData(
-            backgroundColor: Color(0xff2B2B38),
-            modalElevation: 0
+      child: BackGestureWidthTheme(
+        backGestureWidth: BackGestureWidth.fraction(1 / 2),
+        child: MaterialApp(
+          theme: ThemeData(
+            useMaterial3: true,
+            scaffoldBackgroundColor: Colors.transparent,
+            bottomSheetTheme: BottomSheetThemeData(
+              backgroundColor: Color(0xff2B2B38),
+              modalElevation: 0
+            ),
+            extensions: [
+              AppColors.theme
+            ],
+            pageTransitionsTheme: PageTransitionsTheme(
+              builders: {
+                //this is default transition
+                //TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+                //You can set iOS transition on Andoroid
+                TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+                TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+              },
+            ),
           ),
-          extensions: [
-            AppColors.theme
-          ]
+          home: HomePage(),
         ),
-        home: HomePage(),
       ),
     );
   }

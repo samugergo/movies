@@ -10,6 +10,7 @@ import 'package:movies/theme/app_colors.dart';
 import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
+import 'package:movies/widgets/animated_contaner.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
 import 'package:movies/widgets/loaders/color_loader.dart';
 import 'package:movies/widgets/others/image.dart';
@@ -95,7 +96,10 @@ class _PersonPageState extends ImageColoredState<PersonPage> {
     final itemWidth = width/itemCount - itemCount * crossSpacing;
     final itemHeight = itemWidth*1.5;
 
-    return isLoading()
+    return XAnimatedContainer(
+      color: mainColor!, 
+      duration: 1000, 
+      child: isLoading()
       ? ColorLoader(color: mainColor!)
       : Material(
         child: AnnotatedRegion(
@@ -209,6 +213,7 @@ class _PersonPageState extends ImageColoredState<PersonPage> {
             ),
           )
         )
-      );
+      ),
+    );
   }
 }

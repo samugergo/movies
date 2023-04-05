@@ -21,6 +21,7 @@ dependencies:
   page_transition: ^2.0.9
   transparent_image: ^2.0.1
   shared_preferences: ^2.1.0
+  cupertino_back_gesture: ^0.1.0
 
 dev_dependencies:
   flutter_test:
