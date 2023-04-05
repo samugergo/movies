@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies/theme/app_colors.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 darken(Color c, Function callback) async {
@@ -30,7 +31,7 @@ darkenSync(Color c) {
 getImagePalette(ImageProvider imageProvider) async {
   final PaletteGenerator paletteGenerator = await PaletteGenerator
       .fromImageProvider(imageProvider);
-  return paletteGenerator.dominantColor?.color ?? Color(0xff292A37);
+  return paletteGenerator.dominantColor?.color ?? AppColors.theme.primary;
 }
 
 Color checkColor(Color color) {

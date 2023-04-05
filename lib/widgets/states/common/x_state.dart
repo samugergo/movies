@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies/theme/app_colors.dart';
 import 'package:movies/utils/color_util.dart';
 
 abstract class XState<T extends StatefulWidget> extends State<T> {
@@ -40,7 +41,7 @@ abstract class XState<T extends StatefulWidget> extends State<T> {
   @protected
   void preloadImageWithColor(image, [Function? updateColor]) {
     if(image == null || image == '') {
-      _callOptionalFunction(updateColor, Color(0xff292A37));
+      _callOptionalFunction(updateColor, AppColors.theme.primary);
       return;
     }
     var loadedImage = Image.network(image);

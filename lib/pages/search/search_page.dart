@@ -5,6 +5,7 @@ import 'package:movies/models/base/list_response.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/show/show_page.dart';
 import 'package:movies/services/service.dart';
+import 'package:movies/theme/app_colors.dart';
 import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
@@ -105,6 +106,7 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<MainAppState>();
+    final theme = Theme.of(context).extension<AppColors>()!;
 
     goColor(id, color) {
       final Widget to = appState.type == TypeEnum.movie 
@@ -126,7 +128,10 @@ class _SearchState extends State<Search> {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           stops: [0.5, 1],
-          colors: [Color(0xff292A37), Color(0xff0F1018)],
+          colors: [
+            theme.primary!, 
+            theme.secondary!
+          ],
         ),
       ),
       child: Scaffold(
@@ -134,7 +139,7 @@ class _SearchState extends State<Search> {
           elevation: 0,
           scrolledUnderElevation: 0,
           titleSpacing: 0,
-          backgroundColor: Color(0xff343643),
+          backgroundColor: theme.primaryLight,
           leading: IconButton(
             icon: Icon(Icons.arrow_back_rounded),
             onPressed: () {
@@ -154,7 +159,7 @@ class _SearchState extends State<Search> {
             ),
             decoration: InputDecoration(
               filled: true,
-              fillColor: Color(0xff343643),
+              fillColor: theme.primaryLight,
               suffixIcon: Icon(
                 Icons.search,
                 color: Colors.white24,
@@ -165,11 +170,11 @@ class _SearchState extends State<Search> {
                 fontWeight: FontWeight.normal
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0xff343643)),
+                borderSide: BorderSide(color: theme.primaryLight!),
                 borderRadius: BorderRadius.circular(0),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0xff343643)),
+                borderSide: BorderSide(color: theme.primaryLight!),
                 borderRadius: BorderRadius.circular(0),
               ),
               contentPadding: EdgeInsets.only(left: 0),

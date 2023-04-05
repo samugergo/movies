@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:movies/main.dart';
+import 'package:movies/theme/app_colors.dart';
 import 'package:movies/widgets/sections/filter/filter_sheet.dart';
 import 'package:provider/provider.dart';
 
@@ -9,6 +10,7 @@ class FilterSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<MainAppState>();
+    final theme = Theme.of(context).extension<AppColors>()!;
 
     show() {
       showModalBottomSheet<void>(
@@ -23,14 +25,14 @@ class FilterSection extends StatelessWidget {
         children: [
           Icon(
             FontAwesomeIcons.arrowDownWideShort,
-            color: Colors.white,
+            color: theme.iconColor,
             size: 14,
           ),
           SizedBox(width: 10),
           Text(
             appState.order.title,
             style: TextStyle(
-              color: Colors.white,
+              color: theme.primaryTextColor,
               fontSize: 14,
             ),
           ),
@@ -39,12 +41,11 @@ class FilterSection extends StatelessWidget {
             onPressed: () => show(), 
             icon: Icon(
               Icons.filter_list,
-              color: Colors.white,
+              color: theme.iconColor,
             ),
           ),
         ],
       ),
     );
   }
-
 }

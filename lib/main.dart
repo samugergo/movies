@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:movies/pages/home/home_page.dart';
+import 'package:movies/theme/app_colors.dart';
 import 'package:movies/widgets/buttons/hidable_fab.dart';
 import 'package:movies/widgets/appbars/main_app_bar.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
 import 'package:provider/provider.dart'; 
 import 'package:movies/enums/order_enum.dart';
 import 'package:movies/enums/type_enum.dart';
-import 'package:movies/pages/home/home_page.dart';
+import 'package:movies/pages/home/base_container.dart';
 import 'package:movies/services/service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,8 +24,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scrollController = ScrollController();
-
     return ChangeNotifierProvider(
       create: (context) => MainAppState(),
       child: MaterialApp(
@@ -35,25 +34,11 @@ class MainApp extends StatelessWidget {
             backgroundColor: Color(0xff2B2B38),
             modalElevation: 0
           ),
+          extensions: [
+            AppColors.theme
+          ]
         ),
-        home: GradientContainer(
-          child: Scaffold(
-            appBar: AppBar(
-              title: MainAppBar(),
-              titleSpacing: 20,
-              centerTitle: true,
-              elevation: 0,
-              scrolledUnderElevation: 0,
-              backgroundColor: Color(0xff292A37),
-            ),
-            body: HomePage(
-              controller: scrollController,
-            ),
-            floatingActionButton: HidableFab(
-              controller: scrollController
-            ),
-          ),
-        ),
+        home: HomePage(),
       ),
     );
   }

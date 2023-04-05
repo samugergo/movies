@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movies/enums/grid_enum.dart';
 import 'package:movies/enums/order_enum.dart';
 import 'package:movies/main.dart';
+import 'package:movies/theme/app_colors.dart';
 import 'package:provider/provider.dart';
 
 class FilterSheet extends StatelessWidget {
@@ -9,12 +10,32 @@ class FilterSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<MainAppState>();
-    const items = OrderEnum.values;
+    final theme = Theme.of(context).extension<AppColors>()!;
 
     onClick(order, context) {
       appState.setOrder(order);
       appState.loadByOrder(order);
       Navigator.pop(context);
+    }
+
+    title(String title) {
+      return Text(
+        title,
+        style: TextStyle(
+          color: Colors.white,
+        )
+      );
+    }
+
+    groupTitle(String groupTitle) {
+      return Text(
+        groupTitle,
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: theme.primaryTextColor
+        ),
+      );
     }
 
     return SizedBox(
@@ -23,26 +44,14 @@ class FilterSheet extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         child: Column(
           children: [
-            Text(
-              'Rendezés',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white
-              ),
-            ),
+            groupTitle('Rendezés'),
             SizedBox(height: 10),
             Column(
               children: [
-                ...items.map((item) => 
+                ...OrderEnum.values.map((item) => 
                   RadioListTile(
                     value: item, 
-                    title: Text(
-                      item.title,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
+                    title: title(item.title),
                     activeColor: Colors.white,
                     groupValue: appState.order, 
                     onChanged: (order) => onClick(order, context)
@@ -50,26 +59,14 @@ class FilterSheet extends StatelessWidget {
                 ),
               ],
             ),
-            Text(
-              'Elrendezés',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white
-              ),
-            ),
+            groupTitle('Elrendezés'),
             SizedBox(height: 10),
             Column(
               children: [
                 ...GridEnum.values.map((item) => 
                   RadioListTile(
                     value: item.value, 
-                    title: Text(
-                      item.title,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
+                    title: title(item.title),
                     activeColor: Colors.white,
                     groupValue: appState.itemCount, 
                     onChanged: (ic) => appState.setItemCount(ic)
@@ -82,4 +79,4 @@ class FilterSheet extends StatelessWidget {
       ),
     );
   }
-}
+} 

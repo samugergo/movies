@@ -6,6 +6,7 @@ import 'package:movies/models/common/person_model.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/show/show_page.dart';
 import 'package:movies/services/service.dart';
+import 'package:movies/theme/app_colors.dart';
 import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
@@ -51,7 +52,7 @@ class _PersonPageState extends ImageColoredState<PersonPage> {
 
   @override
   void init() async { 
-    mainColor = Color(0xff292A37);
+    mainColor = AppColors.theme.primary;
     var p = await fetchPersonById(widget.id);
     setState(() {
       person = p;
