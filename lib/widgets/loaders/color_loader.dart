@@ -11,18 +11,10 @@ class ColorLoader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion(
-      value: SystemUiOverlayStyle.light.copyWith(           
-        statusBarColor: color,
-      ),
-      child: Container(
-        color: color,
-        child: Center(
-          child: LoadingAnimationWidget.fourRotatingDots(
-            color: Colors.white, 
-            size: 50
-          ),
-        )
+    return  Center(
+      child: LoadingAnimationWidget.fourRotatingDots(
+        color: Colors.white, 
+        size: 50
       ),
     );
   }

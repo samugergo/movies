@@ -6,9 +6,11 @@ import 'package:movies/models/common/person_model.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/show/show_page.dart';
 import 'package:movies/services/service.dart';
+import 'package:movies/theme/app_colors.dart';
 import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
+import 'package:movies/widgets/animated_contaner.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
 import 'package:movies/widgets/loaders/color_loader.dart';
 import 'package:movies/widgets/others/image.dart';
@@ -51,7 +53,7 @@ class _PersonPageState extends ImageColoredState<PersonPage> {
 
   @override
   void init() async { 
-    mainColor = Color(0xff292A37);
+    mainColor = AppColors.theme.primary;
     var p = await fetchPersonById(widget.id);
     setState(() {
       person = p;
@@ -94,7 +96,10 @@ class _PersonPageState extends ImageColoredState<PersonPage> {
     final itemWidth = width/itemCount - itemCount * crossSpacing;
     final itemHeight = itemWidth*1.5;
 
-    return isLoading()
+    return XAnimatedContainer(
+      color: mainColor!, 
+      duration: 1000, 
+      child: isLoading()
       ? ColorLoader(color: mainColor!)
       : Material(
         child: AnnotatedRegion(
@@ -118,98 +123,97 @@ class _PersonPageState extends ImageColoredState<PersonPage> {
                 ];
               },
               body: GradientContainer(
-                children: [
-                  Scaffold(
-                    body: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Section(
-                              title: 'Alap adatok', 
-                              children: [
-                                Card(
-                                  margin: EdgeInsets.zero,
-                                  elevation: 0,
-                                  color: Colors.black26,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    side: BorderSide(color: Colors.white12, width: 1),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              person!.birthday,
-                                              style: TextStyle(
-                                                color: Colors.white70
-                                              ),
+                child: Scaffold(
+                  body: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Section(
+                            title: 'Alap adatok', 
+                            children: [
+                              Card(
+                                margin: EdgeInsets.zero,
+                                elevation: 0,
+                                color: Colors.black26,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide(color: Colors.white12, width: 1),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            person!.birthday,
+                                            style: TextStyle(
+                                              color: Colors.white70
                                             ),
-                                            Text(
-                                              person!.birthPlace,
-                                              style: TextStyle(
-                                                color: Colors.white70
-                                              ),
+                                          ),
+                                          Text(
+                                            person!.birthPlace,
+                                            style: TextStyle(
+                                              color: Colors.white70
                                             ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ]
-                            ),
-                            SectionTitle(
-                              titleLeftPadding: 0, 
-                              title: 'Filmek'
-                            ),
-                            GridView.count(
-                              physics: BouncingScrollPhysics(),
-                              shrinkWrap: true,
-                              crossAxisCount: itemCount,
-                              mainAxisSpacing: mainSpacing,
-                              crossAxisSpacing: crossSpacing,
-                              childAspectRatio: itemWidth/itemHeight,
-                              children: movieList!.map((pair) => ImageCard(
-                                model: pair,
-                                goTo: (model) {
-                                  go(model, TypeEnum.movie);
-                                },
-                              )).toList(),
-                            ),
-                            SectionTitle(
-                              titleLeftPadding: 0, 
-                              title: 'Sorozatok & Tv'
-                            ),
-                            GridView.count(
-                              physics: BouncingScrollPhysics(),
-                              shrinkWrap: true,
-                              crossAxisCount: itemCount,
-                              mainAxisSpacing: mainSpacing,
-                              crossAxisSpacing: crossSpacing,
-                              childAspectRatio: itemWidth/itemHeight,
-                              children: showList!.map((pair) => ImageCard(
-                                model: pair,
-                                goTo: (model) {
-                                  go(model, TypeEnum.show);
-                                },
-                              )).toList(),
-                            ),
-                          ],
-                        ),
+                              ),
+                            ]
+                          ),
+                          SectionTitle(
+                            titleLeftPadding: 0, 
+                            title: 'Filmek'
+                          ),
+                          GridView.count(
+                            physics: BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            crossAxisCount: itemCount,
+                            mainAxisSpacing: mainSpacing,
+                            crossAxisSpacing: crossSpacing,
+                            childAspectRatio: itemWidth/itemHeight,
+                            children: movieList!.map((pair) => ImageCard(
+                              model: pair,
+                              goTo: (model) {
+                                go(model, TypeEnum.movie);
+                              },
+                            )).toList(),
+                          ),
+                          SectionTitle(
+                            titleLeftPadding: 0, 
+                            title: 'Sorozatok & Tv'
+                          ),
+                          GridView.count(
+                            physics: BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            crossAxisCount: itemCount,
+                            mainAxisSpacing: mainSpacing,
+                            crossAxisSpacing: crossSpacing,
+                            childAspectRatio: itemWidth/itemHeight,
+                            children: showList!.map((pair) => ImageCard(
+                              model: pair,
+                              goTo: (model) {
+                                go(model, TypeEnum.show);
+                              },
+                            )).toList(),
+                          ),
+                        ],
                       ),
-                    )
-                  ),
-                ],
+                    ),
+                  )
+                ),
               ),
             ),
           )
         )
-      );
+      ),
+    );
   }
 }

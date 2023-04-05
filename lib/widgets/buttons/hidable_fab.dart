@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hidable/hidable.dart';
 import 'package:movies/pages/search/search_page.dart';
+import 'package:movies/theme/app_colors.dart';
 
 class HidableFab extends StatelessWidget {
 
@@ -13,13 +14,15 @@ class HidableFab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).extension<AppColors>()!;
+    
     return Hidable(
       controller: controller,
       child: Align(
         alignment: Alignment.bottomRight,
         child: FloatingActionButton(
-          backgroundColor: Color(0xff292A37),
-          foregroundColor: Colors.white,
+          backgroundColor: theme.primary,
+          foregroundColor: theme.iconColor,
           onPressed: () => {
             Navigator.push(
               context,

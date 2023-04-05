@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies/theme/app_colors.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -8,7 +9,7 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
     required this.cover,
     required this.child,
     this.onlyTitle = true,
-    this.color = const Color(0xff292A37),
+    this.color,
   });
 
   final String title;
@@ -23,6 +24,8 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    final theme = Theme.of(context).extension<AppColors>()!;
+
     return LayoutBuilder(
       builder: (BuildContext layoutCtx, BoxConstraints constraints) { 
         final List<Widget> children = <Widget>[];
@@ -45,7 +48,7 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
           child: Opacity(
             alwaysIncludeSemantics: true,
             opacity: opacity,
-            child: _buildBackgroundCover(shrinkOffset),
+            child: _buildBackgroundCover(shrinkOffset, theme),
           ),
         ));
 
@@ -125,7 +128,7 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
     );
   }
 
-  _buildBackgroundCover(double shrinkOffset) {
+  _buildBackgroundCover(double shrinkOffset, theme) {
     return ShaderMask(
       shaderCallback: (rect) {
         return LinearGradient(
@@ -147,7 +150,7 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
           ),
         )
         : BoxDecoration(
-          color: Color(0xff292A37),
+          color: theme.primary,
         ),
       ),
     );

@@ -1,14 +1,13 @@
+import 'package:cupertino_back_gesture/cupertino_back_gesture.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:movies/widgets/buttons/hidable_fab.dart';
-import 'package:movies/widgets/appbars/main_app_bar.dart';
+import 'package:movies/pages/home/home_page.dart';
+import 'package:movies/theme/app_colors.dart';
 import 'package:provider/provider.dart'; 
 import 'package:movies/enums/order_enum.dart';
 import 'package:movies/enums/type_enum.dart';
-import 'package:movies/pages/home/home_page.dart';
 import 'package:movies/services/service.dart';
-import 'package:movies/utils/common_util.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   Paint.enableDithering = true;
@@ -22,54 +21,34 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scrollController = ScrollController();
-
     return ChangeNotifierProvider(
       create: (context) => MainAppState(),
-      child: MaterialApp(
-        theme: ThemeData(
-          useMaterial3: true,
-          scaffoldBackgroundColor: Colors.transparent,
-          bottomSheetTheme: BottomSheetThemeData(
-            backgroundColor: Color(0xff2B2B38),
-            modalElevation: 0
+      child: BackGestureWidthTheme(
+        backGestureWidth: BackGestureWidth.fraction(1 / 2),
+        child: MaterialApp(
+          theme: ThemeData(
+            useMaterial3: true,
+            scaffoldBackgroundColor: Colors.transparent,
+            bottomSheetTheme: BottomSheetThemeData(
+              backgroundColor: Color(0xff2B2B38),
+              modalElevation: 0
+            ),
+            extensions: [
+              AppColors.theme
+            ],
+            pageTransitionsTheme: PageTransitionsTheme(
+              builders: {
+                //this is default transition
+                //TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+                //You can set iOS transition on Andoroid
+                TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+                TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+              },
+            ),
           ),
+          home: HomePage(),
         ),
-        home: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              stops: [0.1, 1],
-              colors: [Color(0xff292A37), Color(0xff0F1018)],
-              tileMode: TileMode.mirror
-            ),
-          ),
-          child: AnnotatedRegion(
-            value: SystemUiOverlayStyle.light.copyWith(           
-              statusBarColor: Color(0xff292A37),
-            ),
-            child: SafeArea(
-              child: Scaffold(
-                appBar: AppBar(
-                  title: MainAppBar(),
-                  titleSpacing: 20,
-                  centerTitle: true,
-                  elevation: 0,
-                  scrolledUnderElevation: 0,
-                  backgroundColor: Color(0xff292A37),
-                ),
-                body: XContainer(
-                  controller: scrollController,
-                ),
-                floatingActionButton: HidableFab(
-                  controller: scrollController
-                ),
-              ),
-            ),
-          ),
-        ),
-      )
+      ),
     );
   }
 }
@@ -79,12 +58,14 @@ class MainAppState extends ChangeNotifier {
   List shows = [];
   int moviePage = 0;
   int showPage = 0;
+  int itemCount = 3;
 
   TypeEnum type = TypeEnum.movie;
   OrderEnum order = OrderEnum.popular;
 
   MainAppState() {
     loadMovies(setMovies);
+    loadPreferences();
   }
 
   // --- getter functions ---
@@ -121,6 +102,14 @@ class MainAppState extends ChangeNotifier {
   }
   setOrder(order) {
     this.order = order;
+    notifyListeners();
+  }
+  setItemCount(itemCount) async {
+    this.itemCount = itemCount;
+    
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt('itemCount', itemCount);
+
     notifyListeners();
   }
   // --- update functions ---
@@ -180,5 +169,10 @@ class MainAppState extends ChangeNotifier {
         loadShows(updateShows);
         break;
     }
+  }
+  loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    final ic = prefs.get('itemCount');
+    setItemCount(ic ?? 3);
   }
 }
