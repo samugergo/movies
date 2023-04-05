@@ -6,7 +6,7 @@ import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/show_detailed_model.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/utils/common_util.dart';
-import 'package:movies/widgets/animated_contaner.dart';
+import 'package:movies/widgets/containers/animated_contaner.dart';
 import 'package:movies/widgets/loaders/color_loader.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
 import 'package:movies/widgets/loaders/loader.dart';
@@ -96,7 +96,7 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
   Widget build(BuildContext context) {
     return XAnimatedContainer(
       color: widget.color, 
-      duration: 1000, 
+      duration: 300, 
       child: isLoading()
       ? ColorLoader(color: widget.color)
       : Material(

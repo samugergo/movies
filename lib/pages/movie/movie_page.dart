@@ -6,7 +6,7 @@ import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/movie_detailed_model.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/utils/common_util.dart';
-import 'package:movies/widgets/animated_contaner.dart';
+import 'package:movies/widgets/containers/animated_contaner.dart';
 import 'package:movies/widgets/loaders/color_loader.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
 import 'package:movies/widgets/loaders/loader.dart';
@@ -88,7 +88,7 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
   @override
   Widget build(BuildContext context) {
     return XAnimatedContainer(
-      duration: 1000,
+      duration: 300,
       color: widget.color,
       child: isLoading() 
       ? ColorLoader(color: widget.color)
