@@ -14,14 +14,14 @@ class HomePage extends StatelessWidget {
 
     return GradientContainer(
       child: Scaffold(
-        appBar: AppBar(
-          title: MainAppBar(),
-          titleSpacing: 20,
-          centerTitle: true,
-          elevation: 0,
-          scrolledUnderElevation: 0,
-          backgroundColor: theme.primary,
-        ),
+        // appBar: AppBar(
+        //   title: MainAppBar(),
+        //   titleSpacing: 20,
+        //   centerTitle: true,
+        //   elevation: 0,
+        //   scrolledUnderElevation: 0,
+        //   backgroundColor: theme.primary,
+        // ),
         body: BaseConainer(
           controller: scrollController,
         ),

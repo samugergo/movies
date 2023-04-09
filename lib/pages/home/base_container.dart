@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/main.dart';
@@ -12,6 +13,8 @@ import 'package:movies/widgets/others/image_card.dart';
 import 'package:movies/widgets/sections/filter/filter_section.dart';
 import 'package:movies/widgets/buttons/load_button.dart';
 import 'package:provider/provider.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class BaseConainer extends StatelessWidget {
 
@@ -63,6 +66,7 @@ class _ListView extends StatefulWidget {
 
 class _ListViewState extends State<_ListView> {
   bool calculating = false;
+  int activeIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -96,31 +100,100 @@ class _ListViewState extends State<_ListView> {
 
     return Stack(
       children: [
-        Padding(
-          key: widget.key,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: SingleChildScrollView(
-            controller: widget.controller,
-            child: Column(
-              children: [
-                ButtonSwitch(),
-                FilterSection(),
-                GridView.count(
-                  physics: BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  crossAxisCount: itemCount,
-                  mainAxisSpacing: mainSpacing,
-                  crossAxisSpacing: crossSpacing,
-                  childAspectRatio: itemWidth/itemHeight,
-                  children: widget.list.map((pair) => ImageCard(
-                    model: pair,
-                    goTo: go,
-                  )).toList(),
+        SingleChildScrollView(
+          controller: widget.controller,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // ButtonSwitch(),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(
+                  'Filmek'.toUpperCase(),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold
+                  ),
                 ),
-                SizedBox(height: 10),
-                LoadButton(load: appState.loadMore),
-              ],
-            ),
+              ),
+              CarouselSlider(
+                options: CarouselOptions(
+                  height: 160.0,
+                  enlargeCenterPage: true,
+                  enlargeFactor: 0.2,
+                  autoPlay: true,
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      activeIndex = index;
+                    });
+                  },
+                ),
+                items: appState.movies.sublist(0, 5).map((i) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: FadeInImage.memoryNetwork(
+                              placeholder: kTransparentImage,
+                              fadeInDuration: Duration(milliseconds: 100),
+                              image: imageLink(i.cover),
+                              fit: BoxFit.cover,
+                              width: MediaQuery.of(context).size.width,
+                            ),
+                          ),
+                          Positioned(
+                            left: 10,
+                            right: 10,
+                            bottom: 5,
+                            child: Text(
+                              i.title,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                overflow: TextOverflow.ellipsis,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }).toList(),
+              ),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: AnimatedSmoothIndicator(
+                    activeIndex: activeIndex, 
+                    count: 5,
+                    effect: SlideEffect(  
+                        spacing: 4.0,
+                        dotWidth: 5,  
+                        dotHeight: 5,
+                        dotColor: Colors.grey,  
+                        activeDotColor: Colors.indigo  
+                    ),  
+                  ),
+                ),
+              ),
+              FilterSection(),
+              GridView.count(
+                physics: BouncingScrollPhysics(),
+                shrinkWrap: true,
+                crossAxisCount: itemCount,
+                mainAxisSpacing: mainSpacing,
+                crossAxisSpacing: crossSpacing,
+                childAspectRatio: itemWidth/itemHeight,
+                children: widget.list.map((pair) => ImageCard(
+                  model: pair,
+                  goTo: go,
+                )).toList(),
+              ),
+              SizedBox(height: 10),
+              LoadButton(load: appState.loadMore),
+            ],
           ),
         ),
         if(calculating) ModalBarrier()
