@@ -24,16 +24,20 @@ class XImage extends StatelessWidget {
         width: width,
         height: height,
         child: url != '' 
-        ? Image.network(
-          url,
+         ? FadeInImage.memoryNetwork(
+          placeholder: kTransparentImage,
+          image: url,
           height: height,
-          fit: BoxFit.fill,
+          fadeInDuration: Duration(milliseconds: 200),
+          // width: width,
+          fit: BoxFit.cover,
         )
         : Image.asset(
           'assets/images/default.png',
           height: height,
+          // width: width,
           fit: BoxFit.fill,
-        )
+        ),
       )
     );
   }
