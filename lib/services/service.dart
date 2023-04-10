@@ -100,6 +100,23 @@ fetchRecommendations(int id, TypeEnum type) async {
   }
 }
 
+fetchSimilar(int id, TypeEnum type) async {
+  try {
+    var response = await http.get(
+      Uri.parse(
+        '$baseUrl/${type.value}/$id/similar?$params'
+      )
+    );
+    var json = jsonDecode(response.body);
+    if(json["results"] != null) {
+      return json['results'].map((c) => DisplayModel.fromJson(c)).toList(); 
+    }
+    return [];
+  } catch(e) {
+    print(e);
+  }
+}
+
 fetchCollection(int id) async {
   try {
     var response = await http.get(

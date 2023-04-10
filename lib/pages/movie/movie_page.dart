@@ -39,6 +39,7 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
   Providers? providers;
   List? cast;
   List? recommendations;
+  List? similar;
 
   // fecth functions
   _fetchProviders() async {
@@ -59,6 +60,12 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
       recommendations = r;
     });
   }
+  _fetchSimilar() async {
+    var s = await fetchSimilar(widget.id, TypeEnum.movie);
+    setState(() {
+      similar = s;
+    });
+  }
 
   // init
   @override
@@ -71,6 +78,7 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
     _fetchProviders();
     _fetchCast();
     _fetchRecommends();
+    _fetchSimilar();
 
     preloadImage(originalImageLink(m.cover));
   }
@@ -82,6 +90,7 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
       || providers == null 
       || cast == null 
       || recommendations == null
+      || similar == null
       || imageLoading;
   }
 
@@ -150,8 +159,16 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: RecommendedSection(
+                    child: OtherMoviesSection(
+                      title: 'Ajánlott',
                       recommendations: recommendations!
+                    )
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: OtherMoviesSection(
+                      title: 'Hasonlóak',
+                      recommendations: similar!
                     )
                   ),
                   SizedBox(height: 10),
