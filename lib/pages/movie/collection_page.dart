@@ -75,68 +75,70 @@ class _CollectionPageState extends ImageColoredState<CollectionPage> {
       duration: 300, 
       child: isLoading() 
       ? ColorLoader(color: widget.color)
-      : Material(
-        child: AnnotatedRegion(
-          value: SystemUiOverlayStyle.light.copyWith(           
-            statusBarColor: widget.color,
-          ),
-          child: SafeArea(
-            child: NestedScrollView(
-              headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-                return [
-                  SliverPersistentHeader(
-                    pinned: true,
-                    delegate: MyImageAppBar(
-                      title: collection!.title, 
-                      cover: coverImage,
-                      color: widget.color,
-                      onlyTitle: true,
-                      child: Text(collection!.title),
-                    ),
-                  ),
-                ];
-              },
-              body: Container(
-                color: widget.color,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SectionTitle(
-                          titleLeftPadding: 0, 
-                          title: 'Filmek'
-                        ),
-                        GridView.count(
-                          physics: BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          crossAxisCount: itemCount,
-                          mainAxisSpacing: mainSpacing,
-                          crossAxisSpacing: crossSpacing,
-                          childAspectRatio: itemWidth/itemHeight,
-                          children: collection!.modelList.map((pair) => ImageCard(
-                            model: pair,
-                            goTo: go,
-                          )).toList(),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-                // Section(
-                //   title: 'Filmek',
-                //   titleLeftPadding: 15,
-                //   children: [
-                //     ...chunkList(collection!.modelList).map((pair) => _ImageRow(
-                //       pair: pair,
-                //       goTo: go,
-                //     )).toList(),
-                //   ] 
-                // ),
-              )
+      : SafeArea(
+        child: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return [
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: MyImageAppBar(
+                  title: collection!.title, 
+                  cover: coverImage,
+                  color: widget.color,
+                  onlyTitle: true,
+                  child: Text(collection!.title),
+                ),
+              ),
+            ];
+          },
+          body: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  widget.color,
+                  Colors.black45,
+                ]
+              ),
             ),
-          ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SectionTitle(
+                      titleLeftPadding: 0, 
+                      title: 'Filmek'
+                    ),
+                    GridView.count(
+                      physics: BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      crossAxisCount: itemCount,
+                      mainAxisSpacing: mainSpacing,
+                      crossAxisSpacing: crossSpacing,
+                      childAspectRatio: itemWidth/itemHeight,
+                      children: collection!.modelList.map((pair) => ImageCard(
+                        model: pair,
+                        goTo: go,
+                      )).toList(),
+                    ),
+                  ],
+                ),
+              ),
+            )
+            // Section(
+            //   title: 'Filmek',
+            //   titleLeftPadding: 15,
+            //   children: [
+            //     ...chunkList(collection!.modelList).map((pair) => _ImageRow(
+            //       pair: pair,
+            //       goTo: go,
+            //     )).toList(),
+            //   ] 
+            // ),
+          )
         ),
       )
     );
