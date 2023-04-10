@@ -1,4 +1,5 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:intl/intl.dart';
 
 chunkList(list) {
   var chunks = [];
@@ -48,6 +49,14 @@ year(String date) {
   if(date != '') {
     final DateTime dateTime = DateTime.parse(date);
     return '${dateTime.year}';
+  }
+  return '';
+}
+
+dateFormat(date) {
+  if(date != '') {
+    final DateFormat formatter = DateFormat('yyyy.MM.dd');
+    return formatter.format(DateTime.parse(date));
   }
   return '';
 }

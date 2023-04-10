@@ -20,7 +20,7 @@ class CastSection extends StatelessWidget {
       title: 'Szereplők', 
       children: [
         SizedBox(
-          height: 260,
+          height: 76,
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: cast.map((c) => _CastMember(model: c)).toList(),
@@ -53,55 +53,105 @@ class _CastMember extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
           onTap: () => go(model.id),
-          child: Card(
-            margin: EdgeInsets.zero,
-            elevation: 0,
-            color: Colors.white10,
-            shape: RoundedRectangleBorder(
-              side: BorderSide(
-                color: Colors.white12, 
-              ),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                XImage.customRadius(
-                  model.image, 
-                  125, 180, 
-                  BorderRadius.only(
-                    topLeft: Radius.circular(10), 
-                    topRight: Radius.circular(10)
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 6, left: 6, right: 6),
-                  child: Text(
-                    model.name,
-                    overflow: TextOverflow.visible,
-                    style: TextStyle(
-                      fontSize: 12, 
-                      color: Colors.white
-                    ),
-                  ),
-                ),
-                SizedBox(height: 2),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  child: Text(
-                    model.role,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: Colors.white30
-                    ),
-                  ),
-                )
-              ],
+          child: model.image != '' 
+          ? _CastImage(model: model)
+          : _CastNoImage(model: model),
+        ),
+      ),
+    );
+  }
+}
+
+class _CastImage extends StatelessWidget {
+  _CastImage({
+    required this.model,
+  });
+
+  final CastModel model;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        CircleAvatar(
+          backgroundImage: NetworkImage(model.image),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 6, left: 6, right: 6),
+          child: Text(
+            model.name,            
+            style: TextStyle(
+              fontSize: 10, 
+              color: Colors.white
             ),
           ),
         ),
-      ),
+        SizedBox(height: 2),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          child: Text(
+            model.role,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 10,
+              color: Colors.white30
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _CastNoImage extends StatelessWidget {
+  _CastNoImage({
+    required this.model,
+  });
+
+  final CastModel model;
+
+  _getSign() {
+    final splitted = model.name.split(' ');
+    
+    if(splitted.isEmpty) return 'A';
+    if(splitted.length < 2) return splitted[0][0];
+    if(splitted[1].isEmpty) return splitted[0][0].toUpperCase();
+
+    return splitted[0][0].toUpperCase() + splitted[1][0].toUpperCase();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        CircleAvatar(
+          backgroundColor: Colors.white30,
+          child: Text(_getSign()),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 6, left: 6, right: 6),
+          child: Text(
+            model.name,
+            overflow: TextOverflow.visible,
+            style: TextStyle(
+              fontSize: 10, 
+              color: Colors.white
+            ),
+          ),
+        ),
+        SizedBox(height: 2),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          child: Text(
+            model.role,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 10,
+              color: Colors.white30
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
