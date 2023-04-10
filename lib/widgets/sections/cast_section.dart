@@ -46,8 +46,8 @@ class _CastMember extends StatelessWidget {
       goTo(context, to);
     } 
 
-    return SizedBox(
-      width: 133,
+    return Container(
+      constraints: BoxConstraints(maxWidth: 150),
       child: Padding(
         padding: const EdgeInsets.only(right: 8.0),
         child: InkWell(
@@ -79,7 +79,8 @@ class _CastImage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 6, left: 6, right: 6),
           child: Text(
-            model.name,            
+            model.name,
+            overflow: TextOverflow.ellipsis,      
             style: TextStyle(
               fontSize: 10, 
               color: Colors.white

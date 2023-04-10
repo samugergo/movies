@@ -111,7 +111,16 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
             ];
           },
           body: Container(
-            color: widget.color,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  widget.color,
+                  Colors.black45,
+                ]
+              ),
+            ),
             child: Scaffold(
               body: ListView(
                 children: [
