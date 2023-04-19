@@ -43,12 +43,12 @@ class OtherMoviesSection extends StatelessWidget {
       title: title, 
       children: [
         SizedBox(
-          height: 200,
+          height: 150,
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: recommendations.map((e) => 
               SizedBox(
-                width: 133,
+                width: 100,
                 child: Padding(
                   padding: const EdgeInsets.only(right: 8.0),
                   child: InkWell(
