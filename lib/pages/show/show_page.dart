@@ -130,6 +130,7 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
+                stops: [0.1, 1],
                 colors: [
                   widget.color,
                   Colors.black45,

@@ -124,6 +124,7 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
+                stops: [0.1, 1],
                 colors: [
                   widget.color,
                   Colors.black45,
