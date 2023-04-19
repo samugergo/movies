@@ -9,4 +9,8 @@ enum TypeEnum {
     required this.title,
     required this.value,
   });
+
+  static bool isMovie(TypeEnum value) {
+    return value == movie;
+  }
 }
