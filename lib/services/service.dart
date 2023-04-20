@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
 import 'package:movies/api/parameter/path_parameter.dart';
 import 'package:movies/api/resource/moviedb_resource.dart';
 import 'package:movies/enums/order_enum.dart';
@@ -15,13 +12,6 @@ import 'package:movies/models/detailed/movie_detailed_model.dart';
 import 'package:movies/models/detailed/show_detailed_model.dart';
 
 import '../models/base/display_model.dart';
-
-final apiKey = dotenv.env['API_KEY'];
-final baseUrl = dotenv.env['BASE_URL'];
-final lang = dotenv.env['LANG'];
-final region = dotenv.env['REGION'];
-
-final params = 'language=$lang&region=$region&api_key=$apiKey';
 
 final resource = MovieDBResource();
 

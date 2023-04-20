@@ -1,3 +1,5 @@
+import 'package:movies/converter/json_converters.dart';
+
 class PersonModel {
   final int id;
   final String name;
@@ -16,13 +18,6 @@ class PersonModel {
   });
 
   factory PersonModel.fromJson(Map<String, dynamic> json) {
-    return PersonModel(
-      id: json['id'],
-      name: json['name'],
-      biography: json['biography'] ?? '',
-      birthday: json['birthday'] ?? '',
-      birthPlace: json['place_of_birth'] ?? '',
-      image: json['profile_path'] ?? '',
-    );
+    return fromJsonPersonModel(json);
   }
 }

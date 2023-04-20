@@ -8,8 +8,7 @@ class ResultCard extends StatelessWidget {
   final String image;
   final String title;
   final String release;
-  final String percent;
-  final double raw;
+  final double percent;
   List? genres;
 
   ResultCard({
@@ -17,7 +16,6 @@ class ResultCard extends StatelessWidget {
     required this.title,
     required this.release,
     required this.percent,
-    required this.raw,
     this.genres,
   });
 
@@ -70,7 +68,7 @@ class ResultCard extends StatelessWidget {
                     ),
                     SizedBox(width: 5),
                     Text(
-                      raw.toStringAsFixed(1),
+                      percent.toStringAsFixed(1),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 12

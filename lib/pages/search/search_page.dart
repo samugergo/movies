@@ -210,7 +210,6 @@ class _SearchState extends State<Search> {
                     title: e.title,
                     release: e.release,
                     percent: e.percent,
-                    raw: e.raw,
                   ),
                 ),
               )

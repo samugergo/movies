@@ -1,4 +1,4 @@
-import 'package:movies/utils/common_util.dart';
+import 'package:movies/converter/json_converters.dart';
 
 class CastModel {
   final int id;
@@ -14,11 +14,6 @@ class CastModel {
   });
 
   factory CastModel.fromJson(Map<String, dynamic> json) {
-    return CastModel(
-      id: json['id'],
-      name: json['name'],
-      role: json['character'],
-      image: imageLink(json['profile_path']),
-    );
+    return fromJsonCastModel(json);
   }
 }
