@@ -33,6 +33,7 @@ class ResultCard extends StatelessWidget {
         ),
         Flexible(
           child: Column(
+            mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
