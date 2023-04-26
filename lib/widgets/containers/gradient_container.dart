@@ -8,9 +8,11 @@ const Color grad2 = Color(0xff332F57);
 class GradientContainer extends StatelessWidget {
 
   final Widget child;
+  final Color? color;
 
   GradientContainer({
-    required this.child
+    required this.child,
+    this.color,
   });
 
   @override
@@ -32,7 +34,7 @@ class GradientContainer extends StatelessWidget {
       ),
       child: AnnotatedRegion(
         value: SystemUiOverlayStyle.light.copyWith(           
-          statusBarColor: theme.primary,
+          statusBarColor: color ?? theme.primary,
         ),
         child: SafeArea(
           child: child,

@@ -1,5 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
+import 'package:movies/main.dart';
+import 'package:provider/provider.dart';
+
+getAppState(BuildContext context) {
+  return context.watch<MainAppState>();
+}
 
 chunkList(list) {
   var chunks = [];

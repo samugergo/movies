@@ -7,6 +7,7 @@ class DisplayModel {
   final double percent;
   final String image;
   final String cover;
+  final String tagline;
 
   DisplayModel({
     required this.id,
@@ -14,7 +15,8 @@ class DisplayModel {
     required this.release,
     required this.percent,
     required this.image,
-    required this.cover
+    required this.cover,
+    required this.tagline,
   });
 
   factory DisplayModel.fromJson(Map<String, dynamic> json) {

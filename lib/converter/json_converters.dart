@@ -34,7 +34,8 @@ DisplayModel fromJsonDisplayModel(Map<String, dynamic> json) {
     title: getFieldList(json, PropertyEnum.titleProperties), 
     release: getFieldList(json, PropertyEnum.dateProperties), 
     image: getImage(json, PropertyEnum.image), 
-    cover: getField(json, PropertyEnum.cover)
+    cover: getField(json, PropertyEnum.cover),
+    tagline: getField(json, PropertyEnum.tagline)
   );
 }
 
@@ -113,6 +114,7 @@ enum PropertyEnum {
   buy(key: 'buy'),
   streaming(key: 'flatrate'),
   seasonNumber(key: 'season_number'),
+  tagline(key: 'tagline'),
   ;
   
   const PropertyEnum({

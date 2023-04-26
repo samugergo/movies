@@ -18,7 +18,8 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color? secondaryTextColor;
 
   static const theme = AppColors(
-    primary: Color(0xff292A37),
+    // primary: Color(0xff292A37),
+    primary: Colors.black,
     primaryLight: Color(0xff343643),
     secondary: Color(0xff0F1018),
     iconColor: Colors.white,
