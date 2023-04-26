@@ -22,22 +22,23 @@ class BaseConainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final appState = context.watch<MainAppState>();
 
-    if(appState.isEmptyByType(appState.type)) {
-      return Loader();
-    } else {
-      return AnimatedSwitcher(
-        duration: Duration(milliseconds: 300),
-        child: appState.type == TypeEnum.movie 
-        ? _ListView(
-          key: ValueKey(1),
-          list: appState.movies, 
-        )
-        : _ListView(
-          key: ValueKey(2),
-          list: appState.shows, 
-        ),
-      );
-    }
+    // if(appState.isEmptyByType(appState.type)) {
+    //   return Loader();
+    // } else {
+    //   return AnimatedSwitcher(
+    //     duration: Duration(milliseconds: 300),
+    //     child: appState.type == TypeEnum.movie 
+    //     ? _ListView(
+    //       key: ValueKey(1),
+    //       list: appState.movies, 
+    //     )
+    //     : _ListView(
+    //       key: ValueKey(2),
+    //       list: appState.shows, 
+    //     ),
+    //   );
+    // }
+    return SizedBox();
   }
 }
 
@@ -110,7 +111,7 @@ class _ListViewState extends State<_ListView> {
                 )).toList(),
               ),
               SizedBox(height: 10),
-              LoadButton(load: appState.loadMore),
+              // LoadButton(load: appState.loadMore),
             ],
           ),
         ),

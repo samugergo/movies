@@ -13,4 +13,8 @@ enum TypeEnum {
   static bool isMovie(TypeEnum value) {
     return value == movie;
   }
+
+  static TypeEnum fromValue(String value) {
+    return TypeEnum.values.firstWhere((element) => element.value == value);
+  }
 }

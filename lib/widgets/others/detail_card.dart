@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:movies/models/detailed/detailed_model.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/widgets/others/image.dart';
@@ -34,10 +35,12 @@ class DetailCard extends StatelessWidget {
                   model!.title,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16
+                  style: GoogleFonts.bebasNeue(
+                    textStyle: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16
+                    ),
                   ),
                 ),
               ),

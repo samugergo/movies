@@ -14,7 +14,7 @@ class FilterSheet extends StatelessWidget {
 
     onClick(order, context) {
       appState.setOrder(order);
-      appState.loadByOrder(order);
+      // appState.loadByOrder(order);
       Navigator.pop(context);
     }
 

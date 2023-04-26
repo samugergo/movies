@@ -15,9 +15,9 @@ class ButtonSwitch extends StatelessWidget  {
 
     onClick(type) {
       appState.setType(type);
-      if (appState.isEmptyByType(type)) {
-        appState.loadByType(type);
-      }
+      // if (appState.isEmptyByType(type)) {
+      //   // appState.loadByType(type);
+      // }
     }
 
     return Card(

@@ -111,7 +111,7 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
 
         return Container(
           decoration: BoxDecoration(
-            color: color,
+            color: color!.withAlpha(10),
             boxShadow: <BoxShadow>[
               BoxShadow(
                 color: color!,

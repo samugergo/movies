@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -46,10 +47,9 @@ class XImage extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: url != '' 
-      ? FadeInImage.memoryNetwork(
-        placeholder: kTransparentImage,
-        image: url,
-        fadeInDuration: Duration(milliseconds: 300),
+      ? CachedNetworkImage(
+        imageUrl: url,
+        // fadeInDuration: Duration(milliseconds: 300),
         // width: width,
         fit: BoxFit.cover,
       )

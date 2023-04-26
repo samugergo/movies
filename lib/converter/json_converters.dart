@@ -1,3 +1,4 @@
+import 'package:movies/enums/type_enum.dart';
 import 'package:movies/models/base/display_model.dart';
 import 'package:movies/models/common/cast_model.dart';
 import 'package:movies/models/common/collection_model.dart';
@@ -27,7 +28,7 @@ double getDoubleField(Map<String, dynamic> json, PropertyEnum prop) {
   return json[prop.key].toDouble();
 }
 
-DisplayModel fromJsonDisplayModel(Map<String, dynamic> json) {
+DisplayModel fromJsonDisplayModel(Map<String, dynamic> json, TypeEnum type) {
   return DisplayModel(
     id: getField(json, PropertyEnum.id), 
     percent: getDoubleField(json, PropertyEnum.percent), 
@@ -35,7 +36,8 @@ DisplayModel fromJsonDisplayModel(Map<String, dynamic> json) {
     release: getFieldList(json, PropertyEnum.dateProperties), 
     image: getImage(json, PropertyEnum.image), 
     cover: getField(json, PropertyEnum.cover),
-    tagline: getField(json, PropertyEnum.tagline)
+    tagline: getField(json, PropertyEnum.tagline),
+    type: type
   );
 }
 

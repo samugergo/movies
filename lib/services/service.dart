@@ -19,7 +19,7 @@ fetch(int page, TypeEnum type, OrderEnum order) async {
   var result = await resource.doApiCall('${type.value}/${order.value}', [
     PathParameter(key: ParamEnum.PAGE, value: page + 1),
   ]);
-  return result['results'].map((r) => DisplayModel.fromJson(r)).toList();
+  return result['results'].map((r) => DisplayModel.fromJson(r, type)).toList();
 }
 
 fetchById(int id, TypeEnum type) async {
@@ -46,7 +46,7 @@ fetchCast(int id, TypeEnum type) async {
 fetchRecommendations(int id, TypeEnum type) async {
   var result = await resource.doApiCall('${type.value}/$id/recommendations', []);
   if(result["results"] != null) {
-    return result['results'].map((c) => DisplayModel.fromJson(c)).toList(); 
+    return result['results'].map((c) => DisplayModel.fromJson(c, type)).toList(); 
   }
   return [];
 }
@@ -54,7 +54,7 @@ fetchRecommendations(int id, TypeEnum type) async {
 fetchSimilar(int id, TypeEnum type) async {
   var result = await resource.doApiCall('${type.value}/$id/similar', []);
   if(result["results"] != null) {
-    return result['results'].map((c) => DisplayModel.fromJson(c)).toList(); 
+    return result['results'].map((c) => DisplayModel.fromJson(c, type)).toList(); 
   }
   return [];
 }
@@ -71,7 +71,7 @@ fetchPersonById(int id) async {
 
 fetchPerform(int id, String type) async {
   var result = await resource.doApiCall('person/$id/${type}_credits', []);
-  return result['cast'].map((r) => DisplayModel.fromJson(r)).toList();
+  return result['cast'].map((r) => DisplayModel.fromJson(r, TypeEnum.fromValue(type))).toList();
 }
 
 search(int page, TypeEnum type, String query) async {
@@ -80,7 +80,7 @@ search(int page, TypeEnum type, String query) async {
     PathParameter(key: ParamEnum.PAGE, value: page + 1),
   ]);
   return ListResponse(
-    list: result['results'].map((r) => DisplayModel.fromJson(r)).toList(),
+    list: result['results'].map((r) => DisplayModel.fromJson(r, type)).toList(),
     page: result['page'],
     total: result['total_results'],
     pages: result['total_pages'],
