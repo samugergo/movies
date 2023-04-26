@@ -40,6 +40,7 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
   Providers? providers;
   List? cast;
   List? recommendations;
+  List? similar;
 
   // fetch functions
   _fetchProviders() async {
@@ -60,6 +61,12 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
       recommendations = r;
     });
   }
+  _fetchSimilar() async {
+    var s = await fetchSimilar(widget.id, TypeEnum.show);
+    setState(() {
+      similar = s;
+    });
+  }
 
   // init
   @override
@@ -72,6 +79,7 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
     _fetchProviders();
     _fetchCast();
     _fetchRecommends();
+    _fetchSimilar();
 
     preloadImage(originalImageLink(s.cover));
   }
@@ -99,71 +107,82 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
       duration: 300, 
       child: isLoading()
       ? ColorLoader(color: widget.color)
-      : Material(
-        child: AnnotatedRegion(
-          value: SystemUiOverlayStyle.light.copyWith(           
-            statusBarColor: widget.color,
-          ),
-          child: SafeArea(
-            child: NestedScrollView(
-              headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-                return [
-                  SliverPersistentHeader(
-                    pinned: true,
-                    delegate: MyImageAppBar(
-                      title: show!.title, 
-                      onlyTitle: false,
-                      cover: coverImage,
-                      color: widget.color,
-                      child: DetailCard(
-                        model: show!,
-                      ),
+      : SafeArea(
+        child: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return [
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: MyImageAppBar(
+                  title: show!.title, 
+                  onlyTitle: false,
+                  cover: coverImage,
+                  color: widget.color,
+                  child: DetailCard(
+                    model: show!,
+                  ),
+                ),
+              ),
+            ];
+          },
+          body: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: [0.1, 1],
+                colors: [
+                  widget.color,
+                  Colors.black45,
+                ]
+              ),
+            ),
+            child: Scaffold(
+              body: ListView(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: ProviderSection(
+                      providers: providers
                     ),
                   ),
-                ];
-              },
-              body: Container(
-                color: widget.color,
-                child: Scaffold(
-                  body: ListView(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: ProviderSection(
-                          providers: providers
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: StorySection(
-                          description: show!.description
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: CastSection(
-                          cast: cast!
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: SeasonSection(
-                          list: show!.seasons
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: RecommendedSection(
-                          recommendations: recommendations!
-                        )
-                      ),
-                      SizedBox(height: 10),
-                    ],
-                  )
-                )
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: StorySection(
+                      description: show!.description
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: CastSection(
+                      cast: cast!
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: SeasonSection(
+                      list: show!.seasons
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: OtherMoviesSection(
+                      title: 'Ajánlott',
+                      recommendations: recommendations!
+                    )
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: OtherMoviesSection(
+                      title: 'Hasonlóak',
+                      recommendations: similar!
+                    )
+                  ),
+                  SizedBox(height: 10),
+                ],
               )
-            ),
-          ),
+            )
+          )
         ),
       )
     );

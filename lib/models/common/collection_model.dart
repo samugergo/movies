@@ -1,4 +1,4 @@
-import 'package:movies/utils/common_util.dart';
+import 'package:movies/converter/json_converters.dart';
 
 class CollectionModel {
   final int id;
@@ -14,11 +14,6 @@ class CollectionModel {
   });
 
   factory CollectionModel.fromJson(Map<String, dynamic> json) {
-    return CollectionModel(
-      id: json['id'], 
-      title: json['name'], 
-      image: imageLink(json['poster_path']), 
-      cover: json['backdrop_path'] ?? '',
-    );
+    return fromJsonCollectionModel(json);
   }
 }

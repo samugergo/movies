@@ -10,11 +10,13 @@ import 'package:movies/widgets/others/image.dart';
 import 'package:movies/widgets/sections/common/section.dart';
 import 'package:provider/provider.dart';
 
-class RecommendedSection extends StatelessWidget {
+class OtherMoviesSection extends StatelessWidget {
   final List recommendations;
+  final String title;
 
-  RecommendedSection({
+  OtherMoviesSection({
     required this.recommendations,
+    required this.title,
   });
 
   @override
@@ -38,15 +40,15 @@ class RecommendedSection extends StatelessWidget {
     return recommendations.isEmpty 
     ? SizedBox()
     : Section(
-      title: 'Ajánlott', 
+      title: title, 
       children: [
         SizedBox(
-          height: 200,
+          height: 150,
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: recommendations.map((e) => 
               SizedBox(
-                width: 133,
+                width: 100,
                 child: Padding(
                   padding: const EdgeInsets.only(right: 8.0),
                   child: InkWell(

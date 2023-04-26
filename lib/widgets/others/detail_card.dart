@@ -101,34 +101,54 @@ class DetailCard extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 8),
+              SizedBox(height: 10),
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 8.0),
+              //   child: Card(
+              //     elevation: 0,
+              //     color: Colors.black.withAlpha(50),
+              //     shape: CircleBorder(),
+              //     child: Stack(
+              //       children: [
+              //         CircularProgressIndicator(
+              //           value: model!.raw / 10,
+              //           color: Color.lerp(Colors.red, Colors.green, model!.raw / 10),
+              //           strokeWidth: 2,
+              //         ),
+              //         Positioned.fill(
+              //           child: Align(
+              //             alignment: Alignment.center,
+              //             child: Text(
+              //               model!.raw.toStringAsFixed(1),
+              //               style: TextStyle(
+              //                 color: Colors.white,
+              //                 fontSize: 12
+              //               ),
+              //             ),
+              //           ),
+              //         )
+              //       ],
+              //     ),
+              //   ),
+              // ),
               Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Card(
-                  elevation: 0,
-                  color: Colors.black.withAlpha(50),
-                  shape: CircleBorder(),
-                  child: Stack(
-                    children: [
-                      CircularProgressIndicator(
-                        value: model!.raw / 10,
-                        color: Color.lerp(Colors.red, Colors.green, model!.raw / 10),
-                        strokeWidth: 2,
+                padding: EdgeInsets.only(left: 8.0),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.star_rate,
+                      color: Colors.yellow,
+                      size: 15,
+                    ),
+                    SizedBox(width: 5),
+                    Text(
+                      model!.raw.toStringAsFixed(1),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12
                       ),
-                      Positioned.fill(
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            model!.raw.toStringAsFixed(1),
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                    )
+                  ],
                 ),
               ),
             ],

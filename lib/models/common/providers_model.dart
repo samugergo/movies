@@ -1,5 +1,5 @@
+import 'package:movies/converter/json_converters.dart';
 import 'package:movies/enums/provider_enum.dart';
-import 'package:movies/utils/common_util.dart';
 
 class Providers {
   List? rent = [];
@@ -55,11 +55,7 @@ class Providers {
   }
 
   factory Providers.fromJson(Map<String, dynamic> json) {
-    Providers providers = Providers(
-      rent: json['rent']?.map((r) => Provider.fromJson(r)).toList(), 
-      buy: json['buy']?.map((b) => Provider.fromJson(b)).toList(),  
-      streaming: json['flatrate']?.map((s) => Provider.fromJson(s)).toList()
-    );
+    Providers providers = fromJsonProvidersModel(json);
     providers._setAvailable();
     return providers;
   }
@@ -76,12 +72,4 @@ class Provider {
     required this.title,
     required this.image,
   });
-
-  factory Provider.fromJson(Map<String, dynamic> json) {
-    return Provider(
-      id: json['provider_id'], 
-      title: json['provider_name'], 
-      image: imageLink(json['logo_path'])
-    );
-  }
 }

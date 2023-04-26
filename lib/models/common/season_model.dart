@@ -1,3 +1,4 @@
+import 'package:movies/converter/json_converters.dart';
 import 'package:movies/utils/common_util.dart';
 
 class SeasonModel {
@@ -14,11 +15,6 @@ class SeasonModel {
   });
 
   factory SeasonModel.fromJson(Map<String, dynamic> json) {
-    return SeasonModel(
-      id: json['id'], 
-      title: json['name'], 
-      seasonNumber: json['season_number'],
-      image: imageLink(json['poster_path']),
-    );
+    return fromJsonSeasonModel(json);
   }
 }

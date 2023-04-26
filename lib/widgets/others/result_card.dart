@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies/utils/common_util.dart';
 import 'package:movies/widgets/others/image.dart';
 
 // ignore: must_be_immutable
@@ -7,8 +8,7 @@ class ResultCard extends StatelessWidget {
   final String image;
   final String title;
   final String release;
-  final String percent;
-  final double raw;
+  final double percent;
   List? genres;
 
   ResultCard({
@@ -16,7 +16,6 @@ class ResultCard extends StatelessWidget {
     required this.title,
     required this.release,
     required this.percent,
-    required this.raw,
     this.genres,
   });
 
@@ -34,6 +33,7 @@ class ResultCard extends StatelessWidget {
         ),
         Flexible(
           child: Column(
+            mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
@@ -50,7 +50,7 @@ class ResultCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Text(
-                  release,
+                  dateFormat(release),
                   style: TextStyle(
                     color: Colors.white38,
                     fontSize: 12
@@ -59,32 +59,23 @@ class ResultCard extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Card(
-                  elevation: 0,
-                  color: Colors.black.withAlpha(50),
-                  shape: CircleBorder(),
-                  child: Stack(
-                    children: [
-                      CircularProgressIndicator(
-                        value: raw / 10,
-                        color: Color.lerp(Colors.red, Colors.green, raw / 10),
-                        strokeWidth: 2,
+                padding: EdgeInsets.only(left: 8.0),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.star_rate,
+                      color: Colors.yellow,
+                      size: 15,
+                    ),
+                    SizedBox(width: 5),
+                    Text(
+                      percent.toStringAsFixed(1),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12
                       ),
-                      Positioned.fill(
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            raw.toStringAsFixed(1),
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                    )
+                  ],
                 ),
               ),
               SizedBox(height: 10),
