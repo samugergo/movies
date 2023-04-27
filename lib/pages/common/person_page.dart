@@ -98,6 +98,7 @@ class _PersonPageState extends ImageColoredState<PersonPage> {
 
     return XAnimatedContainer(
       color: mainColor!, 
+      statusbar: mainColor!,
       duration: 300, 
       child: isLoading()
       ? ColorLoader(color: mainColor!)

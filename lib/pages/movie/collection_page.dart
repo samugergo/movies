@@ -72,6 +72,7 @@ class _CollectionPageState extends ImageColoredState<CollectionPage> {
 
     return XAnimatedContainer(
       color: widget.color, 
+      statusbar: widget.color,
       duration: 300, 
       child: isLoading() 
       ? ColorLoader(color: widget.color)

@@ -104,6 +104,7 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
   Widget build(BuildContext context) {
     return XAnimatedContainer(
       color: widget.color, 
+      statusbar: widget.color,
       duration: 300, 
       child: isLoading()
       ? ColorLoader(color: widget.color)

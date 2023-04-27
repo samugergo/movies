@@ -81,6 +81,7 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
     _fetchSimilar();
 
     preloadImage(originalImageLink(m.cover));
+    preloadImageWithColor(lowImageLink(m.cover));
   }
 
   // loading
@@ -91,6 +92,7 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
       || cast == null 
       || recommendations == null
       || similar == null
+      || mainColor == null
       || imageLoading;
   }
 
@@ -99,84 +101,88 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
     return XAnimatedContainer(
       duration: 300,
       color: widget.color,
+      statusbar: mainColor,
       child: isLoading() 
       ? ColorLoader(color: widget.color)
-      : SafeArea(
-        child: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return [
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: MyImageAppBar(
-                  title: movie!.title, 
-                  cover: coverImage,
-                  color: widget.color,
-                  onlyTitle: false,
-                  child: DetailCard(
-                    model: movie!,
+      : Container(
+        color: mainColor,
+        child: SafeArea(
+          child: NestedScrollView(
+            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+              return [
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: MyImageAppBar(
+                    title: movie!.title, 
+                    cover: coverImage,
+                    color: mainColor,
+                    onlyTitle: false,
+                    child: DetailCard(
+                      model: movie!,
+                    ),
                   ),
                 ),
+              ];
+            },
+            body: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: [0.1, 1],
+                  colors: [
+                    mainColor!,
+                    Colors.black54,
+                  ]
+                ),
               ),
-            ];
-          },
-          body: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                stops: [0.1, 1],
-                colors: [
-                  widget.color,
-                  Colors.black45,
-                ]
-              ),
-            ),
-            child: Scaffold(
-              body: ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: ProviderSection(
-                      providers: providers
+              child: Scaffold(
+                body: ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: ProviderSection(
+                        providers: providers
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: StorySection(
-                      description: movie!.description
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: StorySection(
+                        description: movie!.description
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: CastSection(
-                      cast: cast!
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: CastSection(
+                        cast: cast!
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: CollectionSection(
-                      model: movie!.collection,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: CollectionSection(
+                        model: movie!.collection,
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: OtherMoviesSection(
-                      title: 'Ajánlott',
-                      recommendations: recommendations!
-                    )
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: OtherMoviesSection(
-                      title: 'Hasonlóak',
-                      recommendations: similar!
-                    )
-                  ),
-                  SizedBox(height: 10),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: OtherMoviesSection(
+                        title: 'Ajánlott',
+                        recommendations: recommendations!
+                      )
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: OtherMoviesSection(
+                        title: 'Hasonlóak',
+                        recommendations: similar!
+                      )
+                    ),
+                    SizedBox(height: 10),
+                  ],
+                )
               )
             )
-          )
+          ),
         ),
       ),
     );
