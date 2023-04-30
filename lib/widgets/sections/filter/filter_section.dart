@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:movies/main.dart';
+import 'package:movies/state.dart';
 import 'package:movies/theme/app_colors.dart';
 import 'package:movies/widgets/sections/filter/filter_sheet.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +10,7 @@ class FilterSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<MainAppState>();
+    final appState = context.watch<AppState>();
     final theme = Theme.of(context).extension<AppColors>()!;
 
     show() {

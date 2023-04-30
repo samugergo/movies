@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies/enums/type_enum.dart';
+import 'package:movies/state.dart';
 import 'package:provider/provider.dart';
 
 import '../../main.dart';
@@ -7,7 +8,7 @@ import '../../main.dart';
 class MainAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<MainAppState>();
+    final appState = context.watch<AppState>();
 
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 300),

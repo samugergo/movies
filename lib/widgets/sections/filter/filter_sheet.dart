@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movies/enums/grid_enum.dart';
 import 'package:movies/enums/order_enum.dart';
 import 'package:movies/main.dart';
+import 'package:movies/state.dart';
 import 'package:movies/theme/app_colors.dart';
 import 'package:provider/provider.dart';
 
@@ -9,7 +10,7 @@ class FilterSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<MainAppState>();
+    final appState = context.watch<AppState>();
     final theme = Theme.of(context).extension<AppColors>()!;
 
     onClick(order, context) {

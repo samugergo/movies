@@ -43,14 +43,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     // _scrollController = ScrollController();
-    widget.scrollController.addListener(_scrollListener);
+    // widget.scrollController.addListener(_scrollListener);
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    // _scrollController.dispose();
-    super.dispose();
   }
 
   @override
@@ -140,9 +134,6 @@ class _HomePageState extends State<HomePage> {
               SizedBox(height: 6),
             ],
           ),
-          // bottomNavigationBar: _BotttomNavigationBar(
-          //   scrollController: _scrollController
-          // ),
         ),
       ),
     );
@@ -184,47 +175,6 @@ class _ListSection extends StatelessWidget {
                 ),
               )).toList(),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _BotttomNavigationBar extends StatelessWidget {
-  const _BotttomNavigationBar({
-    super.key,
-    required ScrollController scrollController,
-  }) : _scrollController = scrollController;
-
-  final ScrollController _scrollController;
-
-  @override
-  Widget build(BuildContext context) {
-    return Hidable(
-      controller: _scrollController,
-      child: Wrap(
-        children: [
-          BottomNavigationBar(
-            backgroundColor: Colors.black54,
-            unselectedItemColor: Colors.grey[600],
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: FaIcon(FontAwesomeIcons.house),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: FaIcon(FontAwesomeIcons.film),
-                label: 'Business',
-              ),
-              BottomNavigationBarItem(
-                icon: FaIcon(FontAwesomeIcons.user),
-                label: 'School',
-              ),
-            ],
-            currentIndex: 0,
-            selectedItemColor: Colors.white,
-            onTap: (i) {}
           ),
         ],
       ),
@@ -328,7 +278,7 @@ class _CarouselSlider extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                         color: Colors.white,
                         fontSize: 22
-                      )                      
+                      )
                     ),
                   ),
                 ),
