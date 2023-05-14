@@ -5,6 +5,7 @@ import 'package:movies/models/base/list_response.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/show/show_page.dart';
 import 'package:movies/services/service.dart';
+import 'package:movies/state.dart';
 import 'package:movies/theme/app_colors.dart';
 import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
@@ -105,7 +106,7 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<MainAppState>();
+    final appState = context.watch<AppState>();
     final theme = Theme.of(context).extension<AppColors>()!;
 
     goColor(id, color) {

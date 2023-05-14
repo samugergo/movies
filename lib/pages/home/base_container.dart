@@ -3,6 +3,7 @@ import 'package:movies/enums/type_enum.dart';
 import 'package:movies/main.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/show/show_page.dart';
+import 'package:movies/state.dart';
 import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
@@ -20,7 +21,7 @@ class BaseConainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<MainAppState>();
+    final appState = context.watch<AppState>();
 
     // if(appState.isEmptyByType(appState.type)) {
     //   return Loader();
@@ -61,7 +62,7 @@ class _ListViewState extends State<_ListView> {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<MainAppState>();
+    final appState = context.watch<AppState>();
     final itemCount = appState.itemCount;
 
     goColor(id, color) {

@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hidable/hidable.dart';
 import 'package:movies/enums/type_enum.dart';
+import 'package:movies/models/base/display_model.dart';
 import 'package:movies/pages/home/base_container.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/show/show_page.dart';
@@ -128,8 +129,8 @@ class _HomePageState extends State<HomePage> {
               SizedBox(height: 6),
               _ListSection(
                 key: ValueKey(4),
-                title: 'Upcoming Series',
-                list: appState.popularMovies,
+                title: 'Top rated Series',
+                list: appState.upcomingShows,
               ),
               SizedBox(height: 6),
             ],
@@ -224,6 +225,13 @@ class _CarouselSlider extends StatelessWidget {
 
   final Function(int, dynamic) onPageChanged;
 
+  _goto(BuildContext context, DisplayModel model) {
+    Widget to = TypeEnum.isMovie(model.type) 
+      ? MoviePage(id: model.id, color: Colors.black)
+      : ShowPage(id: model.id, color: Colors.black);
+    goTo(context, to);
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<AppColors>()!;
@@ -235,7 +243,7 @@ class _CarouselSlider extends StatelessWidget {
         enlargeCenterPage: true,
         viewportFraction: 1,
         enlargeFactor: 0,
-        autoPlay: true,
+        autoPlay: false,
         onPageChanged: onPageChanged,
       ),
       items: appState.popularMovies.sublist(0, 5).map<Widget>((i) {
@@ -243,30 +251,26 @@ class _CarouselSlider extends StatelessWidget {
           builder: (BuildContext context) {
             return Stack(
               children: [
-                ShaderMask(
-                  shaderCallback: (rect) {
-                    return LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        theme.primary!,
-                        Colors.transparent, 
-                      ],
-                      stops: [0.5, 1]
-                    ).createShader(rect);
-                  },
-                  blendMode: BlendMode.dstIn,
-                  // child: FadeInImage.memoryNetwork(
-                  //   placeholder: kTransparentImage,
-                  //   fadeInDuration: Duration(milliseconds: 1),
-                  //   image: originalImageLink(i.cover),
-                  //   fit: BoxFit.cover,
-                  //   height: 300,
-                  // ),
-                  child: CachedNetworkImage(
-                    imageUrl: originalImageLink(i.cover),
-                    height: 350,
-                    fit: BoxFit.cover,
+                InkWell(
+                  onTap: () => _goto(context, i),
+                  child: ShaderMask(
+                    shaderCallback: (rect) {
+                      return LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          theme.primary!,
+                          Colors.transparent, 
+                        ],
+                        stops: [0.5, 1]
+                      ).createShader(rect);
+                    },
+                    blendMode: BlendMode.dstIn,
+                    child: CachedNetworkImage(
+                      imageUrl: originalImageLink(i.cover),
+                      height: 350,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 Align(

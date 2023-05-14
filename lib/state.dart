@@ -12,7 +12,9 @@ class AppState extends ChangeNotifier {
   List upcomingMovies = [];
   List popularShows = [];
   List upcomingShows = [];
+  List catalogList = [];
 
+  int catalogPage = 0;
   int moviePage = 0;
   int showPage = 0;
   int itemCount = 3;
@@ -22,8 +24,13 @@ class AppState extends ChangeNotifier {
   OrderEnum order = OrderEnum.popular;
 
   AppState() {
+    init();
+    loadPreferences();
+  }
+
+  init() async {
     // load popular movies
-    loadMovies(
+    await loadMovies(
       order: OrderEnum.popular,
       callback: setPopularMovies
     );
@@ -37,8 +44,12 @@ class AppState extends ChangeNotifier {
       order: OrderEnum.popular,
       callback: setPopularShows
     );
-
-    loadPreferences();
+    // load upcoming series
+    loadShows(
+      order: OrderEnum.topRated,
+      callback: setUpcomingShows
+    );
+    setCatalogList(popularMovies);
   }
 
   /// Check if the home page finished loading
@@ -75,7 +86,16 @@ class AppState extends ChangeNotifier {
 
   setPopularShows(List popularShows) {
     this.popularShows = popularShows;
-    print(popularShows);
+    notifyListeners();
+  }
+
+  setUpcomingShows(List upcomingShows) {
+    this.upcomingShows = upcomingShows;
+    notifyListeners();
+  }
+
+  setCatalogList(List catalogList) {
+    this.catalogList = catalogList;
     notifyListeners();
   }
 
@@ -148,6 +168,27 @@ class AppState extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     final ic = prefs.get('itemCount');
     setItemCount(ic ?? 3);
+  }
+
+  loadCatalog(OrderEnum order) async {
+    loadMovies(
+      order: OrderEnum.popular,
+      callback: setCatalogList
+    );
+    // switch (order) {
+    //   case OrderEnum.popular: 
+    //     // TODO: Handle this case.
+    //     break;
+    //   case OrderEnum.topRated:
+    //     // TODO: Handle this case.
+    //     break;
+    //   case OrderEnum.upcoming:
+    //     // TODO: Handle this case.
+    //     break;
+    //   case OrderEnum.onTheAir:
+    //     // TODO: Handle this case.
+    //     break;
+    // }
   }
 
   // loadByOrder(order) async {

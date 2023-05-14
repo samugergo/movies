@@ -33,7 +33,9 @@ class _MainAppState extends State<MainApp> {
 
   Widget _currentPage() {
     switch (_currentIndex) {
-      case 1: return CatalogPage(); 
+      case 1: return CatalogPage(
+        scrollController: _scrollController,
+      ); 
       default: return HomePage(
         scrollController: _scrollController,
       );
