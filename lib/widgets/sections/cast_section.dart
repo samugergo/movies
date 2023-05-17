@@ -20,7 +20,7 @@ class CastSection extends StatelessWidget {
       title: 'Szereplők', 
       children: [
         SizedBox(
-          height: 76,
+          height: 100,
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: cast.map((c) => _CastMember(model: c)).toList(),
@@ -75,6 +75,7 @@ class _CastImage extends StatelessWidget {
       children: [
         CircleAvatar(
           backgroundImage: NetworkImage(model.image),
+          radius: 30,
         ),
         Padding(
           padding: const EdgeInsets.only(top: 6, left: 6, right: 6),
@@ -127,13 +128,14 @@ class _CastNoImage extends StatelessWidget {
       children: [
         CircleAvatar(
           backgroundColor: Colors.white30,
+          radius: 30,
           child: Text(_getSign()),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 6, left: 6, right: 6),
           child: Text(
             model.name,
-            overflow: TextOverflow.visible,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontSize: 10, 
               color: Colors.white
