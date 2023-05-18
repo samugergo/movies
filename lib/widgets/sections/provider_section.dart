@@ -50,7 +50,7 @@ class _ProviderSection extends StatelessWidget {
     return Card(
       margin: EdgeInsets.only(right: 10),
       elevation: 0,
-      color: Colors.white24,
+      color: Colors.white12,
       child: Column(
         children: [
           _ProviderTypeTitle(providerEnum: _providerEnum),
@@ -123,9 +123,9 @@ class _NotAvailable extends StatelessWidget {
     return Card(
       margin: EdgeInsets.zero,
       elevation: 0,
-      color: Colors.white24,
+      color: Colors.white12,
       child: Padding(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(15),
         child: Text(
           'Nem elérhető!',
           style: TextStyle(

@@ -153,14 +153,14 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: CastSection(
-                        cast: cast!
+                      child: CollectionSection(
+                        model: movie!.collection,
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: CollectionSection(
-                        model: movie!.collection,
+                      child: CastSection(
+                        cast: cast!
                       ),
                     ),
                     // Padding(

@@ -155,30 +155,30 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: CastSection(
-                      cast: cast!
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: SeasonSection(
                       list: show!.seasons
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: OtherMoviesSection(
-                      title: 'Ajánlott',
-                      recommendations: recommendations!
-                    )
+                    child: CastSection(
+                      cast: cast!
+                    ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: OtherMoviesSection(
-                      title: 'Hasonlóak',
-                      recommendations: similar!
-                    )
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  //   child: OtherMoviesSection(
+                  //     title: 'Ajánlott',
+                  //     recommendations: recommendations!
+                  //   )
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  //   child: OtherMoviesSection(
+                  //     title: 'Hasonlóak',
+                  //     recommendations: similar!
+                  //   )
+                  // ),
                   SizedBox(height: 10),
                 ],
               )
