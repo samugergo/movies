@@ -138,7 +138,7 @@ class _ListSection extends StatelessWidget {
         title: title,
         children: [
           SizedBox(
-            height: 120,
+            height: 150,
             child: ListView(
               scrollDirection: Axis.horizontal,
               shrinkWrap: true,

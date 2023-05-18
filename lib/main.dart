@@ -119,8 +119,8 @@ class _BotttomNavigationBar extends StatelessWidget {
                 label: 'Catalog',
               ),
               BottomNavigationBarItem(
-                icon: FaIcon(FontAwesomeIcons.solidUser),
-                label: 'Profile',
+                icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
+                label: 'Search',
               ),
             ],
             currentIndex: _currentIndex,
