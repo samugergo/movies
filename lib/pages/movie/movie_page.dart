@@ -98,6 +98,8 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
 
   @override
   Widget build(BuildContext context) {
+    const double horizontalPadding = 15;
+
     return XAnimatedContainer(
       duration: 300,
       color: widget.color,
@@ -117,6 +119,7 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
                     cover: coverImage,
                     color: mainColor,
                     onlyTitle: false,
+                    horizontalPadding: horizontalPadding,
                     child: DetailCard(
                       model: movie!,
                     ),
@@ -140,25 +143,25 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
                 body: ListView(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: ProviderSection(
                         providers: providers
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: StorySection(
                         description: movie!.description
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: CollectionSection(
                         model: movie!.collection,
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: CastSection(
                         cast: cast!
                       ),

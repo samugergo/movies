@@ -10,6 +10,7 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
     required this.child,
     this.onlyTitle = true,
     this.color,
+    required this.horizontalPadding,
   });
 
   final String title;
@@ -17,10 +18,8 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
   final Color? color;
   final Widget child;
   final bool onlyTitle;
-
-  final double _coverHeight = 270;
-  final double _posterHeight = 150;
   final Color textColor = Colors.white;
+  final double horizontalPadding;
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -56,8 +55,8 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
         children.add(!onlyTitle 
           ? Positioned(
             bottom: 10,
-            left: 10,
-            right: 10,
+            left: horizontalPadding,
+            right: horizontalPadding,
             child: Opacity(
               opacity: opacity,
               child: child,

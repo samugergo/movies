@@ -87,6 +87,7 @@ class _CollectionPageState extends ImageColoredState<CollectionPage> {
                   cover: coverImage,
                   color: widget.color,
                   onlyTitle: true,
+                  horizontalPadding: 10,
                   child: Text(collection!.title),
                 ),
               ),

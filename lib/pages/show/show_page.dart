@@ -119,6 +119,7 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
                   onlyTitle: false,
                   cover: coverImage,
                   color: widget.color,
+                  horizontalPadding: 10,
                   child: DetailCard(
                     model: show!,
                   ),

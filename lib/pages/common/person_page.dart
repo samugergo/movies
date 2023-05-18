@@ -118,6 +118,7 @@ class _PersonPageState extends ImageColoredState<PersonPage> {
                       onlyTitle: true,
                       cover: coverImage,
                       color: mainColor,
+                      horizontalPadding: 10,
                       child: Text(person!.name),
                     ),
                   ),

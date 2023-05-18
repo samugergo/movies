@@ -20,6 +20,13 @@ chunkList(list) {
   return chunks;
 }
 
+sublist(List list, int count) {
+  if (list.length <= count) {
+    return list;
+  }
+  return list.sublist(0, count);
+}
+
 imageLink(image) {
   if(image != null &&  image != '') {
     final imageUrl = dotenv.env['IMAGE_URL'];

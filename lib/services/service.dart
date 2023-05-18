@@ -12,6 +12,7 @@ import 'package:movies/models/detailed/movie_detailed_model.dart';
 import 'package:movies/models/detailed/show_detailed_model.dart';
 
 import '../models/base/display_model.dart';
+import '../utils/common_util.dart';
 
 final resource = MovieDBResource();
 
@@ -38,7 +39,7 @@ fetchProviders(int id, TypeEnum type) async {
 fetchCast(int id, TypeEnum type) async {
   var result = await resource.doApiCall('${type.value}/$id/credits', []);
   if(result["cast"] != null) {
-    return result['cast'].map((c) => CastModel.fromJson(c)).toList(); 
+    return sublist(result['cast'].map((c) => CastModel.fromJson(c)).toList(), 10); 
   }
   return [];
 }
