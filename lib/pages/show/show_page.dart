@@ -82,6 +82,7 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
     _fetchSimilar();
 
     preloadImage(originalImageLink(s.cover));
+    preloadImageWithColor(lowImageLink(s.cover));
   }
 
   // loading
@@ -91,6 +92,7 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
       || providers == null 
       || cast == null 
       || recommendations == null 
+      || mainColor == null
       || imageLoading;
   }
 
@@ -104,87 +106,90 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
   Widget build(BuildContext context) {
     return XAnimatedContainer(
       color: widget.color, 
-      statusbar: widget.color,
+      statusbar: mainColor,
       duration: 300, 
       child: isLoading()
       ? ColorLoader(color: widget.color)
-      : SafeArea(
-        child: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return [
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: MyImageAppBar(
-                  title: show!.title, 
-                  onlyTitle: false,
-                  cover: coverImage,
-                  color: widget.color,
-                  horizontalPadding: 10,
-                  child: DetailCard(
-                    model: show!,
+      : Container(
+        color: mainColor,
+        child: SafeArea(
+          child: NestedScrollView(
+            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+              return [
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: MyImageAppBar(
+                    title: show!.title, 
+                    onlyTitle: false,
+                    cover: coverImage,
+                    color: mainColor,
+                    horizontalPadding: 10,
+                    child: DetailCard(
+                      model: show!,
+                    ),
                   ),
                 ),
+              ];
+            },
+            body: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: [0.1, 1],
+                  colors: [
+                    mainColor!,
+                    Colors.black45,
+                  ]
+                ),
               ),
-            ];
-          },
-          body: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                stops: [0.1, 1],
-                colors: [
-                  widget.color,
-                  Colors.black45,
-                ]
-              ),
-            ),
-            child: Scaffold(
-              body: ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: ProviderSection(
-                      providers: providers
+              child: Scaffold(
+                body: ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: ProviderSection(
+                        providers: providers
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: StorySection(
-                      description: show!.description
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: StorySection(
+                        description: show!.description
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: SeasonSection(
-                      list: show!.seasons
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: SeasonSection(
+                        list: show!.seasons
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: CastSection(
-                      cast: cast!
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: CastSection(
+                        cast: cast!
+                      ),
                     ),
-                  ),
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  //   child: OtherMoviesSection(
-                  //     title: 'Ajánlott',
-                  //     recommendations: recommendations!
-                  //   )
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  //   child: OtherMoviesSection(
-                  //     title: 'Hasonlóak',
-                  //     recommendations: similar!
-                  //   )
-                  // ),
-                  SizedBox(height: 10),
-                ],
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    //   child: OtherMoviesSection(
+                    //     title: 'Ajánlott',
+                    //     recommendations: recommendations!
+                    //   )
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    //   child: OtherMoviesSection(
+                    //     title: 'Hasonlóak',
+                    //     recommendations: similar!
+                    //   )
+                    // ),
+                    SizedBox(height: 10),
+                  ],
+                )
               )
             )
-          )
+          ),
         ),
       )
     );
