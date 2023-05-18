@@ -133,12 +133,12 @@ class _ListSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Section(
         title: title,
         children: [
           SizedBox(
-            height: 150,
+            height: 120,
             child: ListView(
               scrollDirection: Axis.horizontal,
               shrinkWrap: true,

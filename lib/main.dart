@@ -63,12 +63,12 @@ class _MainAppState extends State<MainApp> {
           extensions: [
             AppColors.theme
           ],
-          pageTransitionsTheme: PageTransitionsTheme(
-            builders: {
-              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-              TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-            },
-          ),
+          // pageTransitionsTheme: PageTransitionsTheme(
+          //   builders: {
+          //     TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          //     TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+          //   },
+          // ),
         ),
         home: Scaffold(
           extendBodyBehindAppBar: true,
