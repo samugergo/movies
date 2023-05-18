@@ -5,7 +5,7 @@ class Providers {
   List? rent = [];
   List? buy = [];
   List? streaming = []; 
-  List available = [ProviderEnum.streaming];
+  List available = [];
 
   Providers({
     this.rent,
@@ -30,6 +30,9 @@ class Providers {
   }
 
   _setAvailable() {
+    if(_isStreaming()) {
+      available.add(ProviderEnum.streaming);
+    }
     if(_isBuy()) {
       available.add(ProviderEnum.buy);
     }

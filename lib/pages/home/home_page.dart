@@ -2,12 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hidable/hidable.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/models/base/display_model.dart';
-import 'package:movies/pages/home/base_container.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/show/show_page.dart';
 import 'package:movies/theme/app_colors.dart';
@@ -17,7 +14,6 @@ import 'package:movies/widgets/loaders/loader.dart';
 import 'package:movies/widgets/others/image_card.dart';
 import 'package:movies/widgets/sections/common/section.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({
@@ -31,20 +27,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // late ScrollController _scrollController;
-  double _scrollControllerOffset = 0.0;
   int _activeIndex = 0;
-
-  _scrollListener() {
-    setState(() {
-      _scrollControllerOffset = widget.scrollController.offset;
-    });
-  }
 
   @override
   void initState() {
-    // _scrollController = ScrollController();
-    // widget.scrollController.addListener(_scrollListener);
     super.initState();
   }
 
@@ -75,13 +61,6 @@ class _HomePageState extends State<HomePage> {
         child: Scaffold(
           extendBodyBehindAppBar: true,
           extendBody: true,
-          // appBar: PreferredSize(
-          //   preferredSize: Size(MediaQuery.of(context).size.width, kToolbarHeight),
-          //   child: _AppBar(
-          //     scrollOffset: _scrollControllerOffset,
-          //     scrollController: _scrollController,
-          //   ),
-          // ),
           body: ListView(
             controller: widget.scrollController,
             padding: EdgeInsets.zero,
@@ -175,41 +154,6 @@ class _ListSection extends StatelessWidget {
                   },
                 ),
               )).toList(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _AppBar extends StatelessWidget {
-  final double scrollOffset;
-  final ScrollController scrollController;
-  const _AppBar({
-    Key? key, 
-    required this.scrollOffset,
-    required this.scrollController,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Hidable(
-      controller: scrollController,
-      child: Wrap(
-        children: [
-          SafeArea(
-            child: AppBar(
-              backgroundColor: Colors.black
-                  .withOpacity((scrollOffset / 100).clamp(0, 0.6).toDouble()),
-              scrolledUnderElevation: 0,
-              elevation: 0,
-              title: Text(
-                  'Főoldal',
-                  style: TextStyle(
-                    color: Colors.white
-                  ),
-                ),
             ),
           ),
         ],

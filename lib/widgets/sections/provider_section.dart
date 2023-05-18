@@ -5,95 +5,135 @@ import 'package:movies/widgets/others/image.dart';
 import 'package:movies/widgets/sections/common/section.dart';
 
 class ProviderSection extends StatelessWidget {
-
-  final Providers? providers;
-
   ProviderSection({
-    required this.providers,
-  }); 
+    required Providers? providers,
+  }) :
+  _providers = providers;
 
-  getProvider(ProviderEnum provider) {
-    if (providers == null || !providers?.isNotNullByEnum(provider)) {
-      return [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            'Nem elérhető!',
-            style: TextStyle(
-              color: Colors.white38,
-              fontStyle: FontStyle.italic,
-              fontSize: 12
-            ),
-          ),
-        ),
-      ];
-    }
-    return providers!.getByEnum(provider)?.map((e) => 
-      Padding(
-        padding: const EdgeInsets.only(right: 10),
-        child: XImage(
-          url: e.image, 
-          width: 35, 
-          height: 35,
-          radius: 10,
-        ),
-      ),
-    ).toList();
-  }
+  final Providers? _providers;
 
   @override
   Widget build(BuildContext context) {
     return Section(
       title: 'Elérhetőség',
-      children: providers!.available.map((e) => 
-        Card(
-          margin: EdgeInsets.symmetric(horizontal: 0, vertical: 4),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6),
-          ),
-          color: Colors.black26,
-          elevation: 0,
-          child: ClipPath(
-            clipper: ShapeBorderClipper(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(6)
-              )
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: _providers!.available.isNotEmpty 
+          ? _providers!.available.map((provider) => 
+            _ProviderSection(
+              providerEnum: provider, 
+              providers: _providers!
             ),
-            child: Stack(
+          ).toList()
+          : [_NotAvailable()],
+        )
+      ]
+    );
+  }
+}
+
+class _ProviderSection extends StatelessWidget {
+  _ProviderSection({
+    required ProviderEnum providerEnum,
+    required Providers providers,
+  }) : 
+  _providerEnum = providerEnum,
+  _providers = providers;
+  
+
+  final ProviderEnum _providerEnum;
+  final Providers _providers;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.only(right: 10),
+      elevation: 0,
+      color: Colors.white24,
+      child: Column(
+        children: [
+          _ProviderTypeTitle(providerEnum: _providerEnum),
+          Padding(
+            padding: const EdgeInsets.only(right: 6, left: 6, bottom: 6),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      left: BorderSide(color: Colors.white10, width: 10),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      ...getProvider(e),
-                    ],
-                  ),
-                ),
-                Positioned.fill(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: RotatedBox(
-                      quarterTurns: 3,
-                      child: Text(
-                        e.title,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 8
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                ..._providers.getByEnum(_providerEnum).map((provider) => 
+                  _Provider(provider: provider)
+                ).toList()
               ],
             ),
           ),
-        )
-      ).toList(),
+        ],
+      ),
+    );
+  }
+
+}
+
+class _ProviderTypeTitle extends StatelessWidget {
+  _ProviderTypeTitle({
+    required ProviderEnum providerEnum,
+  }) : 
+  _providerEnum = providerEnum;
+
+  final ProviderEnum _providerEnum;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      child: Text(
+        _providerEnum.title,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 11,
+        ),
+      ),
+    );
+  }
+}
+
+class _Provider extends StatelessWidget {
+  _Provider({
+    required Provider provider,
+  }) : 
+  _provider = provider; 
+
+  final Provider _provider;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(4),
+      child: XImage(
+        url: _provider.image, 
+        width: 35, 
+        height: 35,
+        radius: 10,
+      ),
+    );
+  }
+}
+
+class _NotAvailable extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.zero,
+      elevation: 0,
+      color: Colors.white24,
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Text(
+          'Nem elérhető!',
+          style: TextStyle(
+            color: Colors.white,
+            fontStyle: FontStyle.italic
+          ),
+        ),
+      ),
     );
   }
 }

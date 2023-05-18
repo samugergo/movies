@@ -163,20 +163,20 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
                         model: movie!.collection,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: OtherMoviesSection(
-                        title: 'Ajánlott',
-                        recommendations: recommendations!
-                      )
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: OtherMoviesSection(
-                        title: 'Hasonlóak',
-                        recommendations: similar!
-                      )
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    //   child: OtherMoviesSection(
+                    //     title: 'Ajánlott',
+                    //     recommendations: recommendations!
+                    //   )
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    //   child: OtherMoviesSection(
+                    //     title: 'Hasonlóak',
+                    //     recommendations: similar!
+                    //   )
+                    // ),
                     SizedBox(height: 10),
                   ],
                 )
