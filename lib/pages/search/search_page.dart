@@ -15,12 +15,19 @@ import 'package:movies/widgets/others/result_card.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Search extends StatefulWidget {
+class SearchPage extends StatefulWidget {
+  SearchPage({
+    required ScrollController scrollController
+  }) : 
+  _scrollController = scrollController;
+
+  final ScrollController _scrollController;
+
   @override
-  State<Search> createState() => _SearchState();
+  State<SearchPage> createState() => _SearchPageState();
 }
 
-class _SearchState extends State<Search> {
+class _SearchPageState extends State<SearchPage> {
   List results = [];
   int page = 0;
   int total = 0;
@@ -108,6 +115,7 @@ class _SearchState extends State<Search> {
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
     final theme = Theme.of(context).extension<AppColors>()!;
+    const double horizontalPadding = 15;
 
     goColor(id, color) {
       final Widget to = appState.type == TypeEnum.movie 
@@ -136,18 +144,13 @@ class _SearchState extends State<Search> {
         ),
       ),
       child: Scaffold(
+        extendBodyBehindAppBar: true,
         appBar: AppBar(
           elevation: 0,
           scrolledUnderElevation: 0,
           titleSpacing: 0,
-          backgroundColor: theme.primaryLight,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_rounded),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            color: Colors.white,
-          ),
+          backgroundColor: Colors.black54,
+          automaticallyImplyLeading: false,          
           title: TextField(
             controller: controller,
             textInputAction: TextInputAction.search,
@@ -160,25 +163,25 @@ class _SearchState extends State<Search> {
             ),
             decoration: InputDecoration(
               filled: true,
-              fillColor: theme.primaryLight,
+              fillColor: Colors.transparent,
               suffixIcon: Icon(
                 Icons.search,
-                color: Colors.white24,
+                color: Colors.grey[600],
               ),
               hintText: '${appState.type.title} keresése',
               hintStyle: TextStyle(
-                color: Colors.white24,
+                color: Colors.grey[600],
                 fontWeight: FontWeight.normal
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: theme.primaryLight!),
+                borderSide: BorderSide(color: Colors.transparent),
                 borderRadius: BorderRadius.circular(0),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: theme.primaryLight!),
+                borderSide: BorderSide(color: Colors.transparent),
                 borderRadius: BorderRadius.circular(0),
               ),
-              contentPadding: EdgeInsets.only(left: 0),
+              contentPadding: EdgeInsets.only(left: 15),
               constraints: BoxConstraints(
                 maxHeight: 50,
               )
@@ -187,9 +190,10 @@ class _SearchState extends State<Search> {
         ),
         body: results.isNotEmpty 
           ? ListView(
+          controller: widget._scrollController,
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 10.0, top: 10),
+              padding: const EdgeInsets.only(left: horizontalPadding, top: 10),
               child: Text(
                 'Találatok száma: $total',
                 style: TextStyle(
@@ -201,7 +205,7 @@ class _SearchState extends State<Search> {
             SizedBox(height: 15),
             ...results.map((e) => 
               Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16),
+                padding: const EdgeInsets.only(left: horizontalPadding, right: horizontalPadding, bottom: 16),
                 child: InkWell(
                   splashColor: Colors.transparent,
                   borderRadius: BorderRadius.circular(10),
@@ -221,7 +225,7 @@ class _SearchState extends State<Search> {
           ],
         )
         : Container(
-          color: Colors.white12,
+          color: Colors.transparent,
           child: ListView.builder(
             reverse: false,
             shrinkWrap: true,

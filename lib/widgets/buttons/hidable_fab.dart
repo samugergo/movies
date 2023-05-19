@@ -24,10 +24,10 @@ class HidableFab extends StatelessWidget {
           backgroundColor: theme.primary,
           foregroundColor: theme.iconColor,
           onPressed: () => {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Search()),
-            )
+            // Navigator.push(
+            //   context,
+            //   // MaterialPageRoute(builder: (context) => SearchPage()),
+            // )
           },
           child: Icon(
             FontAwesomeIcons.magnifyingGlass,

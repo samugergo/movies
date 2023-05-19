@@ -5,6 +5,7 @@ import 'package:hidable/hidable.dart';
 import 'package:movies/models/base/display_model.dart';
 import 'package:movies/pages/catalog/catalog_page.dart';
 import 'package:movies/pages/home/home_page.dart';
+import 'package:movies/pages/search/search_page.dart';
 import 'package:movies/state.dart';
 import 'package:movies/theme/app_colors.dart';
 import 'package:provider/provider.dart'; 
@@ -36,6 +37,9 @@ class _MainAppState extends State<MainApp> {
       case 1: return CatalogPage(
         scrollController: _scrollController,
       ); 
+      case 2: return SearchPage(
+        scrollController: _scrollController,
+      );
       default: return HomePage(
         scrollController: _scrollController,
       );

@@ -17,16 +17,19 @@ class ProviderSection extends StatelessWidget {
     return Section(
       title: 'Elérhetőség',
       children: [
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          children: _providers!.available.isNotEmpty 
-          ? _providers!.available.map((provider) => 
-            _ProviderSection(
-              providerEnum: provider, 
-              providers: _providers!
-            ),
-          ).toList()
-          : [_NotAvailable()],
+        SizedBox(
+          height: 73,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: _providers!.available.isNotEmpty 
+            ? _providers!.available.map((provider) => 
+              _ProviderSection(
+                providerEnum: provider, 
+                providers: _providers!
+              ),
+            ).toList()
+            : [_NotAvailable()],
+          ),
         )
       ]
     );
@@ -125,13 +128,18 @@ class _NotAvailable extends StatelessWidget {
       elevation: 0,
       color: Colors.white12,
       child: Padding(
-        padding: const EdgeInsets.all(15),
-        child: Text(
-          'Nem elérhető!',
-          style: TextStyle(
-            color: Colors.white,
-            fontStyle: FontStyle.italic
-          ),
+        padding: const EdgeInsets.symmetric(horizontal: 25),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Nem elérhető!',
+              style: TextStyle(
+                color: Colors.white,
+                fontStyle: FontStyle.italic
+              ),
+            ),
+          ],
         ),
       ),
     );

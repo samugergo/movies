@@ -18,7 +18,7 @@ class TrailerButton extends StatelessWidget {
       onPressed: () => _onClick(),
       style: ElevatedButton.styleFrom(
         elevation: 0,
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(12),
         backgroundColor: Colors.white12,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5)
