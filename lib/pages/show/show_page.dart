@@ -6,6 +6,7 @@ import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/show_detailed_model.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/utils/common_util.dart';
+import 'package:movies/widgets/buttons/trailer_button.dart';
 import 'package:movies/widgets/containers/animated_contaner.dart';
 import 'package:movies/widgets/loaders/color_loader.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
@@ -104,6 +105,8 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
 
   @override
   Widget build(BuildContext context) {
+    const double horizontalPadding = 15;
+
     return XAnimatedContainer(
       color: widget.color, 
       statusbar: mainColor,
@@ -123,7 +126,7 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
                     onlyTitle: false,
                     cover: coverImage,
                     color: mainColor,
-                    horizontalPadding: 10,
+                    horizontalPadding: horizontalPadding,
                     child: DetailCard(
                       model: show!,
                     ),
@@ -147,25 +150,31 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
                 body: ListView(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
+                      child: TrailerButton(
+                        onclick: () {}
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: ProviderSection(
                         providers: providers
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: StorySection(
                         description: show!.description
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: SeasonSection(
                         list: show!.seasons
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: CastSection(
                         cast: cast!
                       ),

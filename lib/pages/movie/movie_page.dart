@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/movie_detailed_model.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/utils/common_util.dart';
+import 'package:movies/widgets/buttons/trailer_button.dart';
 import 'package:movies/widgets/containers/animated_contaner.dart';
 import 'package:movies/widgets/loaders/color_loader.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
@@ -142,6 +144,12 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
               child: Scaffold(
                 body: ListView(
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
+                      child: TrailerButton(
+                        onclick: () {}
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: ProviderSection(
