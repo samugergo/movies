@@ -132,17 +132,17 @@ class _SearchPageState extends State<SearchPage> {
     } 
 
     return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          stops: [0.5, 1],
-          colors: [
-            theme.primary!, 
-            theme.secondary!
-          ],
-        ),
-      ),
+      // decoration: BoxDecoration(
+      //   gradient: LinearGradient(
+      //     begin: Alignment.topCenter,
+      //     end: Alignment.bottomCenter,
+      //     stops: [0.5, 1],
+      //     colors: [
+      //       theme.primary!, 
+      //       theme.secondary!
+      //     ],
+      //   ),
+      // ),
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
