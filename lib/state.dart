@@ -208,9 +208,6 @@ class AppState extends ChangeNotifier {
   }
 
   loadCatalog(TypeEnum type, OrderEnum order) async {
-    print(type.toString());
-    print(order.toString());
-    print(catalogPage);
     final list = await fetch(catalogPage, type, order);
     updateCatalog(list);
   }

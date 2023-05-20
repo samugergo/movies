@@ -99,33 +99,30 @@ class _BotttomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = getAppTheme(context);
 
-    return Hidable(
-      controller: _scrollController,
-      child: Wrap(
-        children: [
-          BottomNavigationBar(
-            backgroundColor: theme.hidable,
-            unselectedItemColor: theme.unselected,
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: FaIcon(FontAwesomeIcons.house),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: FaIcon(FontAwesomeIcons.film),
-                label: 'Catalog',
-              ),
-              BottomNavigationBarItem(
-                icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
-                label: 'Search',
-              ),
-            ],
-            currentIndex: _currentIndex,
-            selectedItemColor: theme.selected,
-            onTap: _setCurrent
-          ),
-        ],
-      ),
+    return Wrap(
+      children: [
+        BottomNavigationBar(
+          backgroundColor: theme.hidable,
+          unselectedItemColor: theme.unselected,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: FaIcon(FontAwesomeIcons.house),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: FaIcon(FontAwesomeIcons.film),
+              label: 'Catalog',
+            ),
+            BottomNavigationBarItem(
+              icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
+              label: 'Search',
+            ),
+          ],
+          currentIndex: _currentIndex,
+          selectedItemColor: theme.selected,
+          onTap: _setCurrent
+        ),
+      ],
     );
   }
 }

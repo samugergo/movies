@@ -133,6 +133,7 @@ class _SearchPageState extends State<SearchPage> {
     final appState = context.watch<AppState>();
     final theme = Theme.of(context).extension<AppColors>()!;
     const double horizontalPadding = 15;
+    ScrollController sc = ScrollController();
 
     goColor(id, color) {
       final Widget to = TypeEnum.isMovie(TypeEnum.values[_typeValue])
@@ -161,51 +162,111 @@ class _SearchPageState extends State<SearchPage> {
         ),
       ),
       child: Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          elevation: 0,
-          scrolledUnderElevation: 0,
-          titleSpacing: 0,
-          backgroundColor: theme.hidable,
-          automaticallyImplyLeading: false,          
-          title: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SearchField(
-              controller: _controller,
-              search: _search,
-            ),
-          ),
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(50), // here the desired height
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                children: [
-                  ChipList(
-                    value: _typeValue, 
-                    mandatory: true, 
-                    setState: _setTypeValue,
-                    list: TypeEnum.titles(), 
+        // appBar: AppBar(
+        //   elevation: 0,
+        //   scrolledUnderElevation: 0,
+        //   titleSpacing: 0,
+        //   backgroundColor: theme.hidable,
+        //   automaticallyImplyLeading: false,          
+        //   title: Padding(
+        //     padding: const EdgeInsets.all(8.0),
+        //     child: SearchField(
+        //       controller: _controller,
+        //       search: _search,
+        //     ),
+        //   ),
+        //   bottom: PreferredSize(
+        //     preferredSize: Size.fromHeight(50), // here the desired height
+        //     child: Padding(
+        //       padding: const EdgeInsets.symmetric(horizontal: 10),
+        //       child: Row(
+        //         children: [
+        //           ChipList(
+        //             value: _typeValue, 
+        //             mandatory: true, 
+        //             setState: _setTypeValue,
+        //             list: TypeEnum.titles(), 
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        // body: _results.isNotEmpty 
+        // ? ResultList(
+        //   results: _results, 
+        //   total: _total, 
+        //   load: loadMore, 
+        //   goTo: go,
+        //   horizontalPadding: horizontalPadding, 
+        //   scrollController: widget._scrollController, 
+        // )
+        // : HistoryList(
+        //   history: _history, 
+        //   controller: _controller, 
+        //   search: _search, 
+        //   delete: _deleteFromHistory
+        // )
+        body: NestedScrollView(     
+          controller: widget._scrollController,     
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) { 
+            return [
+                SliverAppBar(
+                  backgroundColor: theme.hidable,
+                  expandedHeight: 160,
+                  flexibleSpace: FlexibleSpaceBar(
+                    centerTitle: true,
+                    titlePadding: EdgeInsets.only(bottom: 50),
+                    title: Text(
+                      'Keresés',
+                      style: TextStyle(
+                        color: Colors.white
+                      ),
+                    ),
                   ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        body: _results.isNotEmpty 
-        ? ResultList(
-          results: _results, 
-          total: _total, 
-          load: loadMore, 
-          goTo: go,
-          horizontalPadding: horizontalPadding, 
-          scrollController: widget._scrollController, 
-        )
-        : HistoryList(
-          history: _history, 
-          controller: _controller, 
-          search: _search, 
-          delete: _deleteFromHistory
+                ),
+                SliverAppBar(
+                  backgroundColor: theme.hidable,
+                  titleSpacing: 10,                  
+                  scrolledUnderElevation: 0,
+                  elevation: 0,
+                  pinned: true,
+                  floating: true,
+                  snap: true,
+                  expandedHeight: 100,
+                  title: SearchField(
+                    controller: _controller, 
+                    search: _search
+                  ),
+                  flexibleSpace: FlexibleSpaceBar(
+                    titlePadding: EdgeInsets.zero,
+                    expandedTitleScale: 1,
+                    centerTitle: true,
+                    title: ChipList(
+                      value: _typeValue, 
+                      mandatory: true, 
+                      setState: _setTypeValue,
+                      list: TypeEnum.titles(), 
+                    ),
+                  ),
+                )
+            ];
+          },
+          body: _results.isNotEmpty 
+          ? ResultList(
+            results: _results, 
+            total: _total, 
+            load: loadMore, 
+            goTo: go,
+            horizontalPadding: horizontalPadding, 
+            scrollController: widget._scrollController, 
+          )
+          : HistoryList(
+            history: _history, 
+            controller: _controller, 
+            search: _search, 
+            delete: _deleteFromHistory
+          )
         )
       )
     );
@@ -251,11 +312,11 @@ class SearchField extends StatelessWidget {
           fontWeight: FontWeight.normal
         ),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white24),
+          borderSide: BorderSide(color: Colors.transparent),
           borderRadius: BorderRadius.circular(10),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white24),
+          borderSide: BorderSide(color: Colors.transparent),
           borderRadius: BorderRadius.circular(10),
         ),
         contentPadding: EdgeInsets.only(left: 15),
@@ -293,10 +354,10 @@ class ResultList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      controller: _scrollController,
+      // controller: _scrollController,
       children: [
         Padding(
-          padding: EdgeInsets.only(left: _horizontalPadding, top: 10),
+          padding: EdgeInsets.only(left: _horizontalPadding),
           child: Text(
             'Találatok száma: $_total',
             style: TextStyle(
@@ -350,7 +411,6 @@ class HistoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
     return Container(
       color: Colors.transparent,
       child: ListView.builder(

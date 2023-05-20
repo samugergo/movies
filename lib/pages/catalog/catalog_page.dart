@@ -5,6 +5,7 @@ import 'package:movies/enums/type_enum.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/show/show_page.dart';
 import 'package:movies/state.dart';
+import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/buttons/load_button.dart';
 import 'package:movies/widgets/others/chip_list.dart';
@@ -55,6 +56,7 @@ class _GridViewState extends State<_GridView> {
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
+    final theme = getAppTheme(context);
     final itemCount = appState.itemCount;
     final list = appState.catalogList;
     
@@ -91,33 +93,54 @@ class _GridViewState extends State<_GridView> {
       }
     }
 
-    return SingleChildScrollView(
+    return NestedScrollView(
       controller: widget.scrollController,
-      child: Column(
-        children: [
-          SizedBox(height: 30),
-          SizedBox(
-            height: 50,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                ChipList(
-                  value: _typeValue, 
-                  mandatory: true, 
-                  setState: setTypeValue,
-                  list: TypeEnum.titles(), 
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) { 
+        return [
+          SliverAppBar(
+            backgroundColor: theme.hidable,
+            expandedHeight: 160,
+            flexibleSpace: FlexibleSpaceBar(
+              centerTitle: true,
+              titlePadding: EdgeInsets.only(bottom: 50),
+              title: Text(
+                'Katalógus',
+                style: TextStyle(
+                  color: Colors.white
                 ),
-                SizedBox(width: 10),
-                ChipList(
-                  value: _orderValue, 
-                  mandatory: true, 
-                  setState: setOrderValue,
-                  list: OrderEnum.titles(), 
-                ),
-              ],
+              ),
             ),
           ),
-          SizedBox(height: 10),
+          SliverAppBar(
+            pinned: true,
+            backgroundColor: theme.hidable,
+            titleSpacing: 0,
+            title: SizedBox(
+              height: 50,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  ChipList(
+                    value: _typeValue, 
+                    mandatory: true, 
+                    setState: setTypeValue,
+                    list: TypeEnum.titles(), 
+                  ),
+                  SizedBox(width: 10),
+                  ChipList(
+                    value: _orderValue, 
+                    mandatory: true, 
+                    setState: setOrderValue,
+                    list: OrderEnum.titles(), 
+                  ),
+                ],
+              ),
+            ),
+          )
+        ];
+      },
+      body: ListView(
+        children: [
           GridView.count(
             padding: EdgeInsets.zero,
             physics: BouncingScrollPhysics(),

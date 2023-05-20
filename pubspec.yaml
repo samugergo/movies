@@ -29,6 +29,7 @@ dependencies:
   google_fonts: ^4.0.3
   cached_network_image: ^3.2.3
   youtube_player_flutter: ^8.1.2
+  chip_list: ^2.4.3+8
 
 dev_dependencies:
   flutter_test:
