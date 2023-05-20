@@ -8,6 +8,7 @@ import 'package:movies/pages/home/home_page.dart';
 import 'package:movies/pages/search/search_page.dart';
 import 'package:movies/state.dart';
 import 'package:movies/theme/app_colors.dart';
+import 'package:movies/utils/common_util.dart';
 import 'package:provider/provider.dart'; 
 import 'package:movies/enums/order_enum.dart';
 import 'package:movies/enums/type_enum.dart';
@@ -60,19 +61,9 @@ class _MainAppState extends State<MainApp> {
         theme: ThemeData(
           useMaterial3: true,
           scaffoldBackgroundColor: Colors.transparent,
-          bottomSheetTheme: BottomSheetThemeData(
-            backgroundColor: Color(0xff2B2B38),
-            modalElevation: 0
-          ),
           extensions: [
             AppColors.theme
           ],
-          // pageTransitionsTheme: PageTransitionsTheme(
-          //   builders: {
-          //     TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-          //     TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-          //   },
-          // ),
         ),
         home: Scaffold(
           extendBodyBehindAppBar: true,
@@ -106,13 +97,15 @@ class _BotttomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = getAppTheme(context);
+
     return Hidable(
       controller: _scrollController,
       child: Wrap(
         children: [
           BottomNavigationBar(
-            backgroundColor: Colors.black54,
-            unselectedItemColor: Colors.grey[600],
+            backgroundColor: theme.hidable,
+            unselectedItemColor: theme.unselected,
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: FaIcon(FontAwesomeIcons.house),
@@ -128,7 +121,7 @@ class _BotttomNavigationBar extends StatelessWidget {
               ),
             ],
             currentIndex: _currentIndex,
-            selectedItemColor: Colors.white,
+            selectedItemColor: theme.selected,
             onTap: _setCurrent
           ),
         ],

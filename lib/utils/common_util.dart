@@ -3,10 +3,15 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 import 'package:movies/main.dart';
 import 'package:movies/state.dart';
+import 'package:movies/theme/app_colors.dart';
 import 'package:provider/provider.dart';
 
 getAppState(BuildContext context) {
   return context.watch<AppState>();
+}
+
+AppColors getAppTheme(BuildContext context) {
+  return Theme.of(context).extension<AppColors>()!;
 }
 
 chunkList(list) {

@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:hidable/hidable.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/main.dart';
 import 'package:movies/models/base/list_response.dart';
@@ -134,28 +135,31 @@ class _SearchPageState extends State<SearchPage> {
     } 
 
     return Container(
-      // decoration: BoxDecoration(
-      //   gradient: LinearGradient(
-      //     begin: Alignment.topCenter,
-      //     end: Alignment.bottomCenter,
-      //     stops: [0.5, 1],
-      //     colors: [
-      //       theme.primary!, 
-      //       theme.secondary!
-      //     ],
-      //   ),
-      // ),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          stops: [0.5, 1],
+          colors: [
+            theme.primary!, 
+            theme.primaryLight!
+          ],
+        ),
+      ),
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           elevation: 0,
           scrolledUnderElevation: 0,
           titleSpacing: 0,
-          backgroundColor: Colors.black54,
+          backgroundColor: theme.hidable,
           automaticallyImplyLeading: false,          
-          title: SearchField(
-            controller: _controller,
-            search: _search,
+          title: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SearchField(
+              controller: _controller,
+              search: _search,
+            ),
           )
         ),
         body: _results.isNotEmpty 
@@ -191,7 +195,8 @@ class SearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
+    final appState = getAppState(context);
+    final theme = getAppTheme(context);
 
     return TextField(
       controller: _controller,
@@ -204,11 +209,11 @@ class SearchField extends StatelessWidget {
         color: Colors.white
       ),
       decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.transparent,
+        // filled: true,
+        fillColor: theme.unselected!,
         suffixIcon: Icon(
           Icons.search,
-          color: Colors.grey[600],
+          color: theme.unselected!,
         ),
         hintText: '${appState.type.title} keresése',
         hintStyle: TextStyle(
@@ -216,12 +221,12 @@ class SearchField extends StatelessWidget {
           fontWeight: FontWeight.normal
         ),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.transparent),
-          borderRadius: BorderRadius.circular(0),
+          borderSide: BorderSide(color: Colors.white24),
+          borderRadius: BorderRadius.circular(10),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.transparent),
-          borderRadius: BorderRadius.circular(0),
+          borderSide: BorderSide(color: Colors.white24),
+          borderRadius: BorderRadius.circular(10),
         ),
         contentPadding: EdgeInsets.only(left: 15),
         constraints: BoxConstraints(

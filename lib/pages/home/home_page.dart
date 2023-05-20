@@ -36,8 +36,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).extension<AppColors>()!;
+    final theme = getAppTheme(context);
     final appState = getAppState(context);
+
     return appState.isLoading() 
     ? Loader()
     : Container(
@@ -48,15 +49,14 @@ class _HomePageState extends State<HomePage> {
           stops: [0.1, 1],
           colors: [
             theme.primary!, 
-            theme.secondary!
+            theme.primaryLight!
           ],
           tileMode: TileMode.mirror
         ),
       ),
       child: AnnotatedRegion(
         value: SystemUiOverlayStyle.light.copyWith(           
-          statusBarColor: Colors.black
-          .withOpacity(0.6),
+          statusBarColor: theme.hidable,
         ),
         child: Scaffold(
           extendBodyBehindAppBar: true,
@@ -82,8 +82,8 @@ class _HomePageState extends State<HomePage> {
                         spacing: 10,
                         dotWidth: 7,  
                         dotHeight: 7,
-                        dotColor: Colors.white24,  
-                        activeDotColor: Colors.white  
+                        dotColor: theme.unselected!,  
+                        activeDotColor: theme.selected!,
                     ),  
                   ),
                 ),

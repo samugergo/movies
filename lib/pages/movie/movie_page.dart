@@ -102,13 +102,14 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
   @override
   Widget build(BuildContext context) {
     const double horizontalPadding = 15;
+    final theme = getAppTheme(context);
 
     return XAnimatedContainer(
       duration: 300,
-      color: widget.color,
+      color: theme.primary!,
       statusbar: mainColor,
       child: isLoading() 
-      ? ColorLoader(color: widget.color)
+      ? ColorLoader(color: theme.primary!)
       : Container(
         color: mainColor,
         child: SafeArea(
