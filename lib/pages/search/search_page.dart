@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/main.dart';
@@ -28,31 +30,31 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  List results = [];
-  int page = 0;
-  int total = 0;
-  int pages = 0;
-  String value = "";
-  List<String> history = [];
-  final TextEditingController controller = TextEditingController();
+  List _results = [];
+  int _page = 0;
+  int _total = 0;
+  int _pages = 0;
+  String _value = "";
+  List<String> _history = [];
+  final TextEditingController _controller = TextEditingController();
 
   _search(value, type, saveHistory) async {
-    this.value = value;
-    page = 0;
-    total = 0;
+    _value = value;
+    _page = 0;
+    _total = 0;
 
     if(saveHistory) {
       _saveHistory(value);
     }
 
-    ListResponse lr = await search(page, type, value);
+    ListResponse lr = await search(_page, type, value);
 
     setResults(lr.list);
     updateTotal(lr.total);
   }
 
   loadMore(type) async {
-    ListResponse lr = await search(page, type, value);
+    ListResponse lr = await search(_page, type, _value);
 
     updateResults(lr.list);
     updateTotal(lr.total);
@@ -62,46 +64,46 @@ class _SearchPageState extends State<SearchPage> {
     final prefs = await SharedPreferences.getInstance();
     final sh = prefs.getStringList('searchHistory');
     setState(() {
-      history = sh ?? []; 
+      _history = sh ?? []; 
     });
   }
 
   _saveHistory(value) async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      if(history.length > 9) {
-        history.removeLast();
+      if(_history.length > 9) {
+        _history.removeLast();
       } 
-      history.insert(0, value);
+      _history.insert(0, value);
     });
-    prefs.setStringList('searchHistory', history);
+    prefs.setStringList('searchHistory', _history);
   }
 
   _deleteFromHistory(index) async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      history.removeAt(index);
+      _history.removeAt(index);
     });
-    prefs.setStringList('searchHistory', history);
+    prefs.setStringList('searchHistory', _history);
   }
 
   setResults(list) {
     setState(() {
-      results = list;
-      page++;
+      _results = list;
+      _page++;
     });
   }
 
   updateResults(list) {
     setState(() {
-      results.addAll(list);
-      page++;
+      _results.addAll(list);
+      _page++;
     });
   }
 
   updateTotal(total) {
     setState(() {
-      this.total = total;
+      _total = total;
     });
   }
 
@@ -151,124 +153,210 @@ class _SearchPageState extends State<SearchPage> {
           titleSpacing: 0,
           backgroundColor: Colors.black54,
           automaticallyImplyLeading: false,          
-          title: TextField(
-            controller: controller,
-            textInputAction: TextInputAction.search,
-            autofocus: true,
-            onSubmitted: (value) {
-              _search(value, appState.type, true);
-            },
+          title: SearchField(
+            controller: _controller,
+            search: _search,
+          )
+        ),
+        body: _results.isNotEmpty 
+        ? ResultList(
+          results: _results, 
+          total: _total, 
+          load: loadMore, 
+          goTo: go,
+          horizontalPadding: horizontalPadding, 
+          scrollController: widget._scrollController, 
+        )
+        : HistoryList(
+          history: _history, 
+          controller: _controller, 
+          search: _search, 
+          delete: _deleteFromHistory
+        )
+      )
+    );
+  }
+}
+
+class SearchField extends StatelessWidget {
+  SearchField({
+    required TextEditingController controller,
+    required Function(String, TypeEnum, bool) search,
+  }) :
+  _controller = controller,
+  _search = search;
+
+  final TextEditingController _controller;
+  final Function(String, TypeEnum, bool) _search;
+
+  @override
+  Widget build(BuildContext context) {
+    final appState = context.watch<AppState>();
+
+    return TextField(
+      controller: _controller,
+      textInputAction: TextInputAction.search,
+      autofocus: true,
+      onSubmitted: (value) {
+        _search(value, appState.type, true);
+      },
+      style: TextStyle(
+        color: Colors.white
+      ),
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.transparent,
+        suffixIcon: Icon(
+          Icons.search,
+          color: Colors.grey[600],
+        ),
+        hintText: '${appState.type.title} keresése',
+        hintStyle: TextStyle(
+          color: Colors.grey[600],
+          fontWeight: FontWeight.normal
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.transparent),
+          borderRadius: BorderRadius.circular(0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.transparent),
+          borderRadius: BorderRadius.circular(0),
+        ),
+        contentPadding: EdgeInsets.only(left: 15),
+        constraints: BoxConstraints(
+          maxHeight: 50,
+        )
+      ),
+    );
+  }
+}
+
+class ResultList extends StatelessWidget {
+  ResultList({
+    required List results,
+    required int total,
+    required double horizontalPadding,
+    required ScrollController scrollController,
+    required Function(TypeEnum) load,
+    required Function goTo,
+  }) : 
+  _results = results,
+  _total = total,
+  _horizontalPadding = horizontalPadding,
+  _scrollController = scrollController,
+  _load = load,
+  _goTo = goTo;
+
+  final List _results;
+  final int _total;
+  final double _horizontalPadding;
+  final ScrollController _scrollController;
+  final Function(TypeEnum) _load;
+  final Function _goTo;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      controller: _scrollController,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(left: _horizontalPadding, top: 10),
+          child: Text(
+            'Találatok száma: $_total',
             style: TextStyle(
-              color: Colors.white
-            ),
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.transparent,
-              suffixIcon: Icon(
-                Icons.search,
-                color: Colors.grey[600],
-              ),
-              hintText: '${appState.type.title} keresése',
-              hintStyle: TextStyle(
-                color: Colors.grey[600],
-                fontWeight: FontWeight.normal
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.transparent),
-                borderRadius: BorderRadius.circular(0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.transparent),
-                borderRadius: BorderRadius.circular(0),
-              ),
-              contentPadding: EdgeInsets.only(left: 15),
-              constraints: BoxConstraints(
-                maxHeight: 50,
-              )
+              color: Colors.white,
+              fontStyle: FontStyle.italic
             ),
           ),
-        ),
-        body: results.isNotEmpty 
-          ? ListView(
-          controller: widget._scrollController,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: horizontalPadding, top: 10),
-              child: Text(
-                'Találatok száma: $total',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontStyle: FontStyle.italic
-                ),
+        ),              
+        SizedBox(height: 15),
+        ..._results.map((e) => 
+          Padding(
+            padding: EdgeInsets.only(left: _horizontalPadding, right: _horizontalPadding, bottom: 16),
+            child: InkWell(
+              splashColor: Colors.transparent,
+              borderRadius: BorderRadius.circular(10),
+              onTap: () => _goTo(e),
+              child: ResultCard(
+                image: e.image,
+                title: e.title,
+                release: e.release,
+                percent: e.percent,
               ),
-            ),              
-            SizedBox(height: 15),
-            ...results.map((e) => 
-              Padding(
-                padding: const EdgeInsets.only(left: horizontalPadding, right: horizontalPadding, bottom: 16),
-                child: InkWell(
-                  splashColor: Colors.transparent,
-                  borderRadius: BorderRadius.circular(10),
-                  onTap: () => go(e),
-                  child: ResultCard(
-                    image: e.image,
-                    title: e.title,
-                    release: e.release,
-                    percent: e.percent,
-                  ),
-                ),
-              )
             ),
-            total != results.length
-            ? LoadButton(load: () => loadMore(appState.type))
-            : SizedBox(),
-          ],
-        )
-        : Container(
-          color: Colors.transparent,
-          child: ListView.builder(
-            reverse: false,
-            shrinkWrap: true,
-            itemCount: history.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                onTap: () {
-                  controller.value = TextEditingValue(
-                    text: history[index],
-                    selection: TextSelection.fromPosition(
-                      TextPosition(offset: history[index].length),
-                    ),
-                  );
-                  FocusManager.instance.primaryFocus?.unfocus();
-                  _search(history[index], appState.type, false);
-                },
-                leading: Icon(
-                  Icons.schedule,
-                  color: Colors.white60,
-                ),
-                title: Text(
-                  history[index],
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Colors.white60,
-                    fontWeight: FontWeight.normal
-                  ),
-                ),
-                trailing: IconButton(
-                  icon: Icon(
-                    Icons.cancel,
-                    color: Colors.white12,
-                    size: 18,
-                  ),
-                  onPressed: () {
-                    _deleteFromHistory(index);
-                  },
+          )
+        ),
+        _total != _results.length
+        ? LoadButton(load: () => _load(TypeEnum.movie))
+        : SizedBox(),
+      ],
+    );
+  }
+
+}
+
+class HistoryList extends StatelessWidget {
+  HistoryList({
+    required List history,
+    required TextEditingController controller,
+    required Function(String, TypeEnum, bool) search,
+    required Function(int) delete,
+  }) : 
+  _history = history,
+  _controller = controller,
+  _search = search,
+  _delete = delete; 
+
+  final List _history;
+  final TextEditingController _controller;
+  final Function(String, TypeEnum, bool) _search;
+  final Function(int) _delete;
+
+  @override
+  Widget build(BuildContext context) {
+    final appState = context.watch<AppState>();
+    return Container(
+      color: Colors.transparent,
+      child: ListView.builder(
+        reverse: false,
+        shrinkWrap: true,
+        itemCount: _history.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            onTap: () {
+              _controller.value = TextEditingValue(
+                text: _history[index],
+                selection: TextSelection.fromPosition(
+                  TextPosition(offset: _history[index].length),
                 ),
               );
-            },  
-          ),
-        )
+              FocusManager.instance.primaryFocus?.unfocus();
+              _search(_history[index], appState.type, false);
+            },
+            leading: Icon(
+              Icons.schedule,
+              color: Colors.white60,
+            ),
+            title: Text(
+              _history[index],
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: Colors.white60,
+                fontWeight: FontWeight.normal
+              ),
+            ),
+            trailing: IconButton(
+              icon: Icon(
+                Icons.cancel,
+                color: Colors.white12,
+                size: 18,
+              ),
+              onPressed: () => _delete(index),
+            ),
+          );
+        },  
       ),
     );
   }
