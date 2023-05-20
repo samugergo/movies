@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:movies/enums/order_enum.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/show/show_page.dart';
 import 'package:movies/state.dart';
 import 'package:movies/utils/navigation_util.dart';
+import 'package:movies/widgets/buttons/load_button.dart';
+import 'package:movies/widgets/others/chip_list.dart';
 import 'package:movies/widgets/others/image_card.dart';
 import 'package:provider/provider.dart';
 
@@ -23,8 +26,11 @@ class CatalogPage extends StatelessWidget {
         .withOpacity(0.6),
       ),
       child: Scaffold(
-        body: _GridView(
-          scrollController: scrollController,
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: _GridView(
+            scrollController: scrollController,
+          ),
         ),
       ),
     );
@@ -43,6 +49,9 @@ class _GridView extends StatefulWidget {
 }
 
 class _GridViewState extends State<_GridView> {
+  int _typeValue = 0;
+  int _orderValue = 0;  
+
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
@@ -55,10 +64,60 @@ class _GridViewState extends State<_GridView> {
     final itemWidth = width/itemCount - itemCount * crossSpacing;
     final itemHeight = itemWidth*1.5;
 
+    var type = TypeEnum.values[_typeValue];
+    var order = OrderEnum.values[_orderValue];
+
+    load(type, order) {
+      appState.loadCatalog(type, order);
+    }
+
+    setTypeValue(typeValue) {
+      if (typeValue != _typeValue) {
+        appState.resetCatalog();
+        setState(() {
+          _typeValue = typeValue;
+        });
+        load(TypeEnum.values[typeValue], OrderEnum.values[_orderValue]);
+      }
+    }
+
+    setOrderValue(orderValue) {
+      if (orderValue != _orderValue) {
+        appState.resetCatalog();
+        setState(() {
+          _orderValue = orderValue;
+        });
+        load(TypeEnum.values[_typeValue], OrderEnum.values[orderValue]);
+      }
+    }
+
     return SingleChildScrollView(
       controller: widget.scrollController,
       child: Column(
         children: [
+          SizedBox(height: 30),
+          SizedBox(
+            height: 50,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                ChipList(
+                  value: _typeValue, 
+                  mandatory: true, 
+                  setState: setTypeValue,
+                  list: TypeEnum.titles(), 
+                ),
+                SizedBox(width: 10),
+                ChipList(
+                  value: _orderValue, 
+                  mandatory: true, 
+                  setState: setOrderValue,
+                  list: OrderEnum.titles(), 
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 10),
           GridView.count(
             padding: EdgeInsets.zero,
             physics: BouncingScrollPhysics(),
@@ -78,6 +137,8 @@ class _GridViewState extends State<_GridView> {
             )).toList(),
           ),
           SizedBox(height: 10),
+          LoadButton(load: () => load(type, order)),
+          SizedBox(height: 10)
         ],
       ),
     );

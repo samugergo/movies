@@ -49,7 +49,8 @@ class AppState extends ChangeNotifier {
       order: OrderEnum.topRated,
       callback: setUpcomingShows
     );
-    setCatalogList(popularMovies);
+    loadCatalog(TypeEnum.movie, OrderEnum.popular);
+    // setCatalogList(popularMovies);
   }
 
   /// Check if the home page finished loading
@@ -96,6 +97,7 @@ class AppState extends ChangeNotifier {
 
   setCatalogList(List catalogList) {
     this.catalogList = catalogList;
+    catalogPage = 1;
     notifyListeners();
   }
 
@@ -131,6 +133,11 @@ class AppState extends ChangeNotifier {
     showPage++;
     notifyListeners();
   }
+  updateCatalog(catalog) {
+    catalogList.addAll(catalog);
+    catalogPage++;
+    notifyListeners();
+  }
 
   // --- load fuctions ---
 
@@ -143,8 +150,9 @@ class AppState extends ChangeNotifier {
   loadMovies({
     order,
     callback,
+    page = 0,
   }) async {
-    final list = await fetch(0, TypeEnum.movie, order);
+    final list = await fetch(page, TypeEnum.movie, order);
     callback(list);
   }
 
@@ -170,7 +178,7 @@ class AppState extends ChangeNotifier {
     setItemCount(ic ?? 3);
   }
 
-  loadCatalog(OrderEnum order) async {
+  loadCatalog2(OrderEnum order) async {
     loadMovies(
       order: OrderEnum.popular,
       callback: setCatalogList
@@ -189,6 +197,28 @@ class AppState extends ChangeNotifier {
     //     // TODO: Handle this case.
     //     break;
     // }
+  }
+
+  loadCatalogMore() async {
+    loadMovies(
+      order: OrderEnum.popular,
+      callback: updateCatalog,
+      page: catalogPage,
+    );
+  }
+
+  loadCatalog(TypeEnum type, OrderEnum order) async {
+    print(type.toString());
+    print(order.toString());
+    print(catalogPage);
+    final list = await fetch(catalogPage, type, order);
+    updateCatalog(list);
+  }
+
+  resetCatalog() {
+    catalogList.clear();
+    catalogPage = 0;
+    notifyListeners();
   }
 
   // loadByOrder(order) async {

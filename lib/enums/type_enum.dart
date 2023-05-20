@@ -17,4 +17,8 @@ enum TypeEnum {
   static TypeEnum fromValue(String value) {
     return TypeEnum.values.firstWhere((element) => element.value == value);
   }
+
+  static List<String> titles() {
+    return TypeEnum.values.map((e) => e.title).toList();
+  }
 }

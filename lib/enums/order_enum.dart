@@ -13,4 +13,8 @@ enum OrderEnum {
     required this.title,
     required this.value
   });
+
+  static List<String> titles() {
+    return [OrderEnum.popular, OrderEnum.topRated].map((e) => e.title).toList();
+  }
 }

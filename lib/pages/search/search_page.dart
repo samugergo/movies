@@ -1,9 +1,6 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:hidable/hidable.dart';
 import 'package:movies/enums/type_enum.dart';
-import 'package:movies/main.dart';
 import 'package:movies/models/base/list_response.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/show/show_page.dart';
@@ -14,6 +11,7 @@ import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/buttons/load_button.dart';
+import 'package:movies/widgets/others/chip_list.dart';
 import 'package:movies/widgets/others/result_card.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,11 +33,16 @@ class _SearchPageState extends State<SearchPage> {
   int _page = 0;
   int _total = 0;
   int _pages = 0;
+  int _typeValue = 0;
   String _value = "";
   List<String> _history = [];
   final TextEditingController _controller = TextEditingController();
 
-  _search(value, type, saveHistory) async {
+  _search(value, saveHistory) async {
+    _searchWithType(value, TypeEnum.values[_typeValue], saveHistory);
+  }
+
+  _searchWithType(value, type, saveHistory) async {
     _value = value;
     _page = 0;
     _total = 0;
@@ -54,8 +57,8 @@ class _SearchPageState extends State<SearchPage> {
     updateTotal(lr.total);
   }
 
-  loadMore(type) async {
-    ListResponse lr = await search(_page, type, _value);
+  loadMore() async {
+    ListResponse lr = await search(_page, TypeEnum.values[_typeValue], _value);
 
     updateResults(lr.list);
     updateTotal(lr.total);
@@ -95,6 +98,17 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
+  _setTypeValue(typeValue) {
+    if (_typeValue != typeValue) {
+      setState(() {
+        _typeValue = typeValue;
+      });
+      if (_value != '') {
+        _searchWithType(_value, TypeEnum.values[typeValue], false);
+      }
+    }
+  }
+
   updateResults(list) {
     setState(() {
       _results.addAll(list);
@@ -121,7 +135,7 @@ class _SearchPageState extends State<SearchPage> {
     const double horizontalPadding = 15;
 
     goColor(id, color) {
-      final Widget to = appState.type == TypeEnum.movie 
+      final Widget to = TypeEnum.isMovie(TypeEnum.values[_typeValue])
         ? MoviePage(id: id, color: color) 
         : ShowPage(id: id, color: color);
       goTo(context, to);
@@ -160,7 +174,23 @@ class _SearchPageState extends State<SearchPage> {
               controller: _controller,
               search: _search,
             ),
-          )
+          ),
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(50), // here the desired height
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                children: [
+                  ChipList(
+                    value: _typeValue, 
+                    mandatory: true, 
+                    setState: _setTypeValue,
+                    list: TypeEnum.titles(), 
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
         body: _results.isNotEmpty 
         ? ResultList(
@@ -185,13 +215,13 @@ class _SearchPageState extends State<SearchPage> {
 class SearchField extends StatelessWidget {
   SearchField({
     required TextEditingController controller,
-    required Function(String, TypeEnum, bool) search,
+    required Function(String, bool) search,
   }) :
   _controller = controller,
   _search = search;
 
   final TextEditingController _controller;
-  final Function(String, TypeEnum, bool) _search;
+  final Function(String, bool) _search;
 
   @override
   Widget build(BuildContext context) {
@@ -203,14 +233,14 @@ class SearchField extends StatelessWidget {
       textInputAction: TextInputAction.search,
       autofocus: true,
       onSubmitted: (value) {
-        _search(value, appState.type, true);
+        _search(value, true);
       },
       style: TextStyle(
         color: Colors.white
       ),
       decoration: InputDecoration(
-        // filled: true,
-        fillColor: theme.unselected!,
+        filled: true,
+        fillColor: Color(0xff222222),
         suffixIcon: Icon(
           Icons.search,
           color: theme.unselected!,
@@ -243,7 +273,7 @@ class ResultList extends StatelessWidget {
     required int total,
     required double horizontalPadding,
     required ScrollController scrollController,
-    required Function(TypeEnum) load,
+    required Function load,
     required Function goTo,
   }) : 
   _results = results,
@@ -257,7 +287,7 @@ class ResultList extends StatelessWidget {
   final int _total;
   final double _horizontalPadding;
   final ScrollController _scrollController;
-  final Function(TypeEnum) _load;
+  final Function _load;
   final Function _goTo;
 
   @override
@@ -293,7 +323,7 @@ class ResultList extends StatelessWidget {
           )
         ),
         _total != _results.length
-        ? LoadButton(load: () => _load(TypeEnum.movie))
+        ? LoadButton(load: () => _load())
         : SizedBox(),
       ],
     );
@@ -305,7 +335,7 @@ class HistoryList extends StatelessWidget {
   HistoryList({
     required List history,
     required TextEditingController controller,
-    required Function(String, TypeEnum, bool) search,
+    required Function(String, bool) search,
     required Function(int) delete,
   }) : 
   _history = history,
@@ -315,7 +345,7 @@ class HistoryList extends StatelessWidget {
 
   final List _history;
   final TextEditingController _controller;
-  final Function(String, TypeEnum, bool) _search;
+  final Function(String, bool) _search;
   final Function(int) _delete;
 
   @override
@@ -337,7 +367,7 @@ class HistoryList extends StatelessWidget {
                 ),
               );
               FocusManager.instance.primaryFocus?.unfocus();
-              _search(_history[index], appState.type, false);
+              _search(_history[index], false);
             },
             leading: Icon(
               Icons.schedule,
