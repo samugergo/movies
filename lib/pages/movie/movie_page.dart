@@ -20,6 +20,7 @@ import 'package:movies/widgets/sections/cast_section.dart';
 import 'package:movies/widgets/sections/recommended_section.dart';
 import 'package:movies/widgets/sections/story_section.dart';
 import 'package:movies/widgets/states/common/image_colored_state.dart';
+import 'package:movies/widgets/youtube_player.dart';
 
 class MoviePage extends StatefulWidget {
 
