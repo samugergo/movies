@@ -80,8 +80,8 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
 
     _fetchProviders();
     _fetchCast();
-    _fetchRecommends();
-    _fetchSimilar();
+    // _fetchRecommends();
+    // _fetchSimilar();
 
     preloadImage(originalImageLink(m.cover));
     preloadImageWithColor(lowImageLink(m.cover));
@@ -93,8 +93,8 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
     return movie == null 
       || providers == null 
       || cast == null 
-      || recommendations == null
-      || similar == null
+      // || recommendations == null
+      // || similar == null
       || mainColor == null
       || imageLoading;
   }

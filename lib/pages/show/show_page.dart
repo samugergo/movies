@@ -79,7 +79,7 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
 
     _fetchProviders();
     _fetchCast();
-    _fetchRecommends();
+    // _fetchRecommends();
     _fetchSimilar();
 
     preloadImage(originalImageLink(s.cover));
@@ -92,7 +92,7 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
     return show == null 
       || providers == null 
       || cast == null 
-      || recommendations == null 
+      // || recommendations == null 
       || mainColor == null
       || imageLoading;
   }
