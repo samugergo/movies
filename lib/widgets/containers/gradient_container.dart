@@ -24,7 +24,7 @@ class GradientContainer extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          stops: [0.1, 1],
+          stops: [0.5, 1],
           colors: [
             theme.primary!, 
             theme.secondary!

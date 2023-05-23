@@ -8,6 +8,7 @@ import 'package:movies/state.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/buttons/load_button.dart';
+import 'package:movies/widgets/containers/gradient_container.dart';
 import 'package:movies/widgets/others/image_card.dart';
 import 'package:movies/widgets/sections/filter/filter_section.dart';
 import 'package:provider/provider.dart';
@@ -20,10 +21,12 @@ class CatalogPage extends StatelessWidget {
         statusBarColor: Colors.black
         .withOpacity(0.6),
       ),
-      child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: _GridView(),
+      child: GradientContainer(
+        child: Scaffold(
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: _GridView(),
+          ),
         ),
       ),
     );
@@ -53,7 +56,7 @@ class _GridViewState extends State<_GridView> {
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) { 
         return [
           SliverAppBar(
-            backgroundColor: theme.hidable,
+            backgroundColor: theme.primary,
             expandedHeight: 160,
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
@@ -68,10 +71,11 @@ class _GridViewState extends State<_GridView> {
           ),
           SliverAppBar(
             pinned: true,
-            backgroundColor: theme.hidable,
+            scrolledUnderElevation: 0,
+            backgroundColor: theme.primary,
             titleSpacing: 5,
             title: _SearchField(),
-          )
+          ),
         ];
       },
       body: ListView(
@@ -119,7 +123,7 @@ class _SearchField extends StatelessWidget {
       ),
       decoration: InputDecoration(
         filled: true,
-        fillColor: Color(0xff222222),
+        fillColor: Color(0xff353443),
         suffixIcon: Icon(
           Icons.search,
           color: theme.unselected!,
@@ -139,7 +143,7 @@ class _SearchField extends StatelessWidget {
         ),
         contentPadding: EdgeInsets.only(left: 15),
         constraints: BoxConstraints(
-          maxHeight: 50,
+          maxHeight: 40,
         )
       ),
     );

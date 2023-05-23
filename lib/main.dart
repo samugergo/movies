@@ -27,7 +27,7 @@ class _MainAppState extends State<MainApp> {
         theme: ThemeData(
           useMaterial3: true,
           scaffoldBackgroundColor: Colors.transparent,
-          bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.black87),
+          bottomSheetTheme: BottomSheetThemeData(backgroundColor: Color(0xff353443)),
           extensions: [
             AppColors.theme
           ],

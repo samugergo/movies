@@ -25,7 +25,9 @@ class AppColors extends ThemeExtension<AppColors> {
 
   static const theme = AppColors(
     // primary: Color(0xff03001C),
-    primary: Colors.black,
+    primary: Color(0xff292A37),
+
+    // primary: Colors.black,
     primaryLight: Colors.black,
     // primaryLight: Color.fromARGB(192, 3, 0, 28),
     secondary: Color(0xff0F1018),

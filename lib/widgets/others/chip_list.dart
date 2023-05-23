@@ -32,7 +32,7 @@ class ChipList<T> extends StatelessWidget {
             labelStyle: TextStyle(
               color: _value == _values[index] ? Colors.black : Colors.white,
             ),
-            backgroundColor: Colors.black87,
+            backgroundColor: Color(0xff353443),
             selectedColor: Colors.white,
             selected: _value == _values[index],
             onSelected: (bool selected) {

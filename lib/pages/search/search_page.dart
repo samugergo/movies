@@ -11,6 +11,7 @@ import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/buttons/load_button.dart';
+import 'package:movies/widgets/containers/gradient_container.dart';
 import 'package:movies/widgets/others/chip_list.dart';
 import 'package:movies/widgets/others/result_card.dart';
 import 'package:movies/widgets/sheets/search_sheet.dart';
@@ -155,25 +156,14 @@ class _SearchPageState extends State<SearchPage> {
       );
     }
 
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          stops: [0.5, 1],
-          colors: [
-            theme.primary!, 
-            theme.primaryLight!
-          ],
-        ),
-      ),
+    return GradientContainer(
+      color: Color(0xff353443),
       child: Scaffold(
-        extendBodyBehindAppBar: true,
         appBar: AppBar(
           elevation: 0,
           scrolledUnderElevation: 0,
           titleSpacing: 0,
-          backgroundColor: theme.hidable,
+          backgroundColor: Color(0xff353443),
           leading: IconButton(
             icon: Icon(Icons.arrow_back_rounded),
             onPressed: () {
@@ -298,6 +288,7 @@ class ResultList extends StatelessWidget {
       shrinkWrap: true,
       // controller: _scrollController,
       children: [
+        SizedBox(height: 20),
         Padding(
           padding: EdgeInsets.only(left: _horizontalPadding),
           child: Text(
