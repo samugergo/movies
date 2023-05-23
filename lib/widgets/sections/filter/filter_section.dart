@@ -20,8 +20,12 @@ class FilterSection extends StatelessWidget {
       );
     }
 
+    title() {
+      return '${appState.order.title} ${appState.type.title.toLowerCase()}';
+    }
+
     return Padding(
-      padding: const EdgeInsets.only(left: 8.0, top: 8.0),
+      padding: const EdgeInsets.only(left: 8.0),
       child: Row(
         children: [
           Icon(
@@ -31,7 +35,7 @@ class FilterSection extends StatelessWidget {
           ),
           SizedBox(width: 10),
           Text(
-            appState.order.title,
+            title(),
             style: TextStyle(
               color: theme.primaryTextColor,
               fontSize: 14,

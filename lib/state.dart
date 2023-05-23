@@ -49,7 +49,7 @@ class AppState extends ChangeNotifier {
       order: OrderEnum.topRated,
       callback: setUpcomingShows
     );
-    loadCatalog(TypeEnum.movie, OrderEnum.popular);
+    loadCatalog();
     // setCatalogList(popularMovies);
   }
 
@@ -107,12 +107,20 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
   setType(type) {
-    this.type = type;
-    notifyListeners();
+    if (this.type != type) {
+      this.type = type;
+      resetCatalog();
+      loadCatalog();
+      notifyListeners();
+    }
   }
   setOrder(order) {
-    this.order = order;
-    notifyListeners();
+    if (this.order != order) {
+      this.order = order;
+      resetCatalog();
+      loadCatalog();
+      notifyListeners();
+    }
   }
   setItemCount(itemCount) async {
     this.itemCount = itemCount;
@@ -178,28 +186,7 @@ class AppState extends ChangeNotifier {
     setItemCount(ic ?? 3);
   }
 
-  loadCatalog2(OrderEnum order) async {
-    loadMovies(
-      order: OrderEnum.popular,
-      callback: setCatalogList
-    );
-    // switch (order) {
-    //   case OrderEnum.popular: 
-    //     // TODO: Handle this case.
-    //     break;
-    //   case OrderEnum.topRated:
-    //     // TODO: Handle this case.
-    //     break;
-    //   case OrderEnum.upcoming:
-    //     // TODO: Handle this case.
-    //     break;
-    //   case OrderEnum.onTheAir:
-    //     // TODO: Handle this case.
-    //     break;
-    // }
-  }
-
-  loadCatalogMore() async {
+  loadCatalogMore() async {    
     loadMovies(
       order: OrderEnum.popular,
       callback: updateCatalog,
@@ -207,43 +194,14 @@ class AppState extends ChangeNotifier {
     );
   }
 
-  loadCatalog(TypeEnum type, OrderEnum order) async {
+  loadCatalog() async {
     final list = await fetch(catalogPage, type, order);
     updateCatalog(list);
   }
 
+  @protected
   resetCatalog() {
     catalogList.clear();
     catalogPage = 0;
-    notifyListeners();
   }
-
-  // loadByOrder(order) async {
-  //   moviePage = 0;
-  //   showPage = 0;
-  //   final m = await fetch(moviePage, TypeEnum.movie, order);
-  //   setMovies(m);
-  //   final s = await fetch(showPage, TypeEnum.show, order);
-  //   setShows(s);
-  // }
-  // loadByType(type) {
-  //   switch (type) {
-  //     case TypeEnum.movie: 
-  //       loadMovies(setMovies);
-  //       break;
-  //     case TypeEnum.show: 
-  //       loadShows(setShows);
-  //       break;
-  //   }
-  // }
-  // loadMore() async {
-  //   switch (type) {
-  //     case TypeEnum.movie: 
-  //       loadMovies(updateMovies);
-  //       break;
-  //     case TypeEnum.show: 
-  //       loadShows(updateShows);
-  //       break;
-  //   }
-  // }
 }

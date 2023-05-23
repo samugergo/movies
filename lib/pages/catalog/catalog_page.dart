@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:movies/enums/order_enum.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/pages/movie/movie_page.dart';
+import 'package:movies/pages/search/search_page.dart';
 import 'package:movies/pages/show/show_page.dart';
 import 'package:movies/state.dart';
 import 'package:movies/utils/common_util.dart';
@@ -10,15 +11,10 @@ import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/buttons/load_button.dart';
 import 'package:movies/widgets/others/chip_list.dart';
 import 'package:movies/widgets/others/image_card.dart';
+import 'package:movies/widgets/sections/filter/filter_section.dart';
 import 'package:provider/provider.dart';
 
 class CatalogPage extends StatelessWidget {
-  CatalogPage({
-    required this.scrollController
-  });
-
-  final ScrollController scrollController;
-
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion(
@@ -29,9 +25,7 @@ class CatalogPage extends StatelessWidget {
       child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: _GridView(
-            scrollController: scrollController,
-          ),
+          child: _GridView(),
         ),
       ),
     );
@@ -39,12 +33,6 @@ class CatalogPage extends StatelessWidget {
 }
 
 class _GridView extends StatefulWidget {
-  _GridView({
-    required this.scrollController
-  });
-
-  final ScrollController scrollController;
-
   @override
   State<_GridView> createState() => _GridViewState();
 }
@@ -70,31 +58,10 @@ class _GridViewState extends State<_GridView> {
     var order = OrderEnum.values[_orderValue];
 
     load(type, order) {
-      appState.loadCatalog(type, order);
-    }
-
-    setTypeValue(typeValue) {
-      if (typeValue != _typeValue) {
-        appState.resetCatalog();
-        setState(() {
-          _typeValue = typeValue;
-        });
-        load(TypeEnum.values[typeValue], OrderEnum.values[_orderValue]);
-      }
-    }
-
-    setOrderValue(orderValue) {
-      if (orderValue != _orderValue) {
-        appState.resetCatalog();
-        setState(() {
-          _orderValue = orderValue;
-        });
-        load(TypeEnum.values[_typeValue], OrderEnum.values[orderValue]);
-      }
+      appState.loadCatalog();
     }
 
     return NestedScrollView(
-      controller: widget.scrollController,
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) { 
         return [
           SliverAppBar(
@@ -114,35 +81,16 @@ class _GridViewState extends State<_GridView> {
           SliverAppBar(
             pinned: true,
             backgroundColor: theme.hidable,
-            titleSpacing: 0,
-            title: SizedBox(
-              height: 50,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  ChipList(
-                    value: _typeValue, 
-                    mandatory: true, 
-                    setState: setTypeValue,
-                    list: TypeEnum.titles(), 
-                  ),
-                  SizedBox(width: 10),
-                  ChipList(
-                    value: _orderValue, 
-                    mandatory: true, 
-                    setState: setOrderValue,
-                    list: OrderEnum.titles(), 
-                  ),
-                ],
-              ),
-            ),
+            titleSpacing: 5,
+            title: _SearchField(),
           )
         ];
       },
       body: ListView(
         children: [
+          FilterSection(),
           GridView.count(
-            padding: EdgeInsets.zero,
+            padding: EdgeInsets.symmetric(horizontal: 5),
             physics: BouncingScrollPhysics(),
             shrinkWrap: true,
             crossAxisCount: itemCount,
@@ -160,9 +108,51 @@ class _GridViewState extends State<_GridView> {
             )).toList(),
           ),
           SizedBox(height: 10),
-          LoadButton(load: () => load(type, order)),
+          LoadButton(load: appState.loadCatalog),
           SizedBox(height: 10)
         ],
+      ),
+    );
+  }
+}
+
+class _SearchField extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final appState = getAppState(context);
+    final theme = getAppTheme(context);
+
+    return TextField(
+      textInputAction: TextInputAction.search,
+      readOnly: true,
+      onTap: () => goTo(context, SearchPage()),
+      style: TextStyle(
+        color: Colors.white
+      ),
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Color(0xff222222),
+        suffixIcon: Icon(
+          Icons.search,
+          color: theme.unselected!,
+        ),
+        hintText: 'Keresés',
+        hintStyle: TextStyle(
+          color: Colors.grey[600],
+          fontWeight: FontWeight.normal
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.transparent),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.transparent),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        contentPadding: EdgeInsets.only(left: 15),
+        constraints: BoxConstraints(
+          maxHeight: 50,
+        )
       ),
     );
   }

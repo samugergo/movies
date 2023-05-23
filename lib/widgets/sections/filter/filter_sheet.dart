@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:movies/enums/grid_enum.dart';
 import 'package:movies/enums/order_enum.dart';
+import 'package:movies/enums/type_enum.dart';
 import 'package:movies/main.dart';
 import 'package:movies/state.dart';
 import 'package:movies/theme/app_colors.dart';
+import 'package:movies/widgets/others/chip_list.dart';
 import 'package:provider/provider.dart';
 
 class FilterSheet extends StatelessWidget {
@@ -29,12 +32,14 @@ class FilterSheet extends StatelessWidget {
     }
 
     groupTitle(String groupTitle) {
-      return Text(
-        groupTitle,
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: theme.primaryTextColor
+      return Center(
+        child: Text(
+          groupTitle,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: theme.primaryTextColor
+          ),
         ),
       );
     }
@@ -43,25 +48,34 @@ class FilterSheet extends StatelessWidget {
       height: 450,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-        child: Column(
+        child: ListView(
           children: [
-            groupTitle('Rendezés'),
+            Center(
+              child: ChipList(
+                value: appState.type, 
+                mandatory: true, 
+                titles: TypeEnum.titles(), 
+                values: TypeEnum.values,
+                setState: appState.setType
+              ),
+            ),
             SizedBox(height: 10),
+            groupTitle('Rendezés'),
             Column(
               children: [
-                ...OrderEnum.values.map((item) => 
+                ...OrderEnum.orders().map((item) => 
                   RadioListTile(
                     value: item, 
                     title: title(item.title),
                     activeColor: Colors.white,
                     groupValue: appState.order, 
-                    onChanged: (order) => onClick(order, context)
+                    onChanged: appState.setOrder
                   ),
                 ),
               ],
             ),
-            groupTitle('Elrendezés'),
             SizedBox(height: 10),
+            groupTitle('Elrendezés'),
             Column(
               children: [
                 ...GridEnum.values.map((item) => 
@@ -70,7 +84,7 @@ class FilterSheet extends StatelessWidget {
                     title: title(item.title),
                     activeColor: Colors.white,
                     groupValue: appState.itemCount, 
-                    onChanged: (ic) => appState.setItemCount(ic)
+                    onChanged: appState.setItemCount
                   ),
                 ),
               ],

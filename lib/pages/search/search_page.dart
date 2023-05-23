@@ -17,13 +17,6 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchPage extends StatefulWidget {
-  SearchPage({
-    required ScrollController scrollController
-  }) : 
-  _scrollController = scrollController;
-
-  final ScrollController _scrollController;
-
   @override
   State<SearchPage> createState() => _SearchPageState();
 }
@@ -162,111 +155,46 @@ class _SearchPageState extends State<SearchPage> {
         ),
       ),
       child: Scaffold(
-        // appBar: AppBar(
-        //   elevation: 0,
-        //   scrolledUnderElevation: 0,
-        //   titleSpacing: 0,
-        //   backgroundColor: theme.hidable,
-        //   automaticallyImplyLeading: false,          
-        //   title: Padding(
-        //     padding: const EdgeInsets.all(8.0),
-        //     child: SearchField(
-        //       controller: _controller,
-        //       search: _search,
-        //     ),
-        //   ),
-        //   bottom: PreferredSize(
-        //     preferredSize: Size.fromHeight(50), // here the desired height
-        //     child: Padding(
-        //       padding: const EdgeInsets.symmetric(horizontal: 10),
-        //       child: Row(
-        //         children: [
-        //           ChipList(
-        //             value: _typeValue, 
-        //             mandatory: true, 
-        //             setState: _setTypeValue,
-        //             list: TypeEnum.titles(), 
-        //           ),
-        //         ],
-        //       ),
-        //     ),
-        //   ),
-        // ),
-        // body: _results.isNotEmpty 
-        // ? ResultList(
-        //   results: _results, 
-        //   total: _total, 
-        //   load: loadMore, 
-        //   goTo: go,
-        //   horizontalPadding: horizontalPadding, 
-        //   scrollController: widget._scrollController, 
-        // )
-        // : HistoryList(
-        //   history: _history, 
-        //   controller: _controller, 
-        //   search: _search, 
-        //   delete: _deleteFromHistory
-        // )
-        body: NestedScrollView(     
-          controller: widget._scrollController,     
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) { 
-            return [
-                SliverAppBar(
-                  backgroundColor: theme.hidable,
-                  expandedHeight: 160,
-                  flexibleSpace: FlexibleSpaceBar(
-                    centerTitle: true,
-                    titlePadding: EdgeInsets.only(bottom: 50),
-                    title: Text(
-                      'Keresés',
-                      style: TextStyle(
-                        color: Colors.white
-                      ),
-                    ),
-                  ),
-                ),
-                SliverAppBar(
-                  backgroundColor: theme.hidable,
-                  titleSpacing: 10,                  
-                  scrolledUnderElevation: 0,
-                  elevation: 0,
-                  pinned: true,
-                  floating: true,
-                  snap: true,
-                  expandedHeight: 100,
-                  title: SearchField(
-                    controller: _controller, 
-                    search: _search
-                  ),
-                  flexibleSpace: FlexibleSpaceBar(
-                    titlePadding: EdgeInsets.zero,
-                    expandedTitleScale: 1,
-                    centerTitle: true,
-                    title: ChipList(
-                      value: _typeValue, 
-                      mandatory: true, 
-                      setState: _setTypeValue,
-                      list: TypeEnum.titles(), 
-                    ),
-                  ),
-                )
-            ];
-          },
-          body: _results.isNotEmpty 
-          ? ResultList(
-            results: _results, 
-            total: _total, 
-            load: loadMore, 
-            goTo: go,
-            horizontalPadding: horizontalPadding, 
-            scrollController: widget._scrollController, 
-          )
-          : HistoryList(
-            history: _history, 
-            controller: _controller, 
-            search: _search, 
-            delete: _deleteFromHistory
-          )
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          titleSpacing: 0,
+          backgroundColor: theme.hidable,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_rounded),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            color: Colors.white,
+          ),       
+          title: SearchField(
+            controller: _controller,
+            search: _search,
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.settings,
+              color: Colors.white,),
+              onPressed: () {
+              },
+            ),
+            SizedBox(width: 10),
+          ],
+        ),
+        body: _results.isNotEmpty 
+        ? ResultList(
+          results: _results, 
+          total: _total, 
+          load: loadMore, 
+          goTo: go,
+          horizontalPadding: horizontalPadding,
+        )
+        : HistoryList(
+          history: _history, 
+          controller: _controller, 
+          search: _search, 
+          delete: _deleteFromHistory
         )
       )
     );
@@ -301,12 +229,12 @@ class SearchField extends StatelessWidget {
       ),
       decoration: InputDecoration(
         filled: true,
-        fillColor: Color(0xff222222),
-        suffixIcon: Icon(
+        fillColor: Colors.transparent,
+        prefixIcon: Icon(
           Icons.search,
           color: theme.unselected!,
         ),
-        hintText: '${appState.type.title} keresése',
+        hintText: 'Keresés',
         hintStyle: TextStyle(
           color: Colors.grey[600],
           fontWeight: FontWeight.normal
@@ -333,27 +261,25 @@ class ResultList extends StatelessWidget {
     required List results,
     required int total,
     required double horizontalPadding,
-    required ScrollController scrollController,
     required Function load,
     required Function goTo,
   }) : 
   _results = results,
   _total = total,
   _horizontalPadding = horizontalPadding,
-  _scrollController = scrollController,
   _load = load,
   _goTo = goTo;
 
   final List _results;
   final int _total;
   final double _horizontalPadding;
-  final ScrollController _scrollController;
   final Function _load;
   final Function _goTo;
 
   @override
   Widget build(BuildContext context) {
     return ListView(
+      shrinkWrap: true,
       // controller: _scrollController,
       children: [
         Padding(

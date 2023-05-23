@@ -30,29 +30,6 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
-  final ScrollController _scrollController = ScrollController();
-  int _currentIndex = 0;
-
-  Widget _currentPage() {
-    switch (_currentIndex) {
-      case 1: return CatalogPage(
-        scrollController: _scrollController,
-      ); 
-      case 2: return SearchPage(
-        scrollController: _scrollController,
-      );
-      default: return HomePage(
-        scrollController: _scrollController,
-      );
-    }
-  }
-
-  void _setCurrent(int currentIndex) {
-    setState(() {
-      _currentIndex = currentIndex; 
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -61,6 +38,7 @@ class _MainAppState extends State<MainApp> {
         theme: ThemeData(
           useMaterial3: true,
           scaffoldBackgroundColor: Colors.transparent,
+          bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.black87),
           extensions: [
             AppColors.theme
           ],
@@ -68,61 +46,9 @@ class _MainAppState extends State<MainApp> {
         home: Scaffold(
           extendBodyBehindAppBar: true,
           extendBody: true,
-          body: _currentPage(),
-          bottomNavigationBar: _BotttomNavigationBar(
-            scrollController: _scrollController,
-            currentIndex: _currentIndex,
-            setCurrent: _setCurrent,
-          ),
+          body: CatalogPage(),
         ),
       ),
-    );
-  }
-}
-
-class _BotttomNavigationBar extends StatelessWidget {
-  const _BotttomNavigationBar({
-    super.key,
-    required ScrollController scrollController,
-    required int currentIndex,
-    required Function(int) setCurrent
-  }) : 
-  _scrollController = scrollController, 
-  _currentIndex = currentIndex,
-  _setCurrent = setCurrent;
-
-  final ScrollController _scrollController;
-  final int _currentIndex;
-  final Function(int) _setCurrent;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = getAppTheme(context);
-
-    return Wrap(
-      children: [
-        BottomNavigationBar(
-          backgroundColor: theme.hidable,
-          unselectedItemColor: theme.unselected,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.house),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.film),
-              label: 'Catalog',
-            ),
-            BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
-              label: 'Search',
-            ),
-          ],
-          currentIndex: _currentIndex,
-          selectedItemColor: theme.selected,
-          onTap: _setCurrent
-        ),
-      ],
     );
   }
 }

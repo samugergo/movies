@@ -1,38 +1,42 @@
 import 'package:flutter/material.dart';
 
-class ChipList extends StatelessWidget {
+class ChipList<T> extends StatelessWidget {
   ChipList({
-    required int value,
+    required T value,
+    required List<T> values,
     required bool mandatory,
-    required List<String> list,
-    required Function(int) setState,
+    required List<String> titles,
+    required Function(T) setState,
   }) : 
   _value = value,
-  _list = list,
+  _values = values,
+  _titles = titles,
   _mandatory = mandatory, 
   _setState = setState;
 
-  final int _value;
+  final T _value;
+  final List<T> _values;
   final bool _mandatory;
-  final List<String> _list;
-  final Function(int) _setState;
+  final List<String> _titles;
+  final Function(T) _setState;
 
   @override
   Widget build(BuildContext context) {
     return Wrap(
       spacing: 5.0,
       children: List<Widget>.generate(
-        _list.length,
+        _titles.length,
         (int index) {
           return ChoiceChip(
-            label: Text(_list[index]),
+            label: Text(_titles[index]),
             labelStyle: TextStyle(
-              color: _value == index ? Colors.black : Colors.white,
+              color: _value == _values[index] ? Colors.black : Colors.white,
             ),
             backgroundColor: Colors.black87,
-            selected: _value == index,
+            selectedColor: Colors.white,
+            selected: _value == _values[index],
             onSelected: (bool selected) {
-              _setState(index);
+              _setState(_values[index]);
             },
           );
         },

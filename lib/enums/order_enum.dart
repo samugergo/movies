@@ -17,4 +17,8 @@ enum OrderEnum {
   static List<String> titles() {
     return [OrderEnum.popular, OrderEnum.topRated].map((e) => e.title).toList();
   }
+
+  static List<OrderEnum> orders() {
+    return [OrderEnum.popular, OrderEnum.topRated];
+  }
 }

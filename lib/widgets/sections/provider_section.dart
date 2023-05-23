@@ -16,22 +16,31 @@ class ProviderSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Section(
       title: 'Elérhetőség',
-      children: [
+      children: _providers!.available.isNotEmpty 
+      ? [
         SizedBox(
           height: 73,
           child: ListView(
             scrollDirection: Axis.horizontal,
-            children: _providers!.available.isNotEmpty 
-            ? _providers!.available.map((provider) => 
+            children: _providers!.available.map((provider) => 
               _ProviderSection(
                 providerEnum: provider, 
                 providers: _providers!
               ),
             ).toList()
-            : [_NotAvailable()],
           ),
         )
       ]
+      : [
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Expanded(
+              child: _NotAvailable()
+            ),
+          ],
+        )
+      ],
     );
   }
 }
@@ -123,23 +132,26 @@ class _Provider extends StatelessWidget {
 class _NotAvailable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.zero,
-      elevation: 0,
-      color: Colors.white12,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Nem elérhető!',
-              style: TextStyle(
-                color: Colors.white,
-                fontStyle: FontStyle.italic
+    return SizedBox(
+      height: 73,
+      child: Card(
+        margin: EdgeInsets.zero,
+        elevation: 0,
+        color: Colors.white12,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Nem elérhető!',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontStyle: FontStyle.italic
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
