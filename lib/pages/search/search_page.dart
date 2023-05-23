@@ -13,6 +13,7 @@ import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/buttons/load_button.dart';
 import 'package:movies/widgets/others/chip_list.dart';
 import 'package:movies/widgets/others/result_card.dart';
+import 'package:movies/widgets/sheets/search_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,13 +27,26 @@ class _SearchPageState extends State<SearchPage> {
   int _page = 0;
   int _total = 0;
   int _pages = 0;
-  int _typeValue = 0;
   String _value = "";
   List<String> _history = [];
   final TextEditingController _controller = TextEditingController();
 
+  var _typeValue = TypeEnum.movie;
+
+  _setTypeValue(typeValue) {
+    if (_typeValue != typeValue) {
+      setState(() {
+        _typeValue = typeValue;
+      });
+      if (_value != '') {
+        _searchWithType(_value, typeValue, false);
+      }
+    }
+    Navigator.pop(context);
+  }
+
   _search(value, saveHistory) async {
-    _searchWithType(value, TypeEnum.values[_typeValue], saveHistory);
+    _searchWithType(value, _typeValue, saveHistory);
   }
 
   _searchWithType(value, type, saveHistory) async {
@@ -51,7 +65,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   loadMore() async {
-    ListResponse lr = await search(_page, TypeEnum.values[_typeValue], _value);
+    ListResponse lr = await search(_page, _typeValue, _value);
 
     updateResults(lr.list);
     updateTotal(lr.total);
@@ -91,17 +105,6 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
-  _setTypeValue(typeValue) {
-    if (_typeValue != typeValue) {
-      setState(() {
-        _typeValue = typeValue;
-      });
-      if (_value != '') {
-        _searchWithType(_value, TypeEnum.values[typeValue], false);
-      }
-    }
-  }
-
   updateResults(list) {
     setState(() {
       _results.addAll(list);
@@ -129,7 +132,7 @@ class _SearchPageState extends State<SearchPage> {
     ScrollController sc = ScrollController();
 
     goColor(id, color) {
-      final Widget to = TypeEnum.isMovie(TypeEnum.values[_typeValue])
+      final Widget to = TypeEnum.isMovie(_typeValue)
         ? MoviePage(id: id, color: color) 
         : ShowPage(id: id, color: color);
       goTo(context, to);
@@ -141,6 +144,16 @@ class _SearchPageState extends State<SearchPage> {
         (color) => goColor(model.id, color)
       );
     } 
+
+    show() {
+      showModalBottomSheet<void>(
+        context: context,
+        builder: (context) => SearchSheet(
+          type: _typeValue,
+          function: _setTypeValue,
+        ),
+      );
+    }
 
     return Container(
       decoration: BoxDecoration(
@@ -171,13 +184,13 @@ class _SearchPageState extends State<SearchPage> {
           title: SearchField(
             controller: _controller,
             search: _search,
+            type: _typeValue,
           ),
           actions: [
             IconButton(
               icon: const Icon(Icons.settings,
               color: Colors.white,),
-              onPressed: () {
-              },
+              onPressed: show
             ),
             SizedBox(width: 10),
           ],
@@ -205,12 +218,15 @@ class SearchField extends StatelessWidget {
   SearchField({
     required TextEditingController controller,
     required Function(String, bool) search,
+    required TypeEnum type,
   }) :
   _controller = controller,
-  _search = search;
+  _search = search,
+  _type = type;
 
   final TextEditingController _controller;
   final Function(String, bool) _search;
+  final TypeEnum _type;
 
   @override
   Widget build(BuildContext context) {
@@ -234,7 +250,7 @@ class SearchField extends StatelessWidget {
           Icons.search,
           color: theme.unselected!,
         ),
-        hintText: 'Keresés',
+        hintText: '${_type.title} keresése',
         hintStyle: TextStyle(
           color: Colors.grey[600],
           fontWeight: FontWeight.normal
