@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:movies/enums/order_enum.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/search/search_page.dart';
@@ -9,7 +8,6 @@ import 'package:movies/state.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/buttons/load_button.dart';
-import 'package:movies/widgets/others/chip_list.dart';
 import 'package:movies/widgets/others/image_card.dart';
 import 'package:movies/widgets/sections/filter/filter_section.dart';
 import 'package:provider/provider.dart';
@@ -37,10 +35,7 @@ class _GridView extends StatefulWidget {
   State<_GridView> createState() => _GridViewState();
 }
 
-class _GridViewState extends State<_GridView> {
-  int _typeValue = 0;
-  int _orderValue = 0;  
-
+class _GridViewState extends State<_GridView> { 
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
@@ -53,13 +48,6 @@ class _GridViewState extends State<_GridView> {
     const mainSpacing = 10.0;
     final itemWidth = width/itemCount - itemCount * crossSpacing;
     final itemHeight = itemWidth*1.5;
-
-    var type = TypeEnum.values[_typeValue];
-    var order = OrderEnum.values[_orderValue];
-
-    load(type, order) {
-      appState.loadCatalog();
-    }
 
     return NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) { 
