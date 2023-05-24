@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies/theme/app_colors.dart';
+import 'package:movies/utils/common_util.dart';
 
 class MyImageAppBar extends SliverPersistentHeaderDelegate {
   MyImageAppBar({
@@ -21,7 +22,7 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    final theme = Theme.of(context).extension<AppColors>()!;
+    final theme = getAppTheme(context);
 
     return LayoutBuilder(
       builder: (BuildContext layoutCtx, BoxConstraints constraints) { 
@@ -56,7 +57,7 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
             left: horizontalPadding,
             right: horizontalPadding,
             child: Opacity(
-              opacity: opacity,
+              opacity: 1 - (shrinkOffset / maxExtent*2).clamp(0, 1.0),
               child: child,
             )
           )
@@ -88,7 +89,7 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
               ),
               Flexible(
                 child: Opacity(
-                  opacity: onlyTitle ? 1 : shrinkOffset / maxExtent,
+                  opacity: onlyTitle ? 1 : (shrinkOffset / maxExtent*2).clamp(0, 1.0),
                   child: _buildTitle(),
                 ),
               ),

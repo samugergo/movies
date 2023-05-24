@@ -7,6 +7,7 @@ import 'package:movies/pages/show/show_page.dart';
 import 'package:movies/state.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
+import 'package:movies/widgets/appbars/main_app_bar.dart';
 import 'package:movies/widgets/buttons/load_button.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
 import 'package:movies/widgets/others/image_card.dart';
@@ -58,19 +59,9 @@ class _GridViewState extends State<_GridView> {
     return NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) { 
         return [
-          SliverAppBar(
-            backgroundColor: theme.primary,
-            expandedHeight: 160,
-            flexibleSpace: FlexibleSpaceBar(
-              centerTitle: true,
-              titlePadding: EdgeInsets.only(bottom: 50),
-              title: Text(
-                locale.catalog,
-                style: TextStyle(
-                  color: Colors.white
-                ),
-              ),
-            ),
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: MainAppBar(),
           ),
           SliverAppBar(
             pinned: true,
