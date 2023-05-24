@@ -109,11 +109,11 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
     const double horizontalPadding = 15;
 
     return XAnimatedContainer(
-      color: widget.color, 
+      color: theme.primary!, 
       statusbar: isLoading() ? theme.primary : mainColor,
       duration: 300, 
       child: isLoading()
-      ? ColorLoader(color: widget.color)
+      ? ColorLoader(color: theme.primary!)
       : Container(
         color: mainColor,
         child: SafeArea(

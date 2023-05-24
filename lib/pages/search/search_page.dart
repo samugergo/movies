@@ -128,24 +128,8 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
     final theme = Theme.of(context).extension<AppColors>()!;
     const double horizontalPadding = 15;
-    ScrollController sc = ScrollController();
-
-    goColor(id, color) {
-      final Widget to = TypeEnum.isMovie(_typeValue)
-        ? MoviePage(id: id, color: color) 
-        : ShowPage(id: id, color: color);
-      goTo(context, to);
-    }
-
-    go(model){
-      getColorFromImage(
-        lowImageLink(model.cover), 
-        (color) => goColor(model.id, color)
-      );
-    } 
 
     show() {
       showModalBottomSheet<void>(
@@ -158,7 +142,7 @@ class _SearchPageState extends State<SearchPage> {
     }
 
     return GradientContainer(
-      color: Color(0xff353443),
+      color: theme.primaryLight,
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -191,7 +175,12 @@ class _SearchPageState extends State<SearchPage> {
           results: _results, 
           total: _total, 
           load: loadMore, 
-          goTo: go,
+          goTo: (model) {
+            final Widget to = TypeEnum.isMovie(model.type)
+              ? MoviePage(id: model.id, color: Colors.black) 
+              : ShowPage(id: model.id, color: Colors.black);
+            goTo(context, to);
+          },
           horizontalPadding: horizontalPadding,
         )
         : HistoryList(
