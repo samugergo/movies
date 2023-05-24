@@ -15,6 +15,8 @@ class CollectionSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = getAppLocale(context);
+
     goColor(id, color) {
       final Widget to = CollectionPage(id: id, color: color);
       goTo(context, to);
@@ -29,7 +31,7 @@ class CollectionSection extends StatelessWidget {
 
     return model != null && model!.cover != ''
     ? Section(
-      title: 'Gyűjtemény', 
+      title: locale.collection, 
       children: [
         Stack(
           children: [
@@ -82,7 +84,7 @@ class CollectionSection extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    'Gyűjtemény megtekintése',
+                    locale.viewCollection,
                     style: TextStyle(
                       fontSize: 16,
                     ),

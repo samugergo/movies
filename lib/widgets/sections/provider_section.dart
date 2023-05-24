@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies/enums/provider_enum.dart';
 import 'package:movies/models/common/providers_model.dart';
+import 'package:movies/utils/common_util.dart';
 import 'package:movies/widgets/others/image.dart';
 import 'package:movies/widgets/sections/common/section.dart';
 
@@ -14,8 +15,10 @@ class ProviderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = getAppLocale(context);
+
     return Section(
-      title: 'Elérhetőség',
+      title: locale.availability,
       children: _providers!.available.isNotEmpty 
       ? [
         SizedBox(
@@ -94,10 +97,23 @@ class _ProviderTypeTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = getAppLocale(context);
+
+    getProviderLocale() {
+      switch (_providerEnum) {
+        case ProviderEnum.rent:
+          return locale.rent;
+        case ProviderEnum.buy:
+          return locale.buy;
+        case ProviderEnum.streaming:
+          return locale.streaming;
+      }
+    }
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       child: Text(
-        _providerEnum.title,
+        getProviderLocale(),
         style: TextStyle(
           color: Colors.white,
           fontSize: 11,
@@ -132,6 +148,8 @@ class _Provider extends StatelessWidget {
 class _NotAvailable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final locale = getAppLocale(context);
+
     return SizedBox(
       height: 73,
       child: Card(
@@ -144,7 +162,7 @@ class _NotAvailable extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Nem elérhető!',
+                locale.notAvailable,
                 style: TextStyle(
                   color: Colors.white,
                   fontStyle: FontStyle.italic

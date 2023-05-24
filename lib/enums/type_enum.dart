@@ -1,13 +1,15 @@
 enum TypeEnum {
-  movie(title: 'Filmek', value: 'movie'),
-  show(title: 'Sorozatok', value: 'tv');
+  movie(title: 'Filmek', value: 'movie', localeKey: 'movies'),
+  show(title: 'Sorozatok', value: 'tv', localeKey: 'shows');
 
   final String title; 
   final String value;
+  final String localeKey;
 
   const TypeEnum({
     required this.title,
     required this.value,
+    required this.localeKey,
   });
 
   static bool isMovie(TypeEnum value) {

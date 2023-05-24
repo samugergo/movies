@@ -9,6 +9,7 @@ import 'package:movies/state.dart';
 import 'package:movies/theme/app_colors.dart';
 import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
+import 'package:movies/utils/locale_util.dart';
 import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/buttons/load_button.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
@@ -221,6 +222,12 @@ class SearchField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = getAppTheme(context);
+    final locale = getAppLocale(context);
+
+    hint() {
+      final type = getTypeLocale(_type, locale).toLowerCase();
+      return locale.searchType(type);
+    }
 
     return TextField(
       controller: _controller,
@@ -239,7 +246,7 @@ class SearchField extends StatelessWidget {
           Icons.search,
           color: theme.unselected!,
         ),
-        hintText: '${_type.title} keresése',
+        hintText: hint(),
         hintStyle: TextStyle(
           color: Colors.grey[600],
           fontWeight: FontWeight.normal
@@ -283,6 +290,8 @@ class ResultList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = getAppLocale(context);
+
     return ListView(
       shrinkWrap: true,
       // controller: _scrollController,
@@ -291,7 +300,7 @@ class ResultList extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(left: _horizontalPadding),
           child: Text(
-            'Találatok száma: $_total',
+            locale.results(_total),
             style: TextStyle(
               color: Colors.white,
               fontStyle: FontStyle.italic

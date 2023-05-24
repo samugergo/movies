@@ -12,6 +12,7 @@ import 'package:movies/widgets/containers/gradient_container.dart';
 import 'package:movies/widgets/others/image_card.dart';
 import 'package:movies/widgets/sections/filter/filter_section.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CatalogPage extends StatelessWidget {
   @override
@@ -41,8 +42,10 @@ class _GridView extends StatefulWidget {
 class _GridViewState extends State<_GridView> { 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
+    final appState = getAppState(context);
     final theme = getAppTheme(context);
+    final locale = getAppLocale(context);
+
     final itemCount = appState.itemCount;
     final list = appState.catalogList;
     
@@ -62,7 +65,7 @@ class _GridViewState extends State<_GridView> {
               centerTitle: true,
               titlePadding: EdgeInsets.only(bottom: 50),
               title: Text(
-                'Katalógus',
+                locale.catalog,
                 style: TextStyle(
                   color: Colors.white
                 ),
@@ -112,6 +115,7 @@ class _SearchField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = getAppTheme(context);
+    final locale = getAppLocale(context);
 
     return TextField(
       textInputAction: TextInputAction.search,
@@ -127,7 +131,7 @@ class _SearchField extends StatelessWidget {
           Icons.search,
           color: theme.unselected!,
         ),
-        hintText: 'Keresés',
+        hintText: locale.search,
         hintStyle: TextStyle(
           color: Colors.grey[600],
           fontWeight: FontWeight.normal

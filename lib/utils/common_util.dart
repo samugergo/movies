@@ -5,6 +5,7 @@ import 'package:movies/main.dart';
 import 'package:movies/state.dart';
 import 'package:movies/theme/app_colors.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 getAppState(BuildContext context) {
   return context.watch<AppState>();
@@ -12,6 +13,10 @@ getAppState(BuildContext context) {
 
 AppColors getAppTheme(BuildContext context) {
   return Theme.of(context).extension<AppColors>()!;
+}
+
+AppLocalizations getAppLocale(BuildContext context) {
+  return AppLocalizations.of(context);
 }
 
 chunkList(list) {
@@ -81,8 +86,8 @@ dateFormat(date) {
   return '';
 }
 
-timeFormat(int minutes) {
+timeFormat(int minutes, AppLocalizations locale) {
   final hours = minutes ~/ 60;
   final mins = minutes % 60;
-  return hours > 0 ? '$hours ó $mins p' : '$mins p';
+  return hours > 0 ? locale.hourMin(hours, mins) : locale.mins(mins);
 }

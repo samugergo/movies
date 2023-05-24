@@ -1,17 +1,19 @@
 enum OrderEnum {
 
-  popular(title: 'Legnépszerűbb', value: 'popular'),
-  topRated(title: 'Legjobbra értékelt', value: 'top_rated'),
-  upcoming(title: 'Közeljővőbeli', value: 'upcoming'),
-  onTheAir(title: 'Legnépszerűbb', value: 'airing_today'),
+  popular(title: 'Legnépszerűbb', value: 'popular', localeKey: 'popular'),
+  topRated(title: 'Legjobbra értékelt', value: 'top_rated', localeKey: 'topRated'),
+  upcoming(title: 'Közeljővőbeli', value: 'upcoming', localeKey: 'upcoming'),
+  onTheAir(title: 'Legnépszerűbb', value: 'airing_today', localeKey: ''),
   ;
 
   final String title;
   final String value;
+  final String localeKey;
 
   const OrderEnum({
     required this.title,
-    required this.value
+    required this.value,
+    required this.localeKey
   });
 
   static List<String> titles() {

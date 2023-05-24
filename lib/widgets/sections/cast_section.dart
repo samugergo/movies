@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies/models/common/cast_model.dart';
 import 'package:movies/pages/common/person_page.dart';
+import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/others/image.dart';
 import 'package:movies/widgets/sections/common/section.dart';
@@ -24,6 +25,8 @@ class CastSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = getAppLocale(context);
+
     final double width = MediaQuery.of(context).size.width;
     const crossSpacing = 10.0;
     const mainSpacing = 2.0;
@@ -33,7 +36,7 @@ class CastSection extends StatelessWidget {
     return _cast.isEmpty 
     ? SizedBox()
     : Section(
-      title: 'Szereplők', 
+      title: locale.cast, 
       // children: [
       //   SizedBox(
       //     height: 100,

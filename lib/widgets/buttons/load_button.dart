@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:movies/utils/common_util.dart';
 
 class LoadButton extends StatelessWidget {
 
@@ -12,6 +13,8 @@ class LoadButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = getAppLocale(context); 
+
     return Padding(
       padding: const EdgeInsets.only(left: 14, right: 14, bottom: 14),
       child: ElevatedButton.icon(
@@ -21,7 +24,7 @@ class LoadButton extends StatelessWidget {
           foregroundColor: MaterialStateProperty.all(Colors.white),
         ),
         icon: FaIcon(FontAwesomeIcons.arrowRotateRight),
-        label: Text('Több betöltése'),
+        label: Text(locale.loadMore),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:movies/utils/common_util.dart';
 
 class TrailerButton extends StatelessWidget {
   TrailerButton({
@@ -11,8 +12,10 @@ class TrailerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = getAppLocale(context);
+
     const icon = FontAwesomeIcons.play;
-    const text = 'Előzetes megtekintése';
+    final text = locale.watchTrailer;
 
     return ElevatedButton.icon(
       onPressed: () => _onClick(),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies/utils/common_util.dart';
 import 'package:movies/widgets/sections/common/section.dart';
 
 class SeasonSection extends StatelessWidget {
@@ -10,10 +11,12 @@ class SeasonSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = getAppLocale(context);
+
     return list.isEmpty 
     ? SizedBox()
     : Section(
-      title: 'Évadok',
+      title: locale.seasons,
       children: [
         SizedBox(
           height: 180,
@@ -63,7 +66,7 @@ class SeasonSection extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                             child: Text(
-                              '${s.seasonNumber}. évad',
+                              locale.season(s.seasonNumber),
                               style: TextStyle(
                                 color: Colors.white,
                               ),

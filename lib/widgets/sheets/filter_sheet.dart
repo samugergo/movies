@@ -4,6 +4,8 @@ import 'package:movies/enums/order_enum.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/state.dart';
 import 'package:movies/theme/app_colors.dart';
+import 'package:movies/utils/common_util.dart';
+import 'package:movies/utils/locale_util.dart';
 import 'package:movies/widgets/others/chip_list.dart';
 import 'package:provider/provider.dart';
 
@@ -11,8 +13,9 @@ class FilterSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = context.watch<AppState>();
-    final theme = Theme.of(context).extension<AppColors>()!;
+    final appState = getAppState(context);
+    final theme = getAppTheme(context);
+    final locale = getAppLocale(context);
 
     title(String title) {
       return Text(
@@ -36,6 +39,10 @@ class FilterSheet extends StatelessWidget {
       );
     }
 
+    titles() {
+      return TypeEnum.values.map((type) => getTypeLocale(type, locale)).toList();
+    }
+
     return SizedBox(
       height: 450,
       child: Padding(
@@ -46,19 +53,19 @@ class FilterSheet extends StatelessWidget {
               child: ChipList(
                 value: appState.type, 
                 mandatory: true, 
-                titles: TypeEnum.titles(), 
+                titles: titles(), 
                 values: TypeEnum.values,
                 setState: appState.setType
               ),
             ),
             SizedBox(height: 10),
-            groupTitle('Rendezés'),
+            groupTitle(locale.order),
             Column(
               children: [
                 ...OrderEnum.orders().map((item) => 
                   RadioListTile(
                     value: item, 
-                    title: title(item.title),
+                    title: title(getOrderLocale(item, locale)),
                     activeColor: Colors.white,
                     groupValue: appState.order, 
                     onChanged: appState.setOrder
@@ -67,7 +74,7 @@ class FilterSheet extends StatelessWidget {
               ],
             ),
             SizedBox(height: 10),
-            groupTitle('Elrendezés'),
+            groupTitle(locale.layout),
             Column(
               children: [
                 ...GridEnum.values.map((item) => 

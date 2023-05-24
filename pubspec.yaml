@@ -14,7 +14,7 @@ dependencies:
   http: ^0.13.5
   hidable: ^1.0.3
   flutter_dotenv: ^5.0.2
-  intl: ^0.18.0
+  intl: any
   palette_generator: ^0.3.3+2
   loading_animation_widget: ^1.2.0+4
   animations: ^2.0.7
@@ -30,6 +30,8 @@ dependencies:
   cached_network_image: ^3.2.3
   youtube_player_flutter: ^8.1.2
   chip_list: ^2.4.3+8
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
@@ -38,6 +40,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
   assets:
     - assets/images/
     - .env
