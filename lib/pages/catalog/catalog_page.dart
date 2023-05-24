@@ -111,7 +111,6 @@ class _GridViewState extends State<_GridView> {
 class _SearchField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final appState = getAppState(context);
     final theme = getAppTheme(context);
 
     return TextField(
@@ -123,7 +122,7 @@ class _SearchField extends StatelessWidget {
       ),
       decoration: InputDecoration(
         filled: true,
-        fillColor: Color(0xff353443),
+        fillColor: theme.primaryLight,
         suffixIcon: Icon(
           Icons.search,
           color: theme.unselected!,

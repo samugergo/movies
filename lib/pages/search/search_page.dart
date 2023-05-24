@@ -163,7 +163,7 @@ class _SearchPageState extends State<SearchPage> {
           elevation: 0,
           scrolledUnderElevation: 0,
           titleSpacing: 0,
-          backgroundColor: Color(0xff353443),
+          backgroundColor: theme.primaryLight,
           leading: IconButton(
             icon: Icon(Icons.arrow_back_rounded),
             onPressed: () {
@@ -220,7 +220,6 @@ class SearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = getAppState(context);
     final theme = getAppTheme(context);
 
     return TextField(

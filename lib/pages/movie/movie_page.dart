@@ -107,7 +107,7 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
     return XAnimatedContainer(
       duration: 300,
       color: theme.primary!,
-      statusbar: mainColor,
+      statusbar: isLoading() ? theme.primary : mainColor,
       child: isLoading() 
       ? ColorLoader(color: theme.primary!)
       : Container(

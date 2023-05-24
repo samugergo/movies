@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movies/pages/catalog/catalog_page.dart';
 import 'package:movies/state.dart';
 import 'package:movies/theme/app_colors.dart';
+import 'package:movies/utils/common_util.dart';
 import 'package:provider/provider.dart'; 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 

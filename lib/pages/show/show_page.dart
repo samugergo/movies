@@ -105,11 +105,12 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = getAppTheme(context);
     const double horizontalPadding = 15;
 
     return XAnimatedContainer(
       color: widget.color, 
-      statusbar: mainColor,
+      statusbar: isLoading() ? theme.primary : mainColor,
       duration: 300, 
       child: isLoading()
       ? ColorLoader(color: widget.color)
