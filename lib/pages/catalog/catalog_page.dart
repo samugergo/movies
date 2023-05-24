@@ -103,7 +103,7 @@ class _GridViewState extends State<_GridView> {
             )).toList(),
           ),
           SizedBox(height: 10),
-          LoadButton(load: appState.loadCatalog),
+          if (list.isNotEmpty) LoadButton(load: appState.loadCatalog),
           SizedBox(height: 10)
         ],
       ),

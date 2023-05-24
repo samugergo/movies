@@ -32,7 +32,7 @@ class _MainAppState extends State<MainApp> {
         theme: ThemeData(
           useMaterial3: true,
           scaffoldBackgroundColor: Colors.transparent,
-          bottomSheetTheme: BottomSheetThemeData(backgroundColor: Color(0xff353443)),
+          bottomSheetTheme: BottomSheetThemeData(backgroundColor: Color(0xff343643)),
           extensions: [
             AppColors.theme
           ],
@@ -48,8 +48,6 @@ class _MainAppState extends State<MainApp> {
           Locale('hu'), // Spanish
         ],
         home: Scaffold(
-          extendBodyBehindAppBar: true,
-          extendBody: true,
           body: CatalogPage(),
         ),
       ),
