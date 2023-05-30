@@ -25,5 +25,6 @@
   "seasons": "Seasons",
   "season": "Season {num}",
   "loadMore": "Load more",
-  "results": "Results: {num}"
+  "results": "Results: {num}",
+  "noResult": "No results in the selected category!"
 }

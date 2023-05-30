@@ -25,5 +25,6 @@
   "seasons": "Évadok",
   "season": "{num}. évad",
   "loadMore": "Több betöltése",
-  "results": "Találatok száma: {num}"
+  "results": "Találatok száma: {num}",
+  "noResult": "Nincs találat a választott kategóriában!"
 }

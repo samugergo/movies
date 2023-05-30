@@ -44,7 +44,7 @@ class FilterSheet extends StatelessWidget {
     }
 
     return SizedBox(
-      height: 450,
+      height: 350,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         child: ListView(
@@ -75,18 +75,15 @@ class FilterSheet extends StatelessWidget {
             ),
             SizedBox(height: 10),
             groupTitle(locale.layout),
-            Column(
-              children: [
-                ...GridEnum.values.map((item) => 
-                  RadioListTile(
-                    value: item.value, 
-                    title: title(item.title),
-                    activeColor: Colors.white,
-                    groupValue: appState.itemCount, 
-                    onChanged: appState.setItemCount
-                  ),
-                ),
-              ],
+            SizedBox(height: 10),
+            Center(
+              child: ChipList(
+                value: appState.grid, 
+                values: GridEnum.values, 
+                mandatory: true, 
+                titles: GridEnum.titles(), 
+                setState: appState.setGrid
+              ),
             ),
           ],
         ),

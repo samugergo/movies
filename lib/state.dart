@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:movies/enums/grid_enum.dart';
 import 'package:movies/enums/order_enum.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/main.dart';
@@ -11,10 +12,10 @@ class AppState extends ChangeNotifier {
   List catalogList = [];
 
   int catalogPage = 0;
-  int itemCount = 3;
 
   TypeEnum type = TypeEnum.movie;
   OrderEnum order = OrderEnum.popular;
+  GridEnum grid = GridEnum.Nx3;
 
   AppState() {
     init();
@@ -48,11 +49,11 @@ class AppState extends ChangeNotifier {
       notifyListeners();
     }
   }
-  setItemCount(itemCount) async {
-    this.itemCount = itemCount;
+  setGrid(grid) async {
+    this.grid = grid;
     
     final prefs = await SharedPreferences.getInstance();
-    prefs.setInt('itemCount', itemCount);
+    prefs.setInt('grid', grid.value);
 
     notifyListeners();
   }
@@ -69,8 +70,10 @@ class AppState extends ChangeNotifier {
   /// 
   loadPreferences() async {
     final prefs = await SharedPreferences.getInstance();
-    final ic = prefs.get('itemCount');
-    setItemCount(ic ?? 3);
+    final ic = prefs.get('grid');
+
+    int val = ic != null ? int.parse(ic.toString()) : 3;
+    setGrid(GridEnum.from(val));
   }
 
   loadCatalog() async {

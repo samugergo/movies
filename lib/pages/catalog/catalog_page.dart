@@ -47,7 +47,7 @@ class _GridViewState extends State<_GridView> {
     final theme = getAppTheme(context);
     final locale = getAppLocale(context);
 
-    final itemCount = appState.itemCount;
+    final itemCount = appState.grid.value;
     final list = appState.catalogList;
     
     final double width = MediaQuery.of(context).size.width;

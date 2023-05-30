@@ -28,7 +28,6 @@ class _SearchPageState extends State<SearchPage> {
   List _results = [];
   int _page = 0;
   int _total = 0;
-  int _pages = 0;
   String _value = "";
   List<String> _history = [];
   final TextEditingController _controller = TextEditingController();
@@ -48,7 +47,9 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   _search(value, saveHistory) async {
-    _searchWithType(value, _typeValue, saveHistory);
+    if (value != "") {
+      _searchWithType(value, _typeValue, saveHistory);
+    }
   }
 
   _searchWithType(value, type, saveHistory) async {
@@ -141,6 +142,35 @@ class _SearchPageState extends State<SearchPage> {
       );
     }
 
+    body() {
+      final searched = _value != "";
+      final hasResults = _results.isNotEmpty;
+
+      if (searched && hasResults) {
+        return ResultList(
+          results: _results, 
+          total: _total, 
+          load: loadMore, 
+          goTo: (model) {
+            final Widget to = TypeEnum.isMovie(model.type)
+              ? MoviePage(id: model.id, color: Colors.black) 
+              : ShowPage(id: model.id, color: Colors.black);
+            goTo(context, to);
+          },
+          horizontalPadding: horizontalPadding,
+        );
+      } else if (searched && !hasResults) {
+        return NoResult();
+      } else {
+        return HistoryList(
+          history: _history, 
+          controller: _controller, 
+          search: _search, 
+          delete: _deleteFromHistory
+        );
+      }
+    }
+
     return GradientContainer(
       color: theme.primaryLight,
       child: Scaffold(
@@ -170,26 +200,8 @@ class _SearchPageState extends State<SearchPage> {
             SizedBox(width: 10),
           ],
         ),
-        body: _results.isNotEmpty 
-        ? ResultList(
-          results: _results, 
-          total: _total, 
-          load: loadMore, 
-          goTo: (model) {
-            final Widget to = TypeEnum.isMovie(model.type)
-              ? MoviePage(id: model.id, color: Colors.black) 
-              : ShowPage(id: model.id, color: Colors.black);
-            goTo(context, to);
-          },
-          horizontalPadding: horizontalPadding,
-        )
-        : HistoryList(
-          history: _history, 
-          controller: _controller, 
-          search: _search, 
-          delete: _deleteFromHistory
-        )
-      )
+        body: body()
+      ),
     );
   }
 }
@@ -382,6 +394,42 @@ class HistoryList extends StatelessWidget {
             ),
           );
         },  
+      ),
+    );
+  }
+}
+
+class NoResult extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final locale = getAppLocale(context);
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.search_off_outlined,
+              color: Colors.grey,
+              size: 100,
+            ),
+            Wrap(
+              children: [
+                Text(
+                  locale.noResult,
+                  style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    fontSize: 18,
+                    color: Colors.grey
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

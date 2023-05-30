@@ -6,19 +6,22 @@ class ChipList<T> extends StatelessWidget {
     required List<T> values,
     required bool mandatory,
     required List<String> titles,
-    required Function(T) setState,
+    required this.setState,
   }) : 
   _value = value,
   _values = values,
   _titles = titles,
-  _mandatory = mandatory, 
-  _setState = setState;
+  _mandatory = mandatory;
 
   final T _value;
   final List<T> _values;
   final bool _mandatory;
   final List<String> _titles;
-  final Function(T) _setState;
+  final Function(T) setState;
+
+  get titles => _titles;
+  get value => _value;
+  get values => _values;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +39,7 @@ class ChipList<T> extends StatelessWidget {
             selectedColor: Colors.white,
             selected: _value == _values[index],
             onSelected: (bool selected) {
-              _setState(_values[index]);
+              setState(_values[index]);
             },
           );
         },
