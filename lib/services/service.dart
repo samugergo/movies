@@ -82,10 +82,17 @@ fetchExternalIds(int id, TypeEnum type) async {
   return ExternalIdModel.fromJson(result);
 }
 
+fetchImages(int id, TypeEnum type) async {
+  var result = await resource.doApiCallOnlyApiKey('${type.value}/$id/images', []);
+  if (result['backdrops'] != null && result['backdrops'].isNotEmpty) {
+    return sublist(result['backdrops'], 5).map((e) => e['file_path']).toList();
+  }
+  return [];
+}
+
 fetchTrailer(int id, TypeEnum type) async {
   var result = await resource.doApiCall('${type.value}/$id/videos', []);
   if (result['results'].isNotEmpty) {
-    print(result['results']);
     var trailer = result['results'].firstWhere((t) => t['type'] == 'Trailer' && t['official'] && t['site'] == 'YouTube', orElse: () => null);
     if (trailer == null) {
       trailer = result['results'].firstWhere((t) => t['type'] == 'Trailer' && t['site'] == 'YouTube', orElse: () => null);
@@ -93,6 +100,7 @@ fetchTrailer(int id, TypeEnum type) async {
     }
     return trailer['key'];
   }
+  return '';
 }
 
 search(int page, TypeEnum type, String query) async {

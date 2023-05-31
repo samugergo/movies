@@ -21,7 +21,6 @@ class MovieDBResource extends Resource {
 
   @override
   doApiCall(String endpoint, List<PathParameter> params) async {
-
     params.addAll([
       PathParameter(
         key: ParamEnum.LANG, 
@@ -32,6 +31,10 @@ class MovieDBResource extends Resource {
         value: dotenv.env[ParamEnum.REGION.name]
       ),
     ]);
+    return await super.doApiCall(endpoint, params);
+  }
+
+  doApiCallOnlyApiKey(String endpoint, List<PathParameter> params) async {
     return await super.doApiCall(endpoint, params);
   }
 }

@@ -48,7 +48,6 @@ void calcMainColor(Image? image, Function callback) async {
 }
 
 getColorFromImage(String? image, Function callback) async {
-  print(image);
   if (image == null || image == '') {
     callback(Colors.black);
   }

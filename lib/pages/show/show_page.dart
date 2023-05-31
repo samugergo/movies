@@ -23,6 +23,7 @@ import 'package:movies/widgets/sections/story_section.dart';
 
 import '../../models/common/external_id_model.dart';
 import '../../utils/navigation_util.dart';
+import '../../widgets/sections/images_section.dart';
 import '../../widgets/sections/social_medial_section.dart';
 import '../../widgets/youtube_player.dart';
 
@@ -49,6 +50,7 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
   List? cast;
   List? recommendations;
   List? similar;
+  List? images;
 
   // fetch functions
   _fetchProviders() async {
@@ -67,13 +69,18 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
     var e = await fetchExternalIds(widget.id, TypeEnum.show);
     setState(() {
       externalIds = e;
-      print(e);
     });
   }
   _fetchTrailer() async {
     var t = await fetchTrailer(widget.id, TypeEnum.show);
     setState(() {
       trailer = t;
+    });
+  }
+  _fetchImages() async {
+    var i = await fetchImages(widget.id, TypeEnum.show);
+    setState(() {
+      images = i;
     });
   }
   _fetchRecommends() async {
@@ -101,6 +108,7 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
     _fetchCast();
     _fetchExternalIds();
     _fetchTrailer();
+    _fetchImages();
     // _fetchRecommends();
     _fetchSimilar();
 
@@ -116,6 +124,7 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
       || cast == null 
       || externalIds == null
       || trailer == null
+      || images == null
       // || recommendations == null 
       || mainColor == null
       || imageLoading;
@@ -207,6 +216,12 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
                       padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: CastSection(
                         cast: cast!
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
+                      child: ImagesSection(
+                        images: images!,
                       ),
                     ),
                     Padding(

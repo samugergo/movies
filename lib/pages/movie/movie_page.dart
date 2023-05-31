@@ -17,6 +17,7 @@ import 'package:movies/widgets/loaders/loader.dart';
 import 'package:movies/widgets/appbars/my_image_app_bar.dart';
 import 'package:movies/widgets/others/detail_card.dart';
 import 'package:movies/widgets/sections/collection_section.dart';
+import 'package:movies/widgets/sections/images_section.dart';
 import 'package:movies/widgets/sections/provider_section.dart';
 import 'package:movies/widgets/sections/cast_section.dart';
 import 'package:movies/widgets/sections/recommended_section.dart';
@@ -48,6 +49,7 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
   List? cast;
   List? recommendations;
   List? similar;
+  List? images;
 
   // fecth functions
   _fetchProviders() async {
@@ -72,6 +74,13 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
     var t = await fetchTrailer(widget.id, TypeEnum.movie);
     setState(() {
       trailer = t;
+    });
+  }
+  _fetchImages() async {
+    var i = await fetchImages(widget.id, TypeEnum.movie);
+    setState(() {
+      print(i);
+      images = i;
     });
   }
   _fetchRecommends() async {
@@ -99,6 +108,7 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
     _fetchCast();
     _fetchExternalIds();
     _fetchTrailer();
+    _fetchImages();
     // _fetchRecommends();
     // _fetchSimilar();
 
@@ -114,6 +124,7 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
       || cast == null 
       || externalIds == null
       || trailer == null
+      || images == null
       // || recommendations == null
       // || similar == null
       || mainColor == null
@@ -200,6 +211,12 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
                       padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: CastSection(
                         cast: cast!
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
+                      child: ImagesSection(
+                        images: images!,
                       ),
                     ),
                     Padding(

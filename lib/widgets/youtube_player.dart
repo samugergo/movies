@@ -23,6 +23,7 @@ class _YoutubePlayerState extends State<MyYoutubePlayer> {
       flags: YoutubePlayerFlags(
         autoPlay: true,
         mute: false,
+        disableDragSeek: true,
       ),
     );
     super.initState();
@@ -30,9 +31,10 @@ class _YoutubePlayerState extends State<MyYoutubePlayer> {
 
   @override
   void dispose() {
-    super.dispose();
+    _controller.dispose();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);  // to re-show bars
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values); 
+    super.dispose();
   }
 
   @override
@@ -41,7 +43,7 @@ class _YoutubePlayerState extends State<MyYoutubePlayer> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
     return YoutubePlayer(
       controller: _controller,
-      showVideoProgressIndicator: true,
+      showVideoProgressIndicator: true,      
     );
   }
 }

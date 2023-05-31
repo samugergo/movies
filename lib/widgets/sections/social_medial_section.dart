@@ -75,7 +75,6 @@ class _SocialMediaButton extends StatelessWidget {
 
     _launchURL() async {
       final Uri url = Uri.parse('${dotenv.env[baseUrlKey.value]}/$id');
-      print(url);
       if (!await launchUrl(url, mode: LaunchMode.externalNonBrowserApplication)) {
         throw Exception('Could not launch $url');
       }
