@@ -244,7 +244,6 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
                     //     recommendations: similar!
                     //   )
                     // ),
-                    SizedBox(height: 10),
                   ],
                 )
               )

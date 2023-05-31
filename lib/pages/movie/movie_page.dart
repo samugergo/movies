@@ -239,7 +239,6 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
                     //     recommendations: similar!
                     //   )
                     // ),
-                    SizedBox(height: 10),
                   ],
                 )
               )

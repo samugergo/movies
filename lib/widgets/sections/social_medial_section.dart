@@ -17,7 +17,7 @@ class SocialMediaSection extends StatelessWidget {
     return !externalIds.isNotNull 
     ? SizedBox()
     : Padding(
-      padding: const EdgeInsets.only(top: 25),
+      padding: const EdgeInsets.symmetric(vertical: 25),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -70,16 +70,15 @@ class _SocialMediaButton extends StatelessWidget {
   final String id;
   final IconData icon; 
 
+  _launchURL() async {
+    final Uri url = Uri.parse('${dotenv.env[baseUrlKey.value]}/$id');
+    if (!await launchUrl(url, mode: LaunchMode.externalNonBrowserApplication)) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-
-    _launchURL() async {
-      final Uri url = Uri.parse('${dotenv.env[baseUrlKey.value]}/$id');
-      if (!await launchUrl(url, mode: LaunchMode.externalNonBrowserApplication)) {
-        throw Exception('Could not launch $url');
-      }
-    }
-
     return IconButton(
       onPressed: _launchURL, 
       icon: FaIcon(

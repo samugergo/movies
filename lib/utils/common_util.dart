@@ -7,7 +7,7 @@ import 'package:movies/theme/app_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-getAppState(BuildContext context) {
+AppState getAppState(BuildContext context) {
   return context.watch<AppState>();
 }
 
