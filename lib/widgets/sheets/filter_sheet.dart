@@ -47,7 +47,7 @@ class FilterSheet extends StatelessWidget {
       height: 350,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-        child: ListView(
+        child: Column(
           children: [
             Center(
               child: ChipList(
