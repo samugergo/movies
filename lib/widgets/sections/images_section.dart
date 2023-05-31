@@ -12,10 +12,12 @@ class ImagesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = getAppLocale(context); 
+
     return images.isEmpty 
     ? SizedBox()
     : Section(
-      title: 'Images', 
+      title: locale.images, 
       children: [
         SizedBox(
           height: 100,
