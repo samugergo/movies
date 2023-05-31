@@ -25,6 +25,7 @@ import 'package:movies/widgets/sections/social_medial_section.dart';
 import 'package:movies/widgets/sections/story_section.dart';
 import 'package:movies/widgets/states/common/image_colored_state.dart';
 import 'package:movies/widgets/youtube_player.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MoviePage extends StatefulWidget {
 
@@ -116,6 +117,13 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
     preloadImageWithColor(lowImageLink(m.cover));
   }
 
+  _launchURL() async {
+    final Uri url = Uri.parse('https://www.youtube.com/watch?v=$trailer');
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
   // loading
   @override
   isLoading() {
@@ -183,9 +191,10 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
                       child: TrailerButton(
                         id: trailer!,
                         onclick: () {
-                          goTo(context, MyYoutubePlayer(
-                            id: trailer!,
-                          ));
+                          // goTo(context, MyYoutubePlayer(
+                          //   id: trailer!,
+                          // ));
+                          _launchURL();
                         }
                       ),
                     ),
