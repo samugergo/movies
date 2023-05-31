@@ -5,6 +5,7 @@ import 'package:movies/enums/resource/param_enum.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/models/base/list_response.dart';
 import 'package:movies/models/common/cast_model.dart';
+import 'package:movies/models/common/external_id_model.dart';
 import 'package:movies/models/common/person_model.dart';
 import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/collection_detailed_model.dart';
@@ -73,6 +74,11 @@ fetchPersonById(int id) async {
 fetchPerform(int id, String type) async {
   var result = await resource.doApiCall('person/$id/${type}_credits', []);
   return result['cast'].map((r) => DisplayModel.fromJson(r, TypeEnum.fromValue(type))).toList();
+}
+
+fetchExternalIds(int id, TypeEnum type) async {
+  var result = await resource.doApiCall('${type.value}/$id/external_ids', []);
+  return ExternalIdModel.fromJson(result);
 }
 
 search(int page, TypeEnum type, String query) async {

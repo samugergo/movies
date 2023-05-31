@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:movies/enums/type_enum.dart';
+import 'package:movies/models/common/external_id_model.dart';
 import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/movie_detailed_model.dart';
 import 'package:movies/services/service.dart';
@@ -18,6 +19,7 @@ import 'package:movies/widgets/sections/collection_section.dart';
 import 'package:movies/widgets/sections/provider_section.dart';
 import 'package:movies/widgets/sections/cast_section.dart';
 import 'package:movies/widgets/sections/recommended_section.dart';
+import 'package:movies/widgets/sections/social_medial_section.dart';
 import 'package:movies/widgets/sections/story_section.dart';
 import 'package:movies/widgets/states/common/image_colored_state.dart';
 import 'package:movies/widgets/youtube_player.dart';
@@ -40,6 +42,7 @@ class MoviePage extends StatefulWidget {
 class _MoviePageState extends ImageColoredState<MoviePage> {
   MovieDetailedModel? movie;
   Providers? providers;
+  ExternalIdModel? externalIds;
   List? cast;
   List? recommendations;
   List? similar;
@@ -55,6 +58,13 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
     var c = await fetchCast(widget.id, TypeEnum.movie);
     setState(() {
       cast = c;
+    });
+  }
+  _fetchExternalIds() async {
+    var e = await fetchExternalIds(widget.id, TypeEnum.movie);
+    setState(() {
+      externalIds = e;
+      print(e);
     });
   }
   _fetchRecommends() async {
@@ -80,6 +90,7 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
 
     _fetchProviders();
     _fetchCast();
+    _fetchExternalIds();
     // _fetchRecommends();
     // _fetchSimilar();
 
@@ -93,6 +104,7 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
     return movie == null 
       || providers == null 
       || cast == null 
+      || externalIds == null
       // || recommendations == null
       // || similar == null
       || mainColor == null
@@ -174,6 +186,12 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
                       padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: CastSection(
                         cast: cast!
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
+                      child: SocialMediaSection(
+                        externalIds: externalIds!
                       ),
                     ),
                     // Padding(

@@ -30,8 +30,9 @@ dependencies:
   cached_network_image: ^3.2.3
   youtube_player_flutter: ^8.1.2
   chip_list: ^2.4.3+8
-  flutter_localizations:
+  flutter_localizations: 
     sdk: flutter
+  url_launcher: ^6.1.11
 
 dev_dependencies:
   flutter_test:
