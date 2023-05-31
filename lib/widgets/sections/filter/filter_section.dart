@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:movies/enums/order_enum.dart';
-import 'package:movies/enums/type_enum.dart';
-import 'package:movies/main.dart';
-import 'package:movies/state.dart';
-import 'package:movies/theme/app_colors.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/locale_util.dart';
 import 'package:movies/widgets/sheets/filter_sheet.dart';
-import 'package:provider/provider.dart';
 
 class FilterSection extends StatelessWidget {
 
@@ -30,10 +25,9 @@ class FilterSection extends StatelessWidget {
       switch (appState.order) {
         case OrderEnum.popular:
           return locale.popularType(type);
-        case OrderEnum.topRated:      
+        default:      
           return locale.topRatedType(type);
       }
-      return '';
     }
 
     return Padding(
