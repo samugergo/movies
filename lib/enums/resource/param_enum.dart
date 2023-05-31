@@ -5,7 +5,12 @@ enum ParamEnum {
   LANG(value: 'language'), 
   REGION(value: 'region'), 
   PAGE(value: 'page'),  
-  QUERY(value: 'query');
+  QUERY(value: 'query'),
+  FACEBOOK_URL(value: 'FACEBOOK_URL'),
+  INSTAGRAM_URL(value: 'INSTAGRAM_URL'),
+  TWITTER_URL(value: 'TWITTER_URL'),
+  IMDB_URL(value: 'IMDB_URL'),
+  ;
 
   const ParamEnum({
     required this.value,

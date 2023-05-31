@@ -1,32 +1,73 @@
 import 'package:flutter/material.dart';
 import 'package:movies/models/common/cast_model.dart';
 import 'package:movies/pages/common/person_page.dart';
+import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/others/image.dart';
 import 'package:movies/widgets/sections/common/section.dart';
 
 class CastSection extends StatelessWidget {
-  final List cast;
-
   CastSection({
-    required this.cast,
-  });
+    required List cast,
+  }) :
+  _cast = cast;
+
+  final List _cast;
+
+  getList() {
+    final l = [];
+    for(var cast in _cast) {
+      l.add(cast.name);
+      l.add(cast.role != null && cast.role != "" ? cast.role : null);
+    }
+    return l;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return cast.isEmpty 
+    final locale = getAppLocale(context);
+
+    final double width = MediaQuery.of(context).size.width;
+    const crossSpacing = 10.0;
+    const mainSpacing = 2.0;
+    final itemWidth = width/2 - 2 * crossSpacing;
+    const itemHeight = 17;
+
+    return _cast.isEmpty 
     ? SizedBox()
     : Section(
-      title: 'Szereplők', 
+      title: locale.cast, 
+      // children: [
+      //   SizedBox(
+      //     height: 100,
+      //     child: ListView(
+      //       scrollDirection: Axis.horizontal,
+      //       children: _cast.map((c) => _CastMember(model: c)).toList(),
+      //     ),
+      //   )
+      // ]
       children: [
-        SizedBox(
-          height: 76,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: cast.map((c) => _CastMember(model: c)).toList(),
+        GridView.count(
+            padding: EdgeInsets.zero,
+            physics: BouncingScrollPhysics(),
+            shrinkWrap: true,
+            crossAxisCount: 2,
+            mainAxisSpacing: mainSpacing,
+            crossAxisSpacing: crossSpacing,
+            childAspectRatio: itemWidth/itemHeight,
+            children: getList().map<Widget>((cast) => 
+              cast != null 
+              ? Text(
+                cast,
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 12,
+                ),
+              )
+              : SizedBox()
+            ).toList(),
           ),
-        )
-      ]
+      ],
     );
   }
 
@@ -75,6 +116,7 @@ class _CastImage extends StatelessWidget {
       children: [
         CircleAvatar(
           backgroundImage: NetworkImage(model.image),
+          radius: 30,
         ),
         Padding(
           padding: const EdgeInsets.only(top: 6, left: 6, right: 6),
@@ -127,13 +169,14 @@ class _CastNoImage extends StatelessWidget {
       children: [
         CircleAvatar(
           backgroundColor: Colors.white30,
+          radius: 30,
           child: Text(_getSign()),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 6, left: 6, right: 6),
           child: Text(
             model.name,
-            overflow: TextOverflow.visible,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontSize: 10, 
               color: Colors.white

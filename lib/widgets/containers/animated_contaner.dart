@@ -6,9 +6,11 @@ class XAnimatedContainer extends StatelessWidget {
     required this.color,
     required this.duration,
     required this.child,
+    required this.statusbar,
   });
 
   final Color color;
+  final Color? statusbar;
   final int duration;
   final Widget child;
 
@@ -17,7 +19,7 @@ class XAnimatedContainer extends StatelessWidget {
     return Material(
       child: AnnotatedRegion(
         value: SystemUiOverlayStyle.light.copyWith(           
-          statusBarColor: color,
+          statusBarColor: statusbar ?? color,
         ),
         child: Container(
           color: color,
@@ -29,5 +31,4 @@ class XAnimatedContainer extends StatelessWidget {
       )
     );
   }
-
 }

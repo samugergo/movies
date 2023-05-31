@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:movies/models/detailed/detailed_model.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/widgets/others/image.dart';
@@ -14,6 +15,8 @@ class DetailCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = getAppLocale(context);
+
     final List list = model!.genres.length > 3 ? model!.genres.sublist(0,3) : model!.genres;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,23 +37,15 @@ class DetailCard extends StatelessWidget {
                   model!.title,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16
+                  style: GoogleFonts.bebasNeue(
+                    textStyle: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16
+                    ),
                   ),
                 ),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 8.0),
-              //   child: Text(
-              //     release,
-              //     style: TextStyle(
-              //       color: Colors.white38,
-              //       fontSize: 12
-              //     ),
-              //   ),
-              // ),
               SizedBox(height: 8),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
@@ -84,7 +79,7 @@ class DetailCard extends StatelessWidget {
                 child: Row(
                   children: [
                     Text(
-                      timeFormat(model!.length),
+                      timeFormat(model!.length, locale),
                       style: TextStyle(
                         color: Colors.white70,
                         fontSize: 12,
@@ -102,35 +97,6 @@ class DetailCard extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10),
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 8.0),
-              //   child: Card(
-              //     elevation: 0,
-              //     color: Colors.black.withAlpha(50),
-              //     shape: CircleBorder(),
-              //     child: Stack(
-              //       children: [
-              //         CircularProgressIndicator(
-              //           value: model!.raw / 10,
-              //           color: Color.lerp(Colors.red, Colors.green, model!.raw / 10),
-              //           strokeWidth: 2,
-              //         ),
-              //         Positioned.fill(
-              //           child: Align(
-              //             alignment: Alignment.center,
-              //             child: Text(
-              //               model!.raw.toStringAsFixed(1),
-              //               style: TextStyle(
-              //                 color: Colors.white,
-              //                 fontSize: 12
-              //               ),
-              //             ),
-              //           ),
-              //         )
-              //       ],
-              //     ),
-              //   ),
-              // ),
               Padding(
                 padding: EdgeInsets.only(left: 8.0),
                 child: Row(

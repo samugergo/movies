@@ -1,5 +1,23 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
+import 'package:movies/main.dart';
+import 'package:movies/state.dart';
+import 'package:movies/theme/app_colors.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+AppState getAppState(BuildContext context) {
+  return context.watch<AppState>();
+}
+
+AppColors getAppTheme(BuildContext context) {
+  return Theme.of(context).extension<AppColors>()!;
+}
+
+AppLocalizations getAppLocale(BuildContext context) {
+  return AppLocalizations.of(context);
+}
 
 chunkList(list) {
   var chunks = [];
@@ -10,6 +28,13 @@ chunkList(list) {
     }
   }
   return chunks;
+}
+
+sublist(List list, int count) {
+  if (list.length <= count) {
+    return list;
+  }
+  return list.sublist(0, count);
 }
 
 imageLink(image) {
@@ -61,8 +86,8 @@ dateFormat(date) {
   return '';
 }
 
-timeFormat(int minutes) {
+timeFormat(int minutes, AppLocalizations locale) {
   final hours = minutes ~/ 60;
   final mins = minutes % 60;
-  return hours > 0 ? '$hours ó $mins p' : '$mins p';
+  return hours > 0 ? locale.hourMin(hours, mins) : locale.mins(mins);
 }

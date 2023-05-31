@@ -13,4 +13,12 @@ enum GridEnum {
     required this.title,
     required this.value,
   });
+
+  static List<String> titles() {
+    return GridEnum.values.map((e) => e.title).toList(); 
+  }
+
+  static GridEnum from(int val) {
+    return GridEnum.values.firstWhere((e) => e.value == val);
+  }
 }

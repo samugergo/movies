@@ -1,3 +1,4 @@
+import 'package:movies/enums/type_enum.dart';
 import 'package:movies/models/base/display_model.dart';
 import 'package:movies/utils/common_util.dart';
 
@@ -25,7 +26,7 @@ class CollectionDetailedModel {
       description: json['overview'] ?? '',
       image: imageLink(json['poster_path']) ?? '', 
       cover: json['backdrop_path'] ?? '', 
-      modelList: json['parts'].map((p) => DisplayModel.fromJson(p)).toList(),
+      modelList: json['parts'].map((p) => DisplayModel.fromJson(p, TypeEnum.movie)).toList(),
     );
   }
 }

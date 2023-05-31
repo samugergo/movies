@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies/theme/app_colors.dart';
 import 'package:movies/utils/common_util.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class MyImageAppBar extends SliverPersistentHeaderDelegate {
   MyImageAppBar({
@@ -10,6 +9,7 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
     required this.child,
     this.onlyTitle = true,
     this.color,
+    required this.horizontalPadding,
   });
 
   final String title;
@@ -17,14 +17,12 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
   final Color? color;
   final Widget child;
   final bool onlyTitle;
-
-  final double _coverHeight = 270;
-  final double _posterHeight = 150;
   final Color textColor = Colors.white;
+  final double horizontalPadding;
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    final theme = Theme.of(context).extension<AppColors>()!;
+    final theme = getAppTheme(context);
 
     return LayoutBuilder(
       builder: (BuildContext layoutCtx, BoxConstraints constraints) { 
@@ -56,10 +54,10 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
         children.add(!onlyTitle 
           ? Positioned(
             bottom: 10,
-            left: 10,
-            right: 10,
+            left: horizontalPadding,
+            right: horizontalPadding,
             child: Opacity(
-              opacity: opacity,
+              opacity: 1 - (shrinkOffset / maxExtent*2).clamp(0, 1.0),
               child: child,
             )
           )
@@ -91,7 +89,7 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
               ),
               Flexible(
                 child: Opacity(
-                  opacity: onlyTitle ? 1 : shrinkOffset / maxExtent,
+                  opacity: onlyTitle ? 1 : (shrinkOffset / maxExtent*2).clamp(0, 1.0),
                   child: _buildTitle(),
                 ),
               ),
@@ -111,7 +109,7 @@ class MyImageAppBar extends SliverPersistentHeaderDelegate {
 
         return Container(
           decoration: BoxDecoration(
-            color: color,
+            color: color!.withAlpha(10),
             boxShadow: <BoxShadow>[
               BoxShadow(
                 color: color!,

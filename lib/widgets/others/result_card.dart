@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/widgets/others/image.dart';
 
@@ -40,10 +41,12 @@ class ResultCard extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Text(
                   title,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14
+                  style: GoogleFonts.bebasNeue(
+                    textStyle: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16
+                    ),
                   ),
                 ),
               ),

@@ -51,6 +51,8 @@ class _CollectionPageState extends ImageColoredState<CollectionPage> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = getAppLocale(context);
+
     goColor(id, color) {
       final Widget to = MoviePage(id: id, color: color);
       goTo(context, to);
@@ -72,6 +74,7 @@ class _CollectionPageState extends ImageColoredState<CollectionPage> {
 
     return XAnimatedContainer(
       color: widget.color, 
+      statusbar: widget.color,
       duration: 300, 
       child: isLoading() 
       ? ColorLoader(color: widget.color)
@@ -86,6 +89,7 @@ class _CollectionPageState extends ImageColoredState<CollectionPage> {
                   cover: coverImage,
                   color: widget.color,
                   onlyTitle: true,
+                  horizontalPadding: 10,
                   child: Text(collection!.title),
                 ),
               ),
@@ -104,14 +108,14 @@ class _CollectionPageState extends ImageColoredState<CollectionPage> {
               ),
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SectionTitle(
                       titleLeftPadding: 0, 
-                      title: 'Filmek'
+                      title: locale.movies
                     ),
                     GridView.count(
                       physics: BouncingScrollPhysics(),
@@ -129,16 +133,6 @@ class _CollectionPageState extends ImageColoredState<CollectionPage> {
                 ),
               ),
             )
-            // Section(
-            //   title: 'Filmek',
-            //   titleLeftPadding: 15,
-            //   children: [
-            //     ...chunkList(collection!.modelList).map((pair) => _ImageRow(
-            //       pair: pair,
-            //       goTo: go,
-            //     )).toList(),
-            //   ] 
-            // ),
           )
         ),
       )

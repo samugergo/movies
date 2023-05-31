@@ -5,11 +5,13 @@ class Section extends StatelessWidget {
   final String title;
   final List children;
   final double titleLeftPadding;
+  final bool centerTitle;
 
   Section({
     required this.title,
     required this.children,
     this.titleLeftPadding = 0.0,
+    this.centerTitle = false,
   });
 
   @override
@@ -19,7 +21,8 @@ class Section extends StatelessWidget {
       children: [
         SectionTitle(
           titleLeftPadding: titleLeftPadding, 
-          title: title
+          title: title,
+          centerTitle: centerTitle,
         ),
         ...children,
       ],

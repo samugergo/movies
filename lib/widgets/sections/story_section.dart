@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies/utils/common_util.dart';
 import 'package:movies/widgets/sections/common/section.dart';
 
 class StorySection extends StatelessWidget {
@@ -10,10 +11,11 @@ class StorySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = getAppLocale(context);
     return description == '' 
     ? SizedBox()
     : Section(
-      title: 'Történet', 
+      title: locale.story, 
       children: [
         Text(
           description,

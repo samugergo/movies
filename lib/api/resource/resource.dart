@@ -23,9 +23,12 @@ class Resource {
   }
 
   _createUrl(String endpoint, List<PathParameter> params) {
-    final paramsString = params
-      .map((p) => p.toString())
-      .reduce((value, element) => '$value&$element');
-    return Uri.parse("$baseUrl/$endpoint?$paramsString&api_key=$apiKey");
+    if(params.isNotEmpty) {
+      final paramsString = params
+        .map((p) => p.toString())
+        .reduce((value, element) => '$value&$element');
+      return Uri.parse("$baseUrl/$endpoint?$paramsString&api_key=$apiKey");
+    }
+    return Uri.parse("$baseUrl/$endpoint?api_key=$apiKey");
   }
 }

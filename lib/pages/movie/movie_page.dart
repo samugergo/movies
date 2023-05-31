@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:movies/enums/type_enum.dart';
+import 'package:movies/models/common/external_id_model.dart';
 import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/movie_detailed_model.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/utils/common_util.dart';
+import 'package:movies/utils/navigation_util.dart';
+import 'package:movies/widgets/buttons/trailer_button.dart';
 import 'package:movies/widgets/containers/animated_contaner.dart';
 import 'package:movies/widgets/loaders/color_loader.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
@@ -13,11 +17,14 @@ import 'package:movies/widgets/loaders/loader.dart';
 import 'package:movies/widgets/appbars/my_image_app_bar.dart';
 import 'package:movies/widgets/others/detail_card.dart';
 import 'package:movies/widgets/sections/collection_section.dart';
+import 'package:movies/widgets/sections/images_section.dart';
 import 'package:movies/widgets/sections/provider_section.dart';
 import 'package:movies/widgets/sections/cast_section.dart';
 import 'package:movies/widgets/sections/recommended_section.dart';
+import 'package:movies/widgets/sections/social_medial_section.dart';
 import 'package:movies/widgets/sections/story_section.dart';
 import 'package:movies/widgets/states/common/image_colored_state.dart';
+import 'package:movies/widgets/youtube_player.dart';
 
 class MoviePage extends StatefulWidget {
 
@@ -37,9 +44,12 @@ class MoviePage extends StatefulWidget {
 class _MoviePageState extends ImageColoredState<MoviePage> {
   MovieDetailedModel? movie;
   Providers? providers;
+  ExternalIdModel? externalIds;
+  String? trailer;
   List? cast;
   List? recommendations;
   List? similar;
+  List? images;
 
   // fecth functions
   _fetchProviders() async {
@@ -52,6 +62,25 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
     var c = await fetchCast(widget.id, TypeEnum.movie);
     setState(() {
       cast = c;
+    });
+  }
+  _fetchExternalIds() async {
+    var e = await fetchExternalIds(widget.id, TypeEnum.movie);
+    setState(() {
+      externalIds = e;
+    });
+  }
+  _fetchTrailer() async {
+    var t = await fetchTrailer(widget.id, TypeEnum.movie);
+    setState(() {
+      trailer = t;
+    });
+  }
+  _fetchImages() async {
+    var i = await fetchImages(widget.id, TypeEnum.movie);
+    setState(() {
+      print(i);
+      images = i;
     });
   }
   _fetchRecommends() async {
@@ -77,10 +106,14 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
 
     _fetchProviders();
     _fetchCast();
-    _fetchRecommends();
-    _fetchSimilar();
+    _fetchExternalIds();
+    _fetchTrailer();
+    _fetchImages();
+    // _fetchRecommends();
+    // _fetchSimilar();
 
     preloadImage(originalImageLink(m.cover));
+    preloadImageWithColor(lowImageLink(m.cover));
   }
 
   // loading
@@ -89,94 +122,128 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
     return movie == null 
       || providers == null 
       || cast == null 
-      || recommendations == null
-      || similar == null
+      || externalIds == null
+      || trailer == null
+      || images == null
+      // || recommendations == null
+      // || similar == null
+      || mainColor == null
       || imageLoading;
   }
 
   @override
   Widget build(BuildContext context) {
+    const double horizontalPadding = 15;
+    final theme = getAppTheme(context);
+
     return XAnimatedContainer(
       duration: 300,
-      color: widget.color,
+      color: theme.primary!,
+      statusbar: isLoading() ? theme.primary : mainColor,
       child: isLoading() 
-      ? ColorLoader(color: widget.color)
-      : SafeArea(
-        child: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return [
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: MyImageAppBar(
-                  title: movie!.title, 
-                  cover: coverImage,
-                  color: widget.color,
-                  onlyTitle: false,
-                  child: DetailCard(
-                    model: movie!,
+      ? ColorLoader(color: theme.primary!)
+      : Container(
+        color: mainColor,
+        child: SafeArea(
+          child: NestedScrollView(
+            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+              return [
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: MyImageAppBar(
+                    title: movie!.title, 
+                    cover: coverImage,
+                    color: mainColor,
+                    onlyTitle: false,
+                    horizontalPadding: horizontalPadding,
+                    child: DetailCard(
+                      model: movie!,
+                    ),
                   ),
                 ),
+              ];
+            },
+            body: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: [0.1, 1],
+                  colors: [
+                    mainColor!,
+                    Colors.black54,
+                  ]
+                ),
               ),
-            ];
-          },
-          body: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                stops: [0.1, 1],
-                colors: [
-                  widget.color,
-                  Colors.black45,
-                ]
-              ),
-            ),
-            child: Scaffold(
-              body: ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: ProviderSection(
-                      providers: providers
+              child: Scaffold(
+                body: ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
+                      child: TrailerButton(
+                        id: trailer!,
+                        onclick: () {
+                          goTo(context, MyYoutubePlayer(
+                            id: trailer!,
+                          ));
+                        }
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: StorySection(
-                      description: movie!.description
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
+                      child: ProviderSection(
+                        providers: providers
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: CastSection(
-                      cast: cast!
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
+                      child: StorySection(
+                        description: movie!.description
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: CollectionSection(
-                      model: movie!.collection,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
+                      child: CollectionSection(
+                        model: movie!.collection,
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: OtherMoviesSection(
-                      title: 'Ajánlott',
-                      recommendations: recommendations!
-                    )
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: OtherMoviesSection(
-                      title: 'Hasonlóak',
-                      recommendations: similar!
-                    )
-                  ),
-                  SizedBox(height: 10),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
+                      child: CastSection(
+                        cast: cast!
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
+                      child: ImagesSection(
+                        images: images!,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
+                      child: SocialMediaSection(
+                        externalIds: externalIds!
+                      ),
+                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    //   child: OtherMoviesSection(
+                    //     title: 'Ajánlott',
+                    //     recommendations: recommendations!
+                    //   )
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    //   child: OtherMoviesSection(
+                    //     title: 'Hasonlóak',
+                    //     recommendations: similar!
+                    //   )
+                    // ),
+                  ],
+                )
               )
             )
-          )
+          ),
         ),
       ),
     );
