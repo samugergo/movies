@@ -22,7 +22,9 @@ import 'package:movies/widgets/sections/recommended_section.dart';
 import 'package:movies/widgets/sections/story_section.dart';
 
 import '../../models/common/external_id_model.dart';
+import '../../utils/navigation_util.dart';
 import '../../widgets/sections/social_medial_section.dart';
+import '../../widgets/youtube_player.dart';
 
 class ShowPage extends StatefulWidget {
 
@@ -43,6 +45,7 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
   ShowDetailedModel? show;
   Providers? providers;
   ExternalIdModel? externalIds;
+  String? trailer;
   List? cast;
   List? recommendations;
   List? similar;
@@ -65,6 +68,12 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
     setState(() {
       externalIds = e;
       print(e);
+    });
+  }
+  _fetchTrailer() async {
+    var t = await fetchTrailer(widget.id, TypeEnum.show);
+    setState(() {
+      trailer = t;
     });
   }
   _fetchRecommends() async {
@@ -91,6 +100,7 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
     _fetchProviders();
     _fetchCast();
     _fetchExternalIds();
+    _fetchTrailer();
     // _fetchRecommends();
     _fetchSimilar();
 
@@ -105,6 +115,7 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
       || providers == null 
       || cast == null 
       || externalIds == null
+      || trailer == null
       // || recommendations == null 
       || mainColor == null
       || imageLoading;
@@ -166,7 +177,12 @@ class _ShowPageState extends ImageColoredState<ShowPage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: TrailerButton(
-                        onclick: () {}
+                        id: trailer!,
+                        onclick: () {
+                          goTo(context, MyYoutubePlayer(
+                            id: trailer!,
+                          ));
+                        }
                       ),
                     ),
                     Padding(

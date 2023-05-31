@@ -4,11 +4,14 @@ import 'package:movies/utils/common_util.dart';
 
 class TrailerButton extends StatelessWidget {
   TrailerButton({
+    required String id,
     required Function onclick,
   }) :
+  _id = id,
   _onClick = onclick;
 
   final Function _onClick;
+  final String _id;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +20,8 @@ class TrailerButton extends StatelessWidget {
     const icon = FontAwesomeIcons.play;
     final text = locale.watchTrailer;
 
-    return ElevatedButton.icon(
+    return _id != '' 
+    ? ElevatedButton.icon(
       onPressed: () => _onClick(),
       style: ElevatedButton.styleFrom(
         elevation: 0,
@@ -38,7 +42,7 @@ class TrailerButton extends StatelessWidget {
         size: 14,
         color: Colors.white,
       ),
-    );
+    )
+    : SizedBox();
   }
-
 }

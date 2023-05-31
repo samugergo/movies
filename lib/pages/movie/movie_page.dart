@@ -8,6 +8,7 @@ import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/movie_detailed_model.dart';
 import 'package:movies/services/service.dart';
 import 'package:movies/utils/common_util.dart';
+import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/buttons/trailer_button.dart';
 import 'package:movies/widgets/containers/animated_contaner.dart';
 import 'package:movies/widgets/loaders/color_loader.dart';
@@ -43,6 +44,7 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
   MovieDetailedModel? movie;
   Providers? providers;
   ExternalIdModel? externalIds;
+  String? trailer;
   List? cast;
   List? recommendations;
   List? similar;
@@ -64,7 +66,12 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
     var e = await fetchExternalIds(widget.id, TypeEnum.movie);
     setState(() {
       externalIds = e;
-      print(e);
+    });
+  }
+  _fetchTrailer() async {
+    var t = await fetchTrailer(widget.id, TypeEnum.movie);
+    setState(() {
+      trailer = t;
     });
   }
   _fetchRecommends() async {
@@ -91,6 +98,7 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
     _fetchProviders();
     _fetchCast();
     _fetchExternalIds();
+    _fetchTrailer();
     // _fetchRecommends();
     // _fetchSimilar();
 
@@ -105,6 +113,7 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
       || providers == null 
       || cast == null 
       || externalIds == null
+      || trailer == null
       // || recommendations == null
       // || similar == null
       || mainColor == null
@@ -161,7 +170,12 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: TrailerButton(
-                        onclick: () {}
+                        id: trailer!,
+                        onclick: () {
+                          goTo(context, MyYoutubePlayer(
+                            id: trailer!,
+                          ));
+                        }
                       ),
                     ),
                     Padding(

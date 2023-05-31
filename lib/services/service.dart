@@ -11,6 +11,7 @@ import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/collection_detailed_model.dart';
 import 'package:movies/models/detailed/movie_detailed_model.dart';
 import 'package:movies/models/detailed/show_detailed_model.dart';
+import 'package:collection/collection.dart';
 
 import '../models/base/display_model.dart';
 import '../utils/common_util.dart';
@@ -79,6 +80,19 @@ fetchPerform(int id, String type) async {
 fetchExternalIds(int id, TypeEnum type) async {
   var result = await resource.doApiCall('${type.value}/$id/external_ids', []);
   return ExternalIdModel.fromJson(result);
+}
+
+fetchTrailer(int id, TypeEnum type) async {
+  var result = await resource.doApiCall('${type.value}/$id/videos', []);
+  if (result['results'].isNotEmpty) {
+    print(result['results']);
+    var trailer = result['results'].firstWhere((t) => t['type'] == 'Trailer' && t['official'] && t['site'] == 'YouTube', orElse: () => null);
+    if (trailer == null) {
+      trailer = result['results'].firstWhere((t) => t['type'] == 'Trailer' && t['site'] == 'YouTube', orElse: () => null);
+      return trailer != null ? trailer['key'] : '';
+    }
+    return trailer['key'];
+  }
 }
 
 search(int page, TypeEnum type, String query) async {
