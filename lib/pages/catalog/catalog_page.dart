@@ -14,6 +14,7 @@ import 'package:movies/widgets/others/image_card.dart';
 import 'package:movies/widgets/sections/filter/filter_section.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 
 class CatalogPage extends StatefulWidget {
   CatalogPage({
@@ -26,7 +27,7 @@ class CatalogPage extends StatefulWidget {
   State<CatalogPage> createState() => _CatalogPageState();
 }
 
-class _CatalogPageState extends State<CatalogPage> {
+class _CatalogPageState extends State<CatalogPage> with AutomaticKeepAliveClientMixin{
   late ScrollController _controller;
   bool _showBtn = false;
   double showoffset = 200;
@@ -98,6 +99,9 @@ class _CatalogPageState extends State<CatalogPage> {
       ),
     );
   }
+  
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class _GridView extends StatefulWidget {
@@ -160,10 +164,11 @@ class _GridViewState extends State<_GridView> {
             children: list.map<Widget>((pair) => ImageCard(
               model: pair,
               goTo: (model) {
-                final Widget to = TypeEnum.isMovie(model.type)
-                  ? MoviePage(id: model.id, color: Colors.black) 
-                  : ShowPage(id: model.id, color: Colors.black);
-                goTo(context, to);
+                context.go('/${model.type.value}?id=${model.id}');
+                // final Widget to = TypeEnum.isMovie(model.type)
+                //   ? MoviePage(id: model.id, color: Colors.black) 
+                //   : ShowPage(id: model.id, color: Colors.black);
+                // goTo(context, to);
               },
             )).toList(),
           ),

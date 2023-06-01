@@ -1,5 +1,7 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:movies/pages/catalog/catalog_page.dart';
+import 'package:movies/router/router.dart';
 import 'package:movies/state.dart';
 import 'package:movies/theme/app_colors.dart';
 import 'package:movies/utils/common_util.dart';
@@ -18,17 +20,18 @@ void main() async {
 
 class MainApp extends StatefulWidget {
   @override
-  State<MainApp> createState() => _MainAppState();
+  State<MainApp> createState() => MainAppState();
 
-  static _MainAppState of(BuildContext context) => context.findAncestorStateOfType<_MainAppState>()!;
+  static MainAppState of(BuildContext context) => context.findAncestorStateOfType<MainAppState>()!;
 }
 
-class _MainAppState extends State<MainApp> {
+class MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => AppState(),
-      child: MaterialApp(
+      child: MaterialApp.router(
+        routerConfig: router,
         theme: ThemeData(
           useMaterial3: true,
           scaffoldBackgroundColor: Colors.transparent,
@@ -47,22 +50,21 @@ class _MainAppState extends State<MainApp> {
           Locale('en'), 
           Locale('hu'), 
         ],
-        home: Scaffold(
-          body: _MainContainer(),
-        ),
       ),
     );
   }
 }
 
-class _MainContainer extends StatelessWidget {
+class MainContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState = getAppState(context);
 
-    return SafeArea(
-      child: CatalogPage(
-        load: appState.loadCatalog
+    return Scaffold(
+      body: SafeArea(
+        child: CatalogPage(
+          load: appState.loadCatalog
+        ),
       ),
     );
   }
