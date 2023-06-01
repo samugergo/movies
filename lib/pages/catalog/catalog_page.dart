@@ -29,15 +29,22 @@ class CatalogPage extends StatefulWidget {
 class _CatalogPageState extends State<CatalogPage> {
   late ScrollController _controller;
   bool _showBtn = false;
+  double showoffset = 200;
 
   @override
   void initState() {
     _controller = ScrollController();
     _controller.addListener(() async {
-      double showoffset = 200;
-      setState(() {
-        _showBtn = _controller.offset > showoffset; 
-      });
+      if (_showBtn && _controller.position.pixels < showoffset) {
+        setState(() {
+          _showBtn = false; 
+        });
+      }
+      if (!_showBtn && _controller.position.pixels > showoffset) {
+        setState(() {
+          _showBtn = true; 
+        });
+      }
       if (_controller.position.pixels == _controller.position.maxScrollExtent) {
         await widget.load();
       }

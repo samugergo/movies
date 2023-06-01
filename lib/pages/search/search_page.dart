@@ -1,22 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:hidable/hidable.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/models/base/list_response.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/show/show_page.dart';
 import 'package:movies/services/service.dart';
-import 'package:movies/state.dart';
 import 'package:movies/theme/app_colors.dart';
-import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/locale_util.dart';
 import 'package:movies/utils/navigation_util.dart';
-import 'package:movies/widgets/buttons/load_button.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
-import 'package:movies/widgets/others/chip_list.dart';
 import 'package:movies/widgets/others/result_card.dart';
 import 'package:movies/widgets/sheets/search_sheet.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchPage extends StatefulWidget {
@@ -31,6 +25,9 @@ class _SearchPageState extends State<SearchPage> {
   String _value = "";
   List<String> _history = [];
   final TextEditingController _controller = TextEditingController();
+  late ScrollController _scrollController;
+  bool _showBtn = false;
+  double showoffset = 200;
 
   var _typeValue = TypeEnum.movie;
 
@@ -68,10 +65,11 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   loadMore() async {
-    ListResponse lr = await search(_page, _typeValue, _value);
-
-    updateResults(lr.list);
-    updateTotal(lr.total);
+    if (_total != _results.length) {
+      ListResponse lr = await search(_page, _typeValue, _value);
+      updateResults(lr.list);
+      updateTotal(lr.total);
+    }
   }
 
   _loadHistory() async {
@@ -124,7 +122,29 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     _loadHistory();
+    _scrollController = ScrollController();
+    _scrollController.addListener(() async {
+      if (_showBtn && _scrollController.position.pixels < showoffset) {
+        setState(() {
+          _showBtn = false; 
+        });
+      }
+      if (!_showBtn && _scrollController.position.pixels > showoffset) {
+        setState(() {
+          _showBtn = true; 
+        });
+      }
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+        await loadMore();
+      }
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -148,9 +168,9 @@ class _SearchPageState extends State<SearchPage> {
 
       if (searched && hasResults) {
         return ResultList(
+          controller: _scrollController,
           results: _results, 
-          total: _total, 
-          load: loadMore, 
+          total: _total,
           goTo: (model) {
             final Widget to = TypeEnum.isMovie(model.type)
               ? MoviePage(id: model.id, color: Colors.black) 
@@ -200,7 +220,24 @@ class _SearchPageState extends State<SearchPage> {
             SizedBox(width: 10),
           ],
         ),
-        body: body()
+        body: body(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: AnimatedOpacity(
+            duration: Duration(milliseconds: 300),
+            opacity: _showBtn ? 1.0 : 0.0, 
+            child: FloatingActionButton(
+              onPressed: () {
+                _scrollController.animateTo(0, duration: Duration(milliseconds: 500), curve: Curves.fastOutSlowIn);
+              },
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+              mini: true,
+              backgroundColor: theme.primary,
+              child: Icon(
+                Icons.arrow_upward,
+                color: Colors.white,
+              ),
+            ),
+          ),
       ),
     );
   }
@@ -269,39 +306,44 @@ class SearchField extends StatelessWidget {
   }
 }
 
-class ResultList extends StatelessWidget {
+class ResultList extends StatefulWidget {
   ResultList({
     required List results,
     required int total,
     required double horizontalPadding,
-    required Function load,
     required Function goTo,
+    required ScrollController controller,
   }) : 
   _results = results,
   _total = total,
   _horizontalPadding = horizontalPadding,
-  _load = load,
-  _goTo = goTo;
+  _goTo = goTo,
+  _controller = controller;
 
   final List _results;
   final int _total;
   final double _horizontalPadding;
-  final Function _load;
+  final ScrollController _controller;
   final Function _goTo;
 
+  @override
+  State<ResultList> createState() => _ResultListState();
+}
+
+class _ResultListState extends State<ResultList> {
   @override
   Widget build(BuildContext context) {
     final locale = getAppLocale(context);
 
     return ListView(
       shrinkWrap: true,
-      // controller: _scrollController,
+      controller: widget._controller,
       children: [
         SizedBox(height: 20),
         Padding(
-          padding: EdgeInsets.only(left: _horizontalPadding),
+          padding: EdgeInsets.only(left: widget._horizontalPadding),
           child: Text(
-            locale.results(_total),
+            locale.results(widget._total),
             style: TextStyle(
               color: Colors.white,
               fontStyle: FontStyle.italic
@@ -309,13 +351,13 @@ class ResultList extends StatelessWidget {
           ),
         ),              
         SizedBox(height: 15),
-        ..._results.map((e) => 
+        ...widget._results.map((e) => 
           Padding(
-            padding: EdgeInsets.only(left: _horizontalPadding, right: _horizontalPadding, bottom: 16),
+            padding: EdgeInsets.only(left: widget._horizontalPadding, right: widget._horizontalPadding, bottom: 16),
             child: InkWell(
               splashColor: Colors.transparent,
               borderRadius: BorderRadius.circular(10),
-              onTap: () => _goTo(e),
+              onTap: () => widget._goTo(e),
               child: ResultCard(
                 image: e.image,
                 title: e.title,
@@ -325,13 +367,9 @@ class ResultList extends StatelessWidget {
             ),
           )
         ),
-        _total != _results.length
-        ? LoadButton(load: () => _load())
-        : SizedBox(),
       ],
     );
   }
-
 }
 
 class HistoryList extends StatelessWidget {
