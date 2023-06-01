@@ -15,9 +15,47 @@ import 'package:movies/widgets/sections/filter/filter_section.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class CatalogPage extends StatelessWidget {
+class CatalogPage extends StatefulWidget {
+  CatalogPage({
+    required this.load,
+  });
+
+  final Function load;
+
+  @override
+  State<CatalogPage> createState() => _CatalogPageState();
+}
+
+class _CatalogPageState extends State<CatalogPage> {
+  late ScrollController _controller;
+  bool _showBtn = false;
+
+  @override
+  void initState() {
+    _controller = ScrollController();
+    _controller.addListener(() async {
+      double showoffset = 200;
+      setState(() {
+        _showBtn = _controller.offset > showoffset; 
+      });
+      if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+        await widget.load();
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final appState = getAppState(context);
+    final theme = getAppTheme(context);    
+
     return AnnotatedRegion(
       value: SystemUiOverlayStyle.light.copyWith(           
         statusBarColor: Colors.black
@@ -27,7 +65,27 @@ class CatalogPage extends StatelessWidget {
         child: Scaffold(
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: _GridView(),
+            child: _GridView(
+              load: appState.loadCatalog,
+              controller: _controller,
+            ),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: AnimatedOpacity(
+            duration: Duration(milliseconds: 300),
+            opacity: _showBtn ? 1.0 : 0.0, 
+            child: FloatingActionButton(
+              onPressed: () {
+                _controller.animateTo(0, duration: Duration(milliseconds: 500), curve: Curves.fastOutSlowIn);
+              },
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+              mini: true,
+              backgroundColor: theme.primary,
+              child: Icon(
+                Icons.arrow_upward,
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
       ),
@@ -36,6 +94,14 @@ class CatalogPage extends StatelessWidget {
 }
 
 class _GridView extends StatefulWidget {
+  _GridView({
+    required this.load,
+    required this.controller,
+  });
+
+  final Function load;
+  final ScrollController controller;
+
   @override
   State<_GridView> createState() => _GridViewState();
 }
@@ -57,12 +123,12 @@ class _GridViewState extends State<_GridView> {
     final itemHeight = itemWidth*1.5;
 
     return NestedScrollView(
-      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) { 
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return [
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: MainAppBar(),
-          ),
+          // SliverPersistentHeader(
+          //   pinned: true,
+          //   delegate: MainAppBar(),
+          // ),
           SliverAppBar(
             pinned: true,
             scrolledUnderElevation: 0,
@@ -73,6 +139,7 @@ class _GridViewState extends State<_GridView> {
         ];
       },
       body: ListView(
+        controller: widget.controller,
         children: [
           FilterSection(),
           GridView.count(
@@ -94,8 +161,6 @@ class _GridViewState extends State<_GridView> {
             )).toList(),
           ),
           SizedBox(height: 10),
-          if (list.isNotEmpty) LoadButton(load: appState.loadCatalog),
-          SizedBox(height: 10)
         ],
       ),
     );

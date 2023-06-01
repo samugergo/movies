@@ -44,12 +44,25 @@ class _MainAppState extends State<MainApp> {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: [
-          Locale('en'), // English
-          Locale('hu'), // Spanish
+          Locale('en'), 
+          Locale('hu'), 
         ],
         home: Scaffold(
-          body: CatalogPage(),
+          body: _MainContainer(),
         ),
+      ),
+    );
+  }
+}
+
+class _MainContainer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final appState = getAppState(context);
+
+    return SafeArea(
+      child: CatalogPage(
+        load: appState.loadCatalog
       ),
     );
   }
