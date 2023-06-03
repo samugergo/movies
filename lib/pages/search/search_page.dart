@@ -19,109 +19,153 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  List _results = [];
-  int _page = 0;
-  int _total = 0;
-  String _value = "";
-  List<String> _history = [];
-  final TextEditingController _controller = TextEditingController();
-  late ScrollController _scrollController;
+  /// It contains the current search page (used for load more search results).
+  int page = 0;
+  /// It contains the total number of results to the search.
+  int total = 0;
+  /// History list state, it contains maximum number of 10 history items.
+  List<String> history = [];
+  /// It contains the loaded search results.
+  List results = [];
+  /// The value of the search field (it must not be null).
+  String searchValue = "";
+  /// The type of the search, it is independent from the [appState.type].
+  TypeEnum typeValue = TypeEnum.movie;  
+  /// It defines that the 'scrollUpButton' should be visible or not.
   bool _showBtn = false;
+  /// It defines on offset to the scroll, when should be the 'scrollUpButton' visible.
   double showoffset = 200;
+  /// A custom [TextEditingController] to manage the search value.
+  late TextEditingController _controller;
+  /// A custom [ScrollController] to create a custom scroll behaviour. (e.g. display the 'scrollUpButton' on scroll).
+  late ScrollController _scrollController;
 
-  var _typeValue = TypeEnum.movie;
+  /// Load the 10 last search values from mobile to display in the history list view 
+  /// whern the user click on the search field.
+  ///
+  loadHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    final sh = prefs.getStringList('searchHistory');
+    setState(() {
+      history = sh ?? []; 
+    });
+  }
+  /// Save the last search ir the mobile preferences to the load historoy function. 
+  /// It must be called when the user search for a new film or show!
+  /// And shouldn't when clik on a history item!
+  /// 
+  /// [String] value of the search field, the value of the search query
+  /// 
+  saveHistory(String value) async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      if(history.length > 9) {
+        history.removeLast();
+      } 
+      history.insert(0, value);
+    });
+    prefs.setStringList('searchHistory', history);
+  }
+  /// Delete an element from the history, and saves the new history list in the mobile [SharedPreferences].
+  /// It must be called only when the user clicks on the remove icon in the history list!
+  /// 
+  /// [int] index of the elemnt the user clicked on in the history list
+  /// 
+  deleteFromHistory(int index) async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      history.removeAt(index);
+    });
+    prefs.setStringList('searchHistory', history);
+  }
 
-  _setTypeValue(typeValue) {
-    if (_typeValue != typeValue) {
+  /// It is a function to search in the DB for movies or shows (it is determined by the [typeValue] variable).
+  /// It calls the [saveHistory] function if needed.
+  /// This function must be called only when you want to reset the history list as well.
+  /// This function is called only when the user changed the type value and we need to search with the new type value
+  /// otherwise use the [searchWithoutType].
+  /// 
+  /// [String] value of the search field
+  /// [TypeEnum] the type value of the search (movie or show).
+  /// [bool] It determines that we want to save the history or not.
+  /// 
+  searchWithType(String value, TypeEnum type, bool needSave) async {
+    searchValue = value;
+    page = 0;
+    total = 0;
+    if(needSave) {
+      saveHistory(value);
+    }
+    ListResponse response = await search(page, type, value);
+    setResults(response);
+  }
+  /// This function is a 'subType' of the [searchWithType] function.
+  /// It uses the the value of the [typeValue] variable as default.
+  /// So if the value of the [typeValue] variable did not change this function should be used.
+  /// 
+  /// [String] value of the search field
+  /// [bool] It determines that we want to save the history or not.
+  /// 
+  searchWithoutType(String value, bool needSave) async {
+    if (value != "") {
+      searchWithType(value, typeValue, needSave);
+    }
+  }
+  /// This function is load more results from the DB using the [searchValue] variable and the [typeValue] variable.
+  /// THis function must be called only on the pagination.
+  /// 
+  loadMore() async {
+    if (total != results.length) {
+      final response = await search(page, typeValue, searchValue);
+      updateResults(response);
+    }
+  }
+  /// Set the [typeValue] variable value and if the searchValue has a value then make a search with this value.
+  /// And automatically closes the bottom sheet after selection.
+  /// 
+  /// [TypeEnum] the new typeValue (movie or show) the user selected.
+  /// 
+  setTypeValue(type) {
+    if (typeValue != type) {
       setState(() {
-        _typeValue = typeValue;
+        typeValue = type;
       });
-      if (_value != '') {
-        _searchWithType(_value, typeValue, false);
+      if (searchValue != '') {
+        searchWithType(searchValue, typeValue, false);
       }
     }
     Navigator.pop(context);
   }
-
-  _search(value, saveHistory) async {
-    if (value != "") {
-      _searchWithType(value, _typeValue, saveHistory);
-    }
-  }
-
-  _searchWithType(value, type, saveHistory) async {
-    _value = value;
-    _page = 0;
-    _total = 0;
-
-    if(saveHistory) {
-      _saveHistory(value);
-    }
-
-    ListResponse lr = await search(_page, type, value);
-
-    setResults(lr.list);
-    updateTotal(lr.total);
-  }
-
-  loadMore() async {
-    if (_total != _results.length) {
-      ListResponse lr = await search(_page, _typeValue, _value);
-      updateResults(lr.list);
-      updateTotal(lr.total);
-    }
-  }
-
-  _loadHistory() async {
-    final prefs = await SharedPreferences.getInstance();
-    final sh = prefs.getStringList('searchHistory');
+  /// Set the values of the [results], [total] and [page] variables.
+  /// It replaces the value of the [results] variable list so this function must be called when we 
+  /// want ot reset the pagination as well.
+  /// 
+  /// [ListResponse] the response of the [search] function
+  /// 
+  setResults(ListResponse response) {
     setState(() {
-      _history = sh ?? []; 
+      results = response.list;
+      total = response.total;
+      page++;
     });
   }
-
-  _saveHistory(value) async {
-    final prefs = await SharedPreferences.getInstance();
+  /// Update the value of the [results] variable list so this function must be called when we 
+  /// don't want to reset the pagination.
+  /// 
+  /// [ListResponse] the response of the [search] function
+  /// 
+  updateResults(ListResponse response) {
     setState(() {
-      if(_history.length > 9) {
-        _history.removeLast();
-      } 
-      _history.insert(0, value);
-    });
-    prefs.setStringList('searchHistory', _history);
-  }
-
-  _deleteFromHistory(index) async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _history.removeAt(index);
-    });
-    prefs.setStringList('searchHistory', _history);
-  }
-
-  setResults(list) {
-    setState(() {
-      _results = list;
-      _page++;
-    });
-  }
-
-  updateResults(list) {
-    setState(() {
-      _results.addAll(list);
-      _page++;
-    });
-  }
-
-  updateTotal(total) {
-    setState(() {
-      _total = total;
+      results.addAll(response.list);
+      total = response.total;
+      page++;
     });
   }
 
   @override
   void initState() {
-    _loadHistory();
+    loadHistory();
+    _controller = TextEditingController();
     _scrollController = ScrollController();
     _scrollController.addListener(() async {
       if (_showBtn && _scrollController.position.pixels < showoffset) {
@@ -156,21 +200,21 @@ class _SearchPageState extends State<SearchPage> {
       showModalBottomSheet<void>(
         context: context,
         builder: (context) => SearchSheet(
-          type: _typeValue,
-          function: _setTypeValue,
+          type: typeValue,
+          function: setTypeValue,
         ),
       );
     }
 
     body() {
-      final searched = _value != "";
-      final hasResults = _results.isNotEmpty;
+      final searched = searchValue != "";
+      final hasResults = results.isNotEmpty;
 
       if (searched && hasResults) {
         return ResultList(
           controller: _scrollController,
-          results: _results, 
-          total: _total,
+          results: results, 
+          total: total,
           goTo: (model) {
             final Widget to = TypeEnum.isMovie(model.type)
               ? MoviePage(id: model.id, color: Colors.black) 
@@ -183,10 +227,10 @@ class _SearchPageState extends State<SearchPage> {
         return NoResult();
       } else {
         return HistoryList(
-          history: _history, 
+          history: history, 
           controller: _controller, 
-          search: _search, 
-          delete: _deleteFromHistory
+          search: searchWithoutType, 
+          delete: deleteFromHistory
         );
       }
     }
@@ -208,8 +252,8 @@ class _SearchPageState extends State<SearchPage> {
           ),       
           title: SearchField(
             controller: _controller,
-            search: _search,
-            type: _typeValue,
+            search: searchWithoutType,
+            type: typeValue,
           ),
           actions: [
             IconButton(

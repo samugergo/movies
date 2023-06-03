@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies/pages/catalog/catalog_page.dart';
-import 'package:movies/state.dart';
+import 'package:movies/states/state.dart';
 import 'package:movies/theme/app_colors.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:provider/provider.dart'; 
@@ -18,12 +18,12 @@ void main() async {
 
 class MainApp extends StatefulWidget {
   @override
-  State<MainApp> createState() => _MainAppState();
+  State<MainApp> createState() => MainAppState();
 
-  static _MainAppState of(BuildContext context) => context.findAncestorStateOfType<_MainAppState>()!;
+  static MainAppState of(BuildContext context) => context.findAncestorStateOfType<MainAppState>()!;
 }
 
-class _MainAppState extends State<MainApp> {
+class MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(

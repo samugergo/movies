@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movies/enums/grid_enum.dart';
 import 'package:movies/enums/order_enum.dart';
 import 'package:movies/enums/type_enum.dart';
-import 'package:movies/state.dart';
+import 'package:movies/states/state.dart';
 import 'package:movies/theme/app_colors.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/locale_util.dart';

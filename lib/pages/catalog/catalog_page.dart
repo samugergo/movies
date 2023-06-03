@@ -4,7 +4,7 @@ import 'package:movies/enums/type_enum.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/search/search_page.dart';
 import 'package:movies/pages/show/show_page.dart';
-import 'package:movies/state.dart';
+import 'package:movies/states/state.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/appbars/main_app_bar.dart';
