@@ -1,148 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:movies/enums/type_enum.dart';
-import 'package:movies/models/common/external_id_model.dart';
-import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/movie_detailed_model.dart';
+import 'package:movies/pages/common/detail_page.dart';
 import 'package:movies/services/service.dart';
+import 'package:movies/states/detail_state.dart';
 import 'package:movies/utils/common_util.dart';
-import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/buttons/trailer_button.dart';
 import 'package:movies/widgets/containers/animated_contaner.dart';
 import 'package:movies/widgets/loaders/color_loader.dart';
-import 'package:movies/widgets/containers/gradient_container.dart';
-import 'package:movies/widgets/loaders/loader.dart';
 import 'package:movies/widgets/appbars/my_image_app_bar.dart';
 import 'package:movies/widgets/others/detail_card.dart';
 import 'package:movies/widgets/sections/collection_section.dart';
 import 'package:movies/widgets/sections/images_section.dart';
 import 'package:movies/widgets/sections/provider_section.dart';
 import 'package:movies/widgets/sections/cast_section.dart';
-import 'package:movies/widgets/sections/recommended_section.dart';
 import 'package:movies/widgets/sections/social_medial_section.dart';
 import 'package:movies/widgets/sections/story_section.dart';
-import 'package:movies/widgets/states/common/image_colored_state.dart';
-import 'package:movies/widgets/youtube_player.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-class MoviePage extends StatefulWidget {
-
-  final int id;
-  final Color color;
-
-  MoviePage({
-    super.key,
-    required this.id,
-    required this.color,
-  });
+class MoviePage extends DetailPage {
+  MoviePage({required super.id}) : super(
+    type: TypeEnum.movie
+  );
+  
 
   @override
   State<MoviePage> createState() => _MoviePageState();
 }
 
-class _MoviePageState extends ImageColoredState<MoviePage> {
+class _MoviePageState extends DetailState<MoviePage> {
   MovieDetailedModel? movie;
-  Providers? providers;
-  ExternalIdModel? externalIds;
-  String? trailer;
-  List? cast;
-  List? recommendations;
-  List? similar;
-  List? images;
-
-  // fecth functions
-  _fetchProviders() async {
-    var p = await fetchProviders(widget.id, TypeEnum.movie);
-    setState(() {
-      providers = p;
-    });
-  }
-  _fetchCast() async {
-    var c = await fetchCast(widget.id, TypeEnum.movie);
-    setState(() {
-      cast = c;
-    });
-  }
-  _fetchExternalIds() async {
-    var e = await fetchExternalIds(widget.id, TypeEnum.movie);
-    setState(() {
-      externalIds = e;
-    });
-  }
-  _fetchTrailer() async {
-    var t = await fetchTrailer(widget.id, TypeEnum.movie);
-    setState(() {
-      trailer = t;
-    });
-  }
-  _fetchImages() async {
-    var i = await fetchImages(widget.id, TypeEnum.movie);
-    setState(() {
-      print(i);
-      images = i;
-    });
-  }
-  _fetchRecommends() async {
-    var r = await fetchRecommendations(widget.id, TypeEnum.movie);
-    setState(() {
-      recommendations = r;
-    });
-  }
-  _fetchSimilar() async {
-    var s = await fetchSimilar(widget.id, TypeEnum.movie);
-    setState(() {
-      similar = s;
-    });
-  }
-
+  
   // init
   @override
-  init() async {
-    var m = await fetchById(widget.id, TypeEnum.movie);
+  void init() async {
+    var m = await fetchById(widget.id, widget.type);
     setState(() {
       movie = m;
     });
 
-    _fetchProviders();
-    _fetchCast();
-    _fetchExternalIds();
-    _fetchTrailer();
-    _fetchImages();
-    // _fetchRecommends();
-    // _fetchSimilar();
+    super.fetchCommonData();
 
     preloadImage(originalImageLink(m.cover));
     preloadImageWithColor(lowImageLink(m.cover));
   }
 
-  _launchURL() async {
-    final Uri url = Uri.parse('https://www.youtube.com/watch?v=$trailer');
-    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-      throw Exception('Could not launch $url');
-    }
-  }
-
   // loading
   @override
-  isLoading() {
-    return movie == null 
-      || providers == null 
-      || cast == null 
-      || externalIds == null
-      || trailer == null
-      || images == null
-      // || recommendations == null
-      // || similar == null
-      || mainColor == null
-      || imageLoading;
+  bool isLoading() {
+    return movie == null
+      || super.isLoading();
   }
 
   @override
   Widget build(BuildContext context) {
-    const double horizontalPadding = 15;
     final theme = getAppTheme(context);
+    const double horizontalPadding = 15;
 
     return XAnimatedContainer(
       duration: 300,
@@ -190,12 +102,7 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
                       padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: TrailerButton(
                         id: trailer!,
-                        onclick: () {
-                          // goTo(context, MyYoutubePlayer(
-                          //   id: trailer!,
-                          // ));
-                          _launchURL();
-                        }
+                        onclick: launchTrailer
                       ),
                     ),
                     Padding(
@@ -234,20 +141,6 @@ class _MoviePageState extends ImageColoredState<MoviePage> {
                         externalIds: externalIds!
                       ),
                     ),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    //   child: OtherMoviesSection(
-                    //     title: 'Ajánlott',
-                    //     recommendations: recommendations!
-                    //   )
-                    // ),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    //   child: OtherMoviesSection(
-                    //     title: 'Hasonlóak',
-                    //     recommendations: similar!
-                    //   )
-                    // ),
                   ],
                 )
               )

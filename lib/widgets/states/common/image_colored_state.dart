@@ -23,6 +23,11 @@ abstract class ImageColoredState<T extends StatefulWidget> extends XState<T> {
   }
 
   @override
+  bool isLoading() {
+    return this.imageLoading;
+  }
+
+  @override
   void preloadImage(image, [Function? updateImage, Function? updateImageLoading]) {
     super.preloadImage(image, _updateCoverImage, _updateImageLoading);
   }

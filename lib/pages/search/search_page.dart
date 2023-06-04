@@ -244,8 +244,8 @@ class _SearchPageState extends State<SearchPage> {
           total: total,
           goTo: (model) {
             final Widget to = TypeEnum.isMovie(model.type)
-              ? MoviePage(id: model.id, color: Colors.black) 
-              : ShowPage(id: model.id, color: Colors.black);
+              ? MoviePage(id: model.id) 
+              : ShowPage(id: model.id);
             goTo(context, to);
           },
           horizontalPadding: horizontalPadding,

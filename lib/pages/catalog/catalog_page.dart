@@ -4,16 +4,11 @@ import 'package:movies/enums/type_enum.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/search/search_page.dart';
 import 'package:movies/pages/show/show_page.dart';
-import 'package:movies/states/state.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
-import 'package:movies/widgets/appbars/main_app_bar.dart';
-import 'package:movies/widgets/buttons/load_button.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
 import 'package:movies/widgets/others/image_card.dart';
 import 'package:movies/widgets/sections/filter/filter_section.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CatalogPage extends StatefulWidget {
   CatalogPage({
@@ -161,8 +156,8 @@ class _GridViewState extends State<_GridView> {
               model: pair,
               goTo: (model) {
                 final Widget to = TypeEnum.isMovie(model.type)
-                  ? MoviePage(id: model.id, color: Colors.black) 
-                  : ShowPage(id: model.id, color: Colors.black);
+                  ? MoviePage(id: model.id) 
+                  : ShowPage(id: model.id);
                 goTo(context, to);
               },
             )).toList(),
