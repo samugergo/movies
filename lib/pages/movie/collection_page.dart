@@ -7,7 +7,7 @@ import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/containers/animated_contaner.dart';
 import 'package:movies/widgets/loaders/color_loader.dart';
-import 'package:movies/widgets/appbars/my_image_app_bar.dart';
+import 'package:movies/widgets/appbars/image_app_bar.dart';
 import 'package:movies/widgets/others/image_card.dart';
 import 'package:movies/widgets/sections/common/section_title.dart';
 import 'package:movies/widgets/states/common/image_colored_state.dart';
@@ -79,7 +79,7 @@ class _CollectionPageState extends ImageColoredState<CollectionPage> {
             return [
               SliverPersistentHeader(
                 pinned: true,
-                delegate: MyImageAppBar(
+                delegate: ImageAppBar(
                   title: collection!.title, 
                   cover: coverImage,
                   color: widget.color,

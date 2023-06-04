@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
-import 'package:movies/main.dart';
 import 'package:movies/states/state.dart';
 import 'package:movies/theme/app_colors.dart';
 import 'package:provider/provider.dart';

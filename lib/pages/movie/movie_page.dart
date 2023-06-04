@@ -8,7 +8,7 @@ import 'package:movies/utils/common_util.dart';
 import 'package:movies/widgets/buttons/trailer_button.dart';
 import 'package:movies/widgets/containers/animated_contaner.dart';
 import 'package:movies/widgets/loaders/color_loader.dart';
-import 'package:movies/widgets/appbars/my_image_app_bar.dart';
+import 'package:movies/widgets/appbars/image_app_bar.dart';
 import 'package:movies/widgets/others/detail_card.dart';
 import 'package:movies/widgets/sections/collection_section.dart';
 import 'package:movies/widgets/sections/images_section.dart';
@@ -70,7 +70,7 @@ class _MoviePageState extends DetailState<MoviePage> {
               return [
                 SliverPersistentHeader(
                   pinned: true,
-                  delegate: MyImageAppBar(
+                  delegate: ImageAppBar(
                     title: movie!.title, 
                     cover: coverImage,
                     color: mainColor,

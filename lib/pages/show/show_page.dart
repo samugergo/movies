@@ -10,7 +10,7 @@ import 'package:movies/widgets/containers/animated_contaner.dart';
 import 'package:movies/widgets/loaders/color_loader.dart';
 import 'package:movies/widgets/others/detail_card.dart';
 import 'package:movies/widgets/sections/season_section.dart';
-import 'package:movies/widgets/appbars/my_image_app_bar.dart';
+import 'package:movies/widgets/appbars/image_app_bar.dart';
 import 'package:movies/widgets/sections/cast_section.dart';
 import 'package:movies/widgets/sections/provider_section.dart';
 import 'package:movies/widgets/sections/story_section.dart';
@@ -69,7 +69,7 @@ class _ShowPageState extends DetailState<ShowPage> {
               return [
                 SliverPersistentHeader(
                   pinned: true,
-                  delegate: MyImageAppBar(
+                  delegate: ImageAppBar(
                     title: show!.title, 
                     onlyTitle: false,
                     cover: coverImage,

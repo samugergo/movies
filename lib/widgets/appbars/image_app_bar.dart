@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:movies/theme/app_colors.dart';
 import 'package:movies/utils/common_util.dart';
 
-class MyImageAppBar extends SliverPersistentHeaderDelegate {
-  MyImageAppBar({
+class ImageAppBar extends SliverPersistentHeaderDelegate {
+  ImageAppBar({
     required this.title,
     required this.cover,
     required this.child,
