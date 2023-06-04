@@ -41,7 +41,6 @@ class _SearchPageState extends State<SearchPage> {
 
   /// Load the 10 last search values from mobile to display in the history list view 
   /// whern the user click on the search field.
-  ///
   loadHistory() async {
     final prefs = await SharedPreferences.getInstance();
     final sh = prefs.getStringList('searchHistory');
@@ -54,7 +53,6 @@ class _SearchPageState extends State<SearchPage> {
   /// And shouldn't when clik on a history item!
   /// 
   /// [String] value of the search field, the value of the search query
-  /// 
   saveHistory(String value) async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -69,7 +67,6 @@ class _SearchPageState extends State<SearchPage> {
   /// It must be called only when the user clicks on the remove icon in the history list!
   /// 
   /// [int] index of the elemnt the user clicked on in the history list
-  /// 
   deleteFromHistory(int index) async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -87,7 +84,6 @@ class _SearchPageState extends State<SearchPage> {
   /// [String] value of the search field
   /// [TypeEnum] the type value of the search (movie or show).
   /// [bool] It determines that we want to save the history or not.
-  /// 
   searchWithType(String value, TypeEnum type, bool needSave) async {
     searchValue = value;
     page = 0;
@@ -104,7 +100,6 @@ class _SearchPageState extends State<SearchPage> {
   /// 
   /// [String] value of the search field
   /// [bool] It determines that we want to save the history or not.
-  /// 
   searchWithoutType(String value, bool needSave) async {
     if (value != "") {
       searchWithType(value, typeValue, needSave);
@@ -112,7 +107,6 @@ class _SearchPageState extends State<SearchPage> {
   }
   /// This function is load more results from the DB using the [searchValue] variable and the [typeValue] variable.
   /// THis function must be called only on the pagination.
-  /// 
   loadMore() async {
     if (total != results.length) {
       final response = await search(page, typeValue, searchValue);
@@ -123,7 +117,6 @@ class _SearchPageState extends State<SearchPage> {
   /// And automatically closes the bottom sheet after selection.
   /// 
   /// [TypeEnum] the new typeValue (movie or show) the user selected.
-  /// 
   setTypeValue(type) {
     if (typeValue != type) {
       setState(() {
@@ -140,7 +133,6 @@ class _SearchPageState extends State<SearchPage> {
   /// want ot reset the pagination as well.
   /// 
   /// [ListResponse] the response of the [search] function
-  /// 
   setResults(ListResponse response) {
     setState(() {
       results = response.list;
@@ -152,7 +144,6 @@ class _SearchPageState extends State<SearchPage> {
   /// don't want to reset the pagination.
   /// 
   /// [ListResponse] the response of the [search] function
-  /// 
   updateResults(ListResponse response) {
     setState(() {
       results.addAll(response.list);
@@ -162,14 +153,12 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   /// Initialize the [TextEditController] which is responsible for the search field and set
-  /// the its value when the user clicks on a history search element.
-  /// 
+  /// the its value when the user clicks on a history search element. 
   initTextController() {
     _controller = TextEditingController();
   } 
   /// Initilaze the [ScrollController] which is responsible for a custom scroll behaviour
   /// (the scoll up button and the pagination).
-  /// 
   initScrollController() {
     _scrollController = ScrollController();
     _scrollController.addListener(() async {
@@ -216,7 +205,6 @@ class _SearchPageState extends State<SearchPage> {
 
     /// This function toggles the seach sheet on the screen when the user clicks on 
     /// the 'changeType' icon.
-    ///  
     showSearchSheet() {
       showModalBottomSheet<void>(
         context: context,
@@ -230,7 +218,6 @@ class _SearchPageState extends State<SearchPage> {
     /// /// If there was with no results then the [NoResults] widget will be rendered.
     /// If there was a search and it has results then it will render the [ResultList] widget.
     /// Otherwise the [HistoryList].
-    /// 
     renderBody() {
       final searched = searchValue != "";
       final hasResults = results.isNotEmpty;
@@ -314,7 +301,6 @@ class _SearchPageState extends State<SearchPage> {
 
 /// This class is private class. It renders a custom search field which is used in this page.
 /// It hasn't got any borders or bagrounds.
-/// 
 class SearchField extends StatelessWidget {
   SearchField({
     required TextEditingController controller,
@@ -340,7 +326,6 @@ class SearchField extends StatelessWidget {
     final locale = getAppLocale(context);
 
     /// This function makes the hint of the search field depends on the locale of the application.
-    ///
     hint() {
       final type = getTypeLocale(_type, locale).toLowerCase();
       return locale.searchType(type);
@@ -387,7 +372,6 @@ class SearchField extends StatelessWidget {
 
 /// This class renders a list of the result elements from the api. It can be 
 /// paginated and all the result elements are clickable.
-/// 
 class ResultList extends StatefulWidget {
   ResultList({
     required List results,
@@ -462,7 +446,6 @@ class _ResultListState extends State<ResultList> {
 
 /// This class renders the history list. The last 10 search value is saved on the 
 /// phone with the [SharedPreferences] package.
-/// 
 class HistoryList extends StatelessWidget {
   HistoryList({
     required List history,
@@ -534,7 +517,6 @@ class HistoryList extends StatelessWidget {
 
 /// This class renders a 'No Results page' when the user's search returns 
 /// with an empty list. 
-/// 
 class NoResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
