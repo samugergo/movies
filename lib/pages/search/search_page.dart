@@ -4,7 +4,6 @@ import 'package:movies/models/base/list_response.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/show/show_page.dart';
 import 'package:movies/services/service.dart';
-import 'package:movies/theme/app_colors.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/locale_util.dart';
 import 'package:movies/utils/navigation_util.dart';
@@ -162,10 +161,16 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
-  @override
-  void initState() {
-    loadHistory();
+  /// Initialize the [TextEditController] which is responsible for the search field and set
+  /// the its value when the user clicks on a history search element.
+  /// 
+  initTextController() {
     _controller = TextEditingController();
+  } 
+  /// Initilaze the [ScrollController] which is responsible for a custom scroll behaviour
+  /// (the scoll up button and the pagination).
+  /// 
+  initScrollController() {
     _scrollController = ScrollController();
     _scrollController.addListener(() async {
       if (_showBtn && _scrollController.position.pixels < showoffset) {
@@ -182,21 +187,37 @@ class _SearchPageState extends State<SearchPage> {
         await loadMore();
       }
     });
+  }
+
+  @override
+  void initState() {
+    loadHistory();
+
+    initTextController();
+    initScrollController();
+   
     super.initState();
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).extension<AppColors>()!;
+    /// This variable contains the app theme.
+    final theme = getAppTheme(context);
+    /// This variable contains the universal app horizontal padding.
+    // TODO: make it universal.
     const double horizontalPadding = 15;
 
-    show() {
+    /// This function toggles the seach sheet on the screen when the user clicks on 
+    /// the 'changeType' icon.
+    ///  
+    showSearchSheet() {
       showModalBottomSheet<void>(
         context: context,
         builder: (context) => SearchSheet(
@@ -205,12 +226,18 @@ class _SearchPageState extends State<SearchPage> {
         ),
       );
     }
-
-    body() {
+    /// This function determines which [Widget] needs to be rendered on the screen.
+    /// /// If there was with no results then the [NoResults] widget will be rendered.
+    /// If there was a search and it has results then it will render the [ResultList] widget.
+    /// Otherwise the [HistoryList].
+    /// 
+    renderBody() {
       final searched = searchValue != "";
       final hasResults = results.isNotEmpty;
 
-      if (searched && hasResults) {
+      if (searched && !hasResults) {
+        return NoResult();
+      } else if (searched && !hasResults) {
         return ResultList(
           controller: _scrollController,
           results: results, 
@@ -223,8 +250,6 @@ class _SearchPageState extends State<SearchPage> {
           },
           horizontalPadding: horizontalPadding,
         );
-      } else if (searched && !hasResults) {
-        return NoResult();
       } else {
         return HistoryList(
           history: history, 
@@ -259,12 +284,12 @@ class _SearchPageState extends State<SearchPage> {
             IconButton(
               icon: const Icon(Icons.settings,
               color: Colors.white,),
-              onPressed: show
+              onPressed: showSearchSheet
             ),
             SizedBox(width: 10),
           ],
         ),
-        body: body(),
+        body: renderBody(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           floatingActionButton: AnimatedOpacity(
             duration: Duration(milliseconds: 300),
@@ -287,6 +312,9 @@ class _SearchPageState extends State<SearchPage> {
   }
 }
 
+/// This class is private class. It renders a custom search field which is used in this page.
+/// It hasn't got any borders or bagrounds.
+/// 
 class SearchField extends StatelessWidget {
   SearchField({
     required TextEditingController controller,
@@ -297,15 +325,22 @@ class SearchField extends StatelessWidget {
   _search = search,
   _type = type;
 
+  /// Contrtoller of the search field.
   final TextEditingController _controller;
+  /// A function to make a seach on the api when needed.
   final Function(String, bool) _search;
+  /// Type of the search (movie or tv) it is stored on page level.
   final TypeEnum _type;
 
   @override
   Widget build(BuildContext context) {
+    /// Theme of the application.
     final theme = getAppTheme(context);
+    // locale of the application.
     final locale = getAppLocale(context);
 
+    /// This function makes the hint of the search field depends on the locale of the application.
+    ///
     hint() {
       final type = getTypeLocale(_type, locale).toLowerCase();
       return locale.searchType(type);
@@ -350,6 +385,9 @@ class SearchField extends StatelessWidget {
   }
 }
 
+/// This class renders a list of the result elements from the api. It can be 
+/// paginated and all the result elements are clickable.
+/// 
 class ResultList extends StatefulWidget {
   ResultList({
     required List results,
@@ -364,10 +402,15 @@ class ResultList extends StatefulWidget {
   _goTo = goTo,
   _controller = controller;
 
+  /// This contains the results from the api it is stored on page level.
   final List _results;
+  /// The total number of result elements.
   final int _total;
+  /// Universal application horizontal padding.
   final double _horizontalPadding;
+  /// The scoll controller of the page to handle the custom scrolling behavior.
   final ScrollController _controller;
+  /// A function to call when the user click on a result element.
   final Function _goTo;
 
   @override
@@ -377,6 +420,7 @@ class ResultList extends StatefulWidget {
 class _ResultListState extends State<ResultList> {
   @override
   Widget build(BuildContext context) {
+    /// Locale of the application.
     final locale = getAppLocale(context);
 
     return ListView(
@@ -416,6 +460,9 @@ class _ResultListState extends State<ResultList> {
   }
 }
 
+/// This class renders the history list. The last 10 search value is saved on the 
+/// phone with the [SharedPreferences] package.
+/// 
 class HistoryList extends StatelessWidget {
   HistoryList({
     required List history,
@@ -428,9 +475,13 @@ class HistoryList extends StatelessWidget {
   _search = search,
   _delete = delete; 
 
+  /// List of the last 10 history items.
   final List _history;
+  /// Controller to change the text field value on click.
   final TextEditingController _controller;
+  /// A function to make a search on the api.
   final Function(String, bool) _search;
+  /// A function to delete an item from the history list (it deletes it from the phone as well).
   final Function(int) _delete;
 
   @override
@@ -481,9 +532,13 @@ class HistoryList extends StatelessWidget {
   }
 }
 
+/// This class renders a 'No Results page' when the user's search returns 
+/// with an empty list. 
+/// 
 class NoResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    /// Locale of the application.
     final locale = getAppLocale(context);
 
     return Center(
