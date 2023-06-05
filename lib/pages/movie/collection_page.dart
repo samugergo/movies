@@ -10,7 +10,7 @@ import 'package:movies/widgets/loaders/color_loader.dart';
 import 'package:movies/widgets/appbars/image_app_bar.dart';
 import 'package:movies/widgets/others/image_card.dart';
 import 'package:movies/widgets/sections/common/section_title.dart';
-import 'package:movies/widgets/states/common/image_colored_state.dart';
+import 'package:movies/states/image_state.dart';
 
 class CollectionPage extends StatefulWidget {
   CollectionPage({
@@ -25,7 +25,7 @@ class CollectionPage extends StatefulWidget {
   State<CollectionPage> createState() => _CollectionPageState();
 }
 
-class _CollectionPageState extends ImageColoredState<CollectionPage> {
+class _CollectionPageState extends ImageState<CollectionPage> {
   CollectionDetailedModel? collection;
 
   @override

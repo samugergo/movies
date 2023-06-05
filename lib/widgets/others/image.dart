@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-// ignore: must_be_immutable
 class XImage extends StatelessWidget {
 
   final String url;
@@ -30,13 +29,11 @@ class XImage extends StatelessWidget {
           image: url,
           height: height,
           fadeInDuration: Duration(milliseconds: 200),
-          // width: width,
           fit: BoxFit.cover,
         )
         : Image.asset(
           'assets/images/default.png',
           height: height,
-          // width: width,
           fit: BoxFit.fill,
         ),
       )
@@ -49,13 +46,10 @@ class XImage extends StatelessWidget {
       child: url != '' 
       ? CachedNetworkImage(
         imageUrl: url,
-        // fadeInDuration: Duration(milliseconds: 300),
-        // width: width,
         fit: BoxFit.cover,
       )
       : Image.asset(
         'assets/images/default.png',
-        // width: width,
         fit: BoxFit.fill,
       ),
     );

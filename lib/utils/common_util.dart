@@ -20,7 +20,7 @@ AppState getAppState(BuildContext context) {
 AppColors getAppTheme(BuildContext context) {
   return Theme.of(context).extension<AppColors>()!;
 }
-/// This function returns the main locale of the application. 
+/// This function returns the locale of the application. 
 /// This function should be used if you need the locale.
 /// 
 /// [BuildContext] is the context of the build function of the widget.

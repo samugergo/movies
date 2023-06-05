@@ -8,7 +8,7 @@ import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
 import 'package:movies/widgets/others/image_card.dart';
-import 'package:movies/widgets/sections/filter/filter_section.dart';
+import 'package:movies/widgets/sections/filter_section.dart';
 
 class CatalogPage extends StatefulWidget {
   CatalogPage({

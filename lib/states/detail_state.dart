@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:movies/pages/common/detail_page.dart';
-import 'package:movies/widgets/states/common/image_colored_state.dart';
+import 'package:movies/states/image_state.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../models/common/external_id_model.dart';
 import '../models/common/providers_model.dart';
 import '../services/service.dart';
 
-abstract class DetailState<T extends DetailPage> extends ImageColoredState<T> {
+abstract class DetailState<T extends DetailPage> extends ImageState<T> {
   /// List of the cast members.
   @protected List? cast;
   /// List of the top 5 images from the movie or show.

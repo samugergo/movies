@@ -4,7 +4,6 @@ import 'package:movies/models/detailed/detailed_model.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/widgets/others/image.dart';
 
-// ignore: must_be_immutable
 class DetailCard extends StatelessWidget {
 
   final DetailedModel? model;
