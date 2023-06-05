@@ -27,5 +27,6 @@
   "loadMore": "Több betöltése",
   "results": "Találatok száma: {num}",
   "noResult": "Nincs találat a választott kategóriában!",
-  "images": "Képek"
+  "images": "Képek",
+  "filterAndSort": "Szűrés és rendezés"
 }

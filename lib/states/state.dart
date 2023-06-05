@@ -32,7 +32,14 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-
+  setTypeString(String? type) {
+    if (this.type.value != type) {
+      this.type = TypeEnum.fromValue(type!);
+      resetCatalog();
+      loadCatalog();
+      notifyListeners();
+    }
+  }
   setType(type) {
     if (this.type != type) {
       this.type = type;

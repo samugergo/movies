@@ -15,6 +15,7 @@ class FilterSection extends StatelessWidget {
 
     show() {
       showModalBottomSheet<void>(
+        elevation: 0,
         context: context,
         builder: (context) => FilterSheet(),
       );

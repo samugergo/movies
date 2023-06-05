@@ -27,5 +27,6 @@
   "loadMore": "Load more",
   "results": "Results: {num}",
   "noResult": "No results in the selected category!",
-  "images": "Images"
+  "images": "Images",
+  "filterAndSort": "Filter and sort"
 }

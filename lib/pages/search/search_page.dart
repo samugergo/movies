@@ -208,6 +208,7 @@ class _SearchPageState extends State<SearchPage> {
     showSearchSheet() {
       showModalBottomSheet<void>(
         context: context,
+        elevation: 0,
         builder: (context) => SearchSheet(
           type: typeValue,
           function: setTypeValue,

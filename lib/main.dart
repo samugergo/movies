@@ -33,7 +33,8 @@ class MainAppState extends State<MainApp> {
           useMaterial3: true,
           scaffoldBackgroundColor: Colors.transparent,
           bottomSheetTheme: BottomSheetThemeData(
-            backgroundColor: Color(0xff343643)
+            backgroundColor: Color(0xff292A37),
+            elevation: 0,
           ),
           extensions: [
             AppColors.theme
