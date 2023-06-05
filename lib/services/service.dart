@@ -6,12 +6,10 @@ import 'package:movies/enums/type_enum.dart';
 import 'package:movies/models/base/list_response.dart';
 import 'package:movies/models/common/cast_model.dart';
 import 'package:movies/models/common/external_id_model.dart';
-import 'package:movies/models/common/person_model.dart';
 import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/detailed/collection_detailed_model.dart';
 import 'package:movies/models/detailed/movie_detailed_model.dart';
 import 'package:movies/models/detailed/show_detailed_model.dart';
-import 'package:collection/collection.dart';
 
 import '../models/base/display_model.dart';
 import '../utils/common_util.dart';
@@ -65,11 +63,6 @@ fetchSimilar(int id, TypeEnum type) async {
 fetchCollection(int id) async {
   var result = await resource.doApiCall('collection/$id', []);
   return CollectionDetailedModel.fromJson(result);
-}
-
-fetchPersonById(int id) async {
-  var result = await resource.doApiCall('person/$id', []);
-  return PersonModel.fromJson(result);
 }
 
 fetchPerform(int id, String type) async {

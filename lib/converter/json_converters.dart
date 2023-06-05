@@ -3,7 +3,6 @@ import 'package:movies/models/base/display_model.dart';
 import 'package:movies/models/common/cast_model.dart';
 import 'package:movies/models/common/collection_model.dart';
 import 'package:movies/models/common/external_id_model.dart';
-import 'package:movies/models/common/person_model.dart';
 import 'package:movies/models/common/providers_model.dart';
 import 'package:movies/models/common/season_model.dart';
 import 'package:movies/utils/common_util.dart';
@@ -57,17 +56,6 @@ CollectionModel fromJsonCollectionModel(Map<String, dynamic> json) {
     title: getField(json, PropertyEnum.name), 
     image: getImage(json, PropertyEnum.image), 
     cover: getField(json, PropertyEnum.cover),
-  );
-}
-
-PersonModel fromJsonPersonModel(Map<String, dynamic> json) {
-  return PersonModel(
-    id: getField(json, PropertyEnum.id), 
-    name: getField(json, PropertyEnum.name), 
-    biography: getField(json, PropertyEnum.biography), 
-    birthday: getField(json, PropertyEnum.birthday), 
-    birthPlace: getField(json, PropertyEnum.placeOfBirth), 
-    image: getField(json, PropertyEnum.profile),
   );
 }
 
