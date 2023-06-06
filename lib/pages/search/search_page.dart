@@ -8,6 +8,7 @@ import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/locale_util.dart';
 import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
+import 'package:movies/widgets/loaders/color_loader.dart';
 import 'package:movies/widgets/others/result_card.dart';
 import 'package:movies/widgets/sheets/search_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,6 +31,8 @@ class _SearchPageState extends State<SearchPage> {
   String searchValue = "";
   /// The type of the search, it is independent from the [appState.type].
   TypeEnum typeValue = TypeEnum.movie;  
+  /// It defines if the the api is loading the search or not.
+  bool _loading = false;
   /// It defines that the 'scrollUpButton' should be visible or not.
   bool _showBtn = false;
   /// It defines on offset to the scroll, when should be the 'scrollUpButton' visible.
@@ -85,6 +88,7 @@ class _SearchPageState extends State<SearchPage> {
   /// [TypeEnum] the type value of the search (movie or show).
   /// [bool] It determines that we want to save the history or not.
   searchWithType(String value, TypeEnum type, bool needSave) async {
+    setLoading(true);
     searchValue = value;
     page = 0;
     total = 0;
@@ -93,6 +97,7 @@ class _SearchPageState extends State<SearchPage> {
     }
     ListResponse response = await search(page, type, value);
     setResults(response);
+    setLoading(false);
   }
   /// This function is a 'subType' of the [searchWithType] function.
   /// It uses the the value of the [typeValue] variable as default.
@@ -149,6 +154,15 @@ class _SearchPageState extends State<SearchPage> {
       results.addAll(response.list);
       total = response.total;
       page++;
+    });
+  }
+  /// This function set the valaue of the [loading] variable to display the loading screen 
+  /// while the app is waiting for the results.
+  /// 
+  /// [bool] the value of the [loading] variable
+  setLoading(bool loading) {
+    setState(() {
+      _loading = loading;
     });
   }
 
@@ -222,8 +236,9 @@ class _SearchPageState extends State<SearchPage> {
     renderBody() {
       final searched = searchValue != "";
       final hasResults = results.isNotEmpty;
-
-      if (searched && !hasResults) {
+      if(_loading) {
+        return ColorLoader(color: theme.primary!);
+      } else if (searched && !hasResults) {
         return NoResult();
       } else if (searched && hasResults) {
         return ResultList(
