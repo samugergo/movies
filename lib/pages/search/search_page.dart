@@ -225,7 +225,7 @@ class _SearchPageState extends State<SearchPage> {
 
       if (searched && !hasResults) {
         return NoResult();
-      } else if (searched && !hasResults) {
+      } else if (searched && hasResults) {
         return ResultList(
           controller: _scrollController,
           results: results, 
