@@ -29,7 +29,7 @@ class _SearchPageState extends State<SearchPage> {
   List results = [];
   /// The value of the search field (it must not be null).
   String searchValue = "";
-  /// The type of the search, it is independent from the [appState.type].
+  /// The type of the search, it is independent of the [appState.type].
   TypeEnum typeValue = TypeEnum.movie;  
   /// It defines if the the api is loading the search or not.
   bool _loading = false;
