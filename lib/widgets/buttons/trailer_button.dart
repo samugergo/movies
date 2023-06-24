@@ -6,9 +6,8 @@ class TrailerButton extends StatelessWidget {
   TrailerButton({
     required String id,
     required Function onclick,
-  }) :
-  _id = id,
-  _onClick = onclick;
+  })  : _id = id,
+        _onClick = onclick;
 
   final Function _onClick;
   final String _id;
@@ -20,29 +19,16 @@ class TrailerButton extends StatelessWidget {
     const icon = FontAwesomeIcons.play;
     final text = locale.watchTrailer;
 
-    return _id != '' 
-    ? ElevatedButton.icon(
-      onPressed: () => _onClick(),
-      style: ElevatedButton.styleFrom(
-        elevation: 0,
-        padding: EdgeInsets.all(12),
-        backgroundColor: Colors.white12,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5)
-        ),
-      ),
-      label: Text(
-        text,
-        style: TextStyle(
-          color: Colors.white,
-        ),
-      ),
-      icon: FaIcon(
-        icon,
-        size: 14,
-        color: Colors.white,
-      ),
-    )
-    : SizedBox();
+    return _id != ''
+        ? ElevatedButton.icon(
+            onPressed: () => _onClick(),
+            style: ElevatedButton.styleFrom(
+                elevation: 0,
+                padding: EdgeInsets.all(12),
+                backgroundColor: Colors.white12,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
+            label: Text(text, style: TextStyle(color: Colors.white)),
+            icon: FaIcon(icon, size: 14, color: Colors.white))
+        : SizedBox();
   }
 }

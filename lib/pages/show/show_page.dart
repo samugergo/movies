@@ -18,9 +18,7 @@ import '../../widgets/sections/images_section.dart';
 import '../../widgets/sections/social_medial_section.dart';
 
 class ShowPage extends DetailPage {
-  ShowPage({required super.id}) : super(
-    type: TypeEnum.show
-  );
+  ShowPage({required super.id}) : super(type: TypeEnum.show);
 
   @override
   State<ShowPage> createState() => _ShowPageState();
@@ -46,8 +44,7 @@ class _ShowPageState extends DetailState<ShowPage> {
   // loading
   @override
   bool isLoading() {
-    return show == null 
-      || super.isLoading();
+    return show == null || super.isLoading();
   }
 
   @override
@@ -56,97 +53,67 @@ class _ShowPageState extends DetailState<ShowPage> {
     const double horizontalPadding = 15;
 
     return XAnimatedContainer(
-      duration: 300, 
-      color: theme.primary!, 
-      statusbar: isLoading() ? theme.primary : mainColor,
-      child: isLoading()
-      ? ColorLoader(color: theme.primary!)
-      : Container(
-        color: mainColor,
-        child: SafeArea(
-          child: NestedScrollView(
-            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-              return [
-                SliverPersistentHeader(
-                  pinned: true,
-                  delegate: ImageAppBar(
-                    title: show!.title, 
-                    onlyTitle: false,
-                    cover: coverImage,
-                    color: mainColor,
-                    horizontalPadding: horizontalPadding,
-                    child: DetailCard(
-                      model: show!,
-                    ),
-                  ),
-                ),
-              ];
-            },
-            body: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  stops: [0.1, 1],
-                  colors: [
-                    mainColor!,
-                    Colors.black45,
-                  ]
-                ),
-              ),
-              child: Scaffold(
-                body: ListView(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                      child: TrailerButton(
-                        id: trailer!,
-                        onclick: launchTrailer
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                      child: ProviderSection(
-                        providers: providers
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                      child: StorySection(
-                        description: show!.description
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                      child: SeasonSection(
-                        list: show!.seasons
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                      child: CastSection(
-                        cast: cast!
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                      child: ImagesSection(
-                        images: images!,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                      child: SocialMediaSection(
-                        externalIds: externalIds!
-                      ),
-                    ),
-                  ],
-                )
-              )
-            )
-          ),
-        ),
-      )
-    );
+        duration: 300,
+        color: theme.primary!,
+        statusbar: isLoading() ? theme.primary : mainColor,
+        child: isLoading()
+            ? ColorLoader(color: theme.primary!)
+            : Container(
+                color: mainColor,
+                child: SafeArea(
+                    child: NestedScrollView(
+                        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                          return [
+                            SliverPersistentHeader(
+                                pinned: true,
+                                delegate: ImageAppBar(
+                                    title: show!.title,
+                                    onlyTitle: false,
+                                    cover: coverImage,
+                                    color: mainColor,
+                                    horizontalPadding: horizontalPadding,
+                                    child: DetailCard(model: show!)))
+                          ];
+                        },
+                        body: Container(
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    stops: [0.1, 1],
+                                    colors: [mainColor!, Colors.black45])),
+                            child: Scaffold(
+                                body: ListView(children: [
+                              Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: horizontalPadding),
+                                  child: TrailerButton(id: trailer!, onclick: launchTrailer)),
+                              Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: horizontalPadding),
+                                  child: ProviderSection(providers: providers)),
+                              Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: horizontalPadding),
+                                  child: StorySection(description: show!.description)),
+                              Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: horizontalPadding),
+                                  child: SeasonSection(list: show!.seasons)),
+                              Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: horizontalPadding),
+                                  child: CastSection(cast: cast!)),
+                              Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: horizontalPadding),
+                                  child: ImagesSection(
+                                    images: images!,
+                                  )),
+                              Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: horizontalPadding),
+                                  child: SocialMediaSection(externalIds: externalIds!))
+                            ])))))));
   }
 }

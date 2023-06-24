@@ -24,20 +24,20 @@ class CatalogPage extends StatefulWidget {
 class _CatalogPageState extends State<CatalogPage> {
   late ScrollController _controller;
   bool _showBtn = false;
-  double showoffset = 200;
+  double showOffset = 200;
 
   @override
   void initState() {
     _controller = ScrollController();
     _controller.addListener(() async {
-      if (_showBtn && _controller.position.pixels < showoffset) {
+      if (_showBtn && _controller.position.pixels < showOffset) {
         setState(() {
-          _showBtn = false; 
+          _showBtn = false;
         });
       }
-      if (!_showBtn && _controller.position.pixels > showoffset) {
+      if (!_showBtn && _controller.position.pixels > showOffset) {
         setState(() {
-          _showBtn = true; 
+          _showBtn = true;
         });
       }
       if (_controller.position.pixels == _controller.position.maxScrollExtent) {
@@ -56,42 +56,34 @@ class _CatalogPageState extends State<CatalogPage> {
   @override
   Widget build(BuildContext context) {
     final appState = getAppState(context);
-    final theme = getAppTheme(context);    
+    final theme = getAppTheme(context);
 
     return AnnotatedRegion(
-      value: SystemUiOverlayStyle.light.copyWith(           
-        statusBarColor: Colors.black
-        .withOpacity(0.6),
-      ),
-      child: GradientContainer(
-        child: Scaffold(
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: _GridView(
-              load: appState.loadCatalog,
-              controller: _controller,
-            ),
-          ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: AnimatedOpacity(
-            duration: Duration(milliseconds: 300),
-            opacity: _showBtn ? 1.0 : 0.0, 
-            child: FloatingActionButton(
-              onPressed: () {
-                _controller.animateTo(0, duration: Duration(milliseconds: 500), curve: Curves.fastOutSlowIn);
-              },
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-              mini: true,
-              backgroundColor: theme.primary,
-              child: Icon(
-                Icons.arrow_upward,
-                color: Colors.white,
-              ),
-            ),
-          ),
+        value: SystemUiOverlayStyle.light.copyWith(
+          statusBarColor: Colors.black.withOpacity(0.6),
         ),
-      ),
-    );
+        child: GradientContainer(
+            child: Scaffold(
+                body: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: _GridView(
+                    load: appState.loadCatalog,
+                    controller: _controller,
+                  ),
+                ),
+                floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+                floatingActionButton: AnimatedOpacity(
+                    duration: Duration(milliseconds: 300),
+                    opacity: _showBtn ? 1.0 : 0.0,
+                    child: FloatingActionButton(
+                        onPressed: () {
+                          _controller.animateTo(0,
+                              duration: Duration(milliseconds: 500), curve: Curves.fastOutSlowIn);
+                        },
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+                        mini: true,
+                        backgroundColor: theme.primary,
+                        child: Icon(Icons.arrow_upward, color: Colors.white))))));
   }
 }
 
@@ -108,64 +100,54 @@ class _GridView extends StatefulWidget {
   State<_GridView> createState() => _GridViewState();
 }
 
-class _GridViewState extends State<_GridView> { 
+class _GridViewState extends State<_GridView> {
   @override
   Widget build(BuildContext context) {
     final appState = getAppState(context);
     final theme = getAppTheme(context);
-    final locale = getAppLocale(context);
 
     final itemCount = appState.grid.value;
     final list = appState.catalogList;
-    
-    final double width = MediaQuery.of(context).size.width;
+
+    final width = MediaQuery.of(context).size.width;
     const crossSpacing = 10.0;
     const mainSpacing = 10.0;
-    final itemWidth = width/itemCount - itemCount * crossSpacing;
-    final itemHeight = itemWidth*1.5;
+    final itemWidth = width / itemCount - itemCount * crossSpacing;
+    final itemHeight = itemWidth * 1.5;
 
     return NestedScrollView(
-      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-        return [
-          // SliverPersistentHeader(
-          //   pinned: true,
-          //   delegate: MainAppBar(),
-          // ),
-          SliverAppBar(
-            pinned: true,
-            scrolledUnderElevation: 0,
-            backgroundColor: theme.primary,
-            titleSpacing: 5,
-            title: _SearchField(),
-          ),
-        ];
-      },
-      body: ListView(
-        controller: widget.controller,
-        children: [
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return [
+            SliverAppBar(
+                pinned: true,
+                scrolledUnderElevation: 0,
+                backgroundColor: theme.primary,
+                titleSpacing: 5,
+                title: _SearchField())
+          ];
+        },
+        body: ListView(controller: widget.controller, children: [
           FilterSection(),
           GridView.count(
-            padding: EdgeInsets.symmetric(horizontal: 5),
-            physics: BouncingScrollPhysics(),
-            shrinkWrap: true,
-            crossAxisCount: itemCount,
-            mainAxisSpacing: mainSpacing,
-            crossAxisSpacing: crossSpacing,
-            childAspectRatio: itemWidth/itemHeight,
-            children: list.map<Widget>((pair) => ImageCard(
-              model: pair,
-              goTo: (model) {
-                final Widget to = TypeEnum.isMovie(model.type)
-                  ? MoviePage(id: model.id) 
-                  : ShowPage(id: model.id);
-                goTo(context, to);
-              },
-            )).toList(),
-          ),
-          SizedBox(height: 10),
-        ],
-      ),
-    );
+              padding: EdgeInsets.symmetric(horizontal: 5),
+              physics: BouncingScrollPhysics(),
+              shrinkWrap: true,
+              crossAxisCount: itemCount,
+              mainAxisSpacing: mainSpacing,
+              crossAxisSpacing: crossSpacing,
+              childAspectRatio: itemWidth / itemHeight,
+              children: list
+                  .map<Widget>((pair) => ImageCard(
+                      model: pair,
+                      goTo: (model) {
+                        final Widget to = TypeEnum.isMovie(model.type)
+                            ? MoviePage(id: model.id)
+                            : ShowPage(id: model.id);
+                        goTo(context, to);
+                      }))
+                  .toList()),
+          SizedBox(height: 10)
+        ]));
   }
 }
 
@@ -179,34 +161,26 @@ class _SearchField extends StatelessWidget {
       textInputAction: TextInputAction.search,
       readOnly: true,
       onTap: () => goTo(context, SearchPage()),
-      style: TextStyle(
-        color: Colors.white
-      ),
+      style: TextStyle(color: Colors.white),
       decoration: InputDecoration(
-        filled: true,
-        fillColor: theme.primaryLight,
-        suffixIcon: Icon(
-          Icons.search,
-          color: theme.unselected!,
-        ),
-        hintText: locale.search,
-        hintStyle: TextStyle(
-          color: Colors.grey[600],
-          fontWeight: FontWeight.normal
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.transparent),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.transparent),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        contentPadding: EdgeInsets.only(left: 15),
-        constraints: BoxConstraints(
-          maxHeight: 40,
-        )
-      ),
+          filled: true,
+          fillColor: theme.primaryLight,
+          suffixIcon: Icon(
+            Icons.search,
+            color: theme.unselected!,
+          ),
+          hintText: locale.search,
+          hintStyle: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.normal),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.transparent),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.transparent),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          contentPadding: EdgeInsets.only(left: 15),
+          constraints: BoxConstraints(maxHeight: 40)),
     );
   }
 }

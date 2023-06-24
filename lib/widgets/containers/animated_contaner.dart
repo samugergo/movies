@@ -17,18 +17,13 @@ class XAnimatedContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: AnnotatedRegion(
-        value: SystemUiOverlayStyle.light.copyWith(           
-          statusBarColor: statusbar ?? color,
-        ),
-        child: Container(
-          color: color,
-          child: AnimatedSwitcher(
-            duration: Duration(milliseconds: duration),
-            child: child,
-          ),
-        ),
-      )
-    );
+        child: AnnotatedRegion(
+            value: SystemUiOverlayStyle.light.copyWith(
+              statusBarColor: statusbar ?? color,
+            ),
+            child: Container(
+                color: color,
+                child:
+                    AnimatedSwitcher(duration: Duration(milliseconds: duration), child: child))));
   }
 }

@@ -18,7 +18,7 @@ class CollectionPage extends StatefulWidget {
     required this.color,
   });
 
-  final int id; 
+  final int id;
   final Color color;
 
   @override
@@ -40,8 +40,7 @@ class _CollectionPageState extends ImageState<CollectionPage> {
 
   @override
   isLoading() {
-    return collection == null
-      || imageLoading == true;
+    return collection == null || imageLoading == true;
   }
 
   @override
@@ -53,84 +52,62 @@ class _CollectionPageState extends ImageState<CollectionPage> {
       goTo(context, to);
     }
 
-    go(model){
-      getColorFromImage(
-        lowImageLink(model.cover), 
-        (color) => goColor(model.id, color)
-      );
+    go(model) {
+      getColorFromImage(lowImageLink(model.cover), (color) => goColor(model.id, color));
     }
 
     final double width = MediaQuery.of(context).size.width;
     const itemCount = 3;
     const crossSpacing = 10.0;
     const mainSpacing = 10.0;
-    final itemWidth = width/itemCount - itemCount * crossSpacing;
-    final itemHeight = itemWidth*1.5;
+    final itemWidth = width / itemCount - itemCount * crossSpacing;
+    final itemHeight = itemWidth * 1.5;
 
     return XAnimatedContainer(
-      color: widget.color, 
-      statusbar: widget.color,
-      duration: 300, 
-      child: isLoading() 
-      ? ColorLoader(color: widget.color)
-      : SafeArea(
-        child: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return [
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: ImageAppBar(
-                  title: collection!.title, 
-                  cover: coverImage,
-                  color: widget.color,
-                  onlyTitle: true,
-                  horizontalPadding: 10,
-                  child: Text(collection!.title),
-                ),
-              ),
-            ];
-          },
-          body: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                stops: [0.1, 1],
-                colors: [
-                  widget.color,
-                  Colors.black45,
-                ]
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SectionTitle(
-                      titleLeftPadding: 0, 
-                      title: locale.movies
-                    ),
-                    GridView.count(
-                      physics: BouncingScrollPhysics(),
-                      shrinkWrap: true,
-                      crossAxisCount: itemCount,
-                      mainAxisSpacing: mainSpacing,
-                      crossAxisSpacing: crossSpacing,
-                      childAspectRatio: itemWidth/itemHeight,
-                      children: collection!.modelList.map((pair) => ImageCard(
-                        model: pair,
-                        goTo: go,
-                      )).toList(),
-                    ),
-                  ],
-                ),
-              ),
-            )
-          )
-        ),
-      )
-    );
+        color: widget.color,
+        statusbar: widget.color,
+        duration: 300,
+        child: isLoading()
+            ? ColorLoader(color: widget.color)
+            : SafeArea(
+                child: NestedScrollView(
+                    headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                      return [
+                        SliverPersistentHeader(
+                            pinned: true,
+                            delegate: ImageAppBar(
+                                title: collection!.title,
+                                cover: coverImage,
+                                color: widget.color,
+                                onlyTitle: true,
+                                horizontalPadding: 10,
+                                child: Text(collection!.title)))
+                      ];
+                    },
+                    body: Container(
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                stops: [0.1, 1],
+                                colors: [widget.color, Colors.black45])),
+                        child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            child: SingleChildScrollView(
+                                child:
+                                    Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                              SectionTitle(titleLeftPadding: 0, title: locale.movies),
+                              GridView.count(
+                                physics: BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                crossAxisCount: itemCount,
+                                mainAxisSpacing: mainSpacing,
+                                crossAxisSpacing: crossSpacing,
+                                childAspectRatio: itemWidth / itemHeight,
+                                children: collection!.modelList
+                                    .map((pair) => ImageCard(model: pair, goTo: go))
+                                    .toList(),
+                              )
+                            ])))))));
   }
 }
