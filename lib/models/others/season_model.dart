@@ -1,5 +1,7 @@
-import 'package:movies/converter/json_converters.dart';
+import 'package:movies/utils/json_util.dart';
 import 'package:movies/utils/common_util.dart';
+
+import '../../enums/property_enum.dart';
 
 class SeasonModel {
   final int id;
@@ -15,6 +17,10 @@ class SeasonModel {
   });
 
   factory SeasonModel.fromJson(Map<String, dynamic> json) {
-    return fromJsonSeasonModel(json);
+    return SeasonModel(
+        id: getField(json, PropertyEnum.id),
+        title: getField(json, PropertyEnum.name),
+        image: getImage(json, PropertyEnum.poster),
+        seasonNumber: getField(json, PropertyEnum.seasonNumber));
   }
 }

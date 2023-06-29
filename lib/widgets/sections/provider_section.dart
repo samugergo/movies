@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies/enums/provider_enum.dart';
-import 'package:movies/models/common/providers_model.dart';
+import 'package:movies/models/others/providers_model.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/widgets/others/image.dart';
 import 'package:movies/widgets/sections/common/section.dart';

@@ -3,8 +3,8 @@ import 'package:movies/pages/common/detail_page.dart';
 import 'package:movies/states/image_state.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../models/common/external_id_model.dart';
-import '../models/common/providers_model.dart';
+import '../models/others/external_id_model.dart';
+import '../models/others/providers_model.dart';
 import '../services/service.dart';
 
 abstract class DetailState<T extends DetailPage> extends ImageState<T> {

@@ -4,7 +4,7 @@ import 'package:movies/utils/color_util.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/sections/common/section.dart';
-import 'package:movies/models/common/collection_model.dart';
+import 'package:movies/models/others/collection_model.dart';
 
 class CollectionSection extends StatelessWidget {
   CollectionSection({

@@ -4,9 +4,9 @@ import 'package:movies/enums/order_enum.dart';
 import 'package:movies/enums/resource/param_enum.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/models/base/list_response.dart';
-import 'package:movies/models/common/cast_model.dart';
-import 'package:movies/models/common/external_id_model.dart';
-import 'package:movies/models/common/providers_model.dart';
+import 'package:movies/models/others/cast_model.dart';
+import 'package:movies/models/others/external_id_model.dart';
+import 'package:movies/models/others/providers_model.dart';
 import 'package:movies/models/detailed/collection_detailed_model.dart';
 import 'package:movies/models/detailed/movie_detailed_model.dart';
 import 'package:movies/models/detailed/show_detailed_model.dart';
@@ -17,20 +17,21 @@ import '../utils/common_util.dart';
 final resource = MovieDBResource();
 
 fetch(int page, TypeEnum type, OrderEnum order) async {
-  var result = await resource.doApiCall('${type.value}/${order.value}', [
-    PathParameter(key: ParamEnum.PAGE, value: page + 1),
-  ]);
+  var result = await resource.doApiCall(
+      '${type.value}/${order.value}', [PathParameter(key: ParamEnum.PAGE, value: page + 1)]);
   return result['results'].map((r) => DisplayModel.fromJson(r, type)).toList();
 }
 
 fetchById(int id, TypeEnum type) async {
   var result = await resource.doApiCall('${type.value}/$id', []);
-  return TypeEnum.isMovie(type) ? MovieDetailedModel.fromJson(result) : ShowDetailedModel.fromJson(result);
+  return TypeEnum.isMovie(type)
+      ? MovieDetailedModel.fromJson(result)
+      : ShowDetailedModel.fromJson(result);
 }
 
 fetchProviders(int id, TypeEnum type) async {
   var result = await resource.doApiCall('${type.value}/$id/watch/providers', []);
-  if(result["results"]["HU"] != null) {
+  if (result["results"]["HU"] != null) {
     return Providers.fromJson(result["results"]["HU"]);
   }
   return Providers();
@@ -38,24 +39,24 @@ fetchProviders(int id, TypeEnum type) async {
 
 fetchCast(int id, TypeEnum type) async {
   var result = await resource.doApiCall('${type.value}/$id/credits', []);
-  if(result["cast"] != null) {
-    return sublist(result['cast'].map((c) => CastModel.fromJson(c)).toList(), 10); 
+  if (result["cast"] != null) {
+    return sublist(result['cast'].map((c) => CastModel.fromJson(c)).toList(), 10);
   }
   return [];
 }
 
 fetchRecommendations(int id, TypeEnum type) async {
   var result = await resource.doApiCall('${type.value}/$id/recommendations', []);
-  if(result["results"] != null) {
-    return result['results'].map((c) => DisplayModel.fromJson(c, type)).toList(); 
+  if (result["results"] != null) {
+    return result['results'].map((c) => DisplayModel.fromJson(c, type)).toList();
   }
   return [];
 }
 
 fetchSimilar(int id, TypeEnum type) async {
   var result = await resource.doApiCall('${type.value}/$id/similar', []);
-  if(result["results"] != null) {
-    return result['results'].map((c) => DisplayModel.fromJson(c, type)).toList(); 
+  if (result["results"] != null) {
+    return result['results'].map((c) => DisplayModel.fromJson(c, type)).toList();
   }
   return [];
 }
@@ -86,9 +87,12 @@ fetchImages(int id, TypeEnum type) async {
 fetchTrailer(int id, TypeEnum type) async {
   var result = await resource.doApiCall('${type.value}/$id/videos', []);
   if (result['results'].isNotEmpty) {
-    var trailer = result['results'].firstWhere((t) => t['type'] == 'Trailer' && t['official'] && t['site'] == 'YouTube', orElse: () => null);
+    var trailer = result['results'].firstWhere(
+        (t) => t['type'] == 'Trailer' && t['official'] && t['site'] == 'YouTube',
+        orElse: () => null);
     if (trailer == null) {
-      trailer = result['results'].firstWhere((t) => t['type'] == 'Trailer' && t['site'] == 'YouTube', orElse: () => null);
+      trailer = result['results']
+          .firstWhere((t) => t['type'] == 'Trailer' && t['site'] == 'YouTube', orElse: () => null);
       return trailer != null ? trailer['key'] : '';
     }
     return trailer['key'];
@@ -99,12 +103,11 @@ fetchTrailer(int id, TypeEnum type) async {
 search(int page, TypeEnum type, String query) async {
   var result = await resource.doApiCall('search/${type.value}', [
     PathParameter(key: ParamEnum.QUERY, value: query),
-    PathParameter(key: ParamEnum.PAGE, value: page + 1),
+    PathParameter(key: ParamEnum.PAGE, value: page + 1)
   ]);
   return ListResponse(
-    list: result['results'].map((r) => DisplayModel.fromJson(r, type)).toList(),
-    page: result['page'],
-    total: result['total_results'],
-    pages: result['total_pages'],
-  );
+      list: result['results'].map((r) => DisplayModel.fromJson(r, type)).toList(),
+      page: result['page'],
+      total: result['total_results'],
+      pages: result['total_pages']);
 }

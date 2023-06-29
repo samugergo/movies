@@ -435,7 +435,7 @@ class _ResultListState extends State<ResultList> {
               borderRadius: BorderRadius.circular(10),
               onTap: () => widget._goTo(e),
               child: ResultCard(
-                  image: e.image, title: e.title, release: e.release, percent: e.percent))))
+                  image: e.poster, title: e.title, release: e.release, percent: e.percent))))
     ]);
   }
 }

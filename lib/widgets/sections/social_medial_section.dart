@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:movies/enums/resource/param_enum.dart';
-import 'package:movies/models/common/external_id_model.dart';
+import 'package:movies/models/others/external_id_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SocialMediaSection extends StatelessWidget {

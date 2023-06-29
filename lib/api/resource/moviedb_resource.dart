@@ -6,14 +6,14 @@ import 'package:movies/api/resource/resource.dart';
 import 'package:movies/enums/resource/param_enum.dart';
 
 class MovieDBResource extends Resource {
-  MovieDBResource() : super(
-    baseUrl: dotenv.env[ParamEnum.BASE_URL.name]!, 
-    apiKey: dotenv.env[ParamEnum.API_KEY.name]!
-  );
+  MovieDBResource()
+      : super(
+            baseUrl: dotenv.env[ParamEnum.BASE_URL.name]!,
+            apiKey: dotenv.env[ParamEnum.API_KEY.name]!);
 
   getLanguage() {
     const valid = ['en_US', 'hu_HU'];
-    if(valid.contains(Platform.localeName)) {
+    if (valid.contains(Platform.localeName)) {
       return Platform.localeName.replaceFirst(RegExp('_'), '-');
     }
     return dotenv.env[ParamEnum.LANG.name];
@@ -22,14 +22,8 @@ class MovieDBResource extends Resource {
   @override
   doApiCall(String endpoint, List<PathParameter> params) async {
     params.addAll([
-      PathParameter(
-        key: ParamEnum.LANG, 
-        value: getLanguage()
-      ),
-      PathParameter(
-        key: ParamEnum.REGION, 
-        value: dotenv.env[ParamEnum.REGION.name]
-      ),
+      PathParameter(key: ParamEnum.LANG, value: getLanguage()),
+      PathParameter(key: ParamEnum.REGION, value: dotenv.env[ParamEnum.REGION.name])
     ]);
     return await super.doApiCall(endpoint, params);
   }

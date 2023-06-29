@@ -1,5 +1,7 @@
-import 'package:movies/converter/json_converters.dart';
+import 'package:movies/utils/json_util.dart';
 import 'package:movies/enums/type_enum.dart';
+
+import '../../enums/property_enum.dart';
 
 class DisplayModel {
   final int id;
@@ -23,7 +25,15 @@ class DisplayModel {
   });
 
   factory DisplayModel.fromJson(Map<String, dynamic> json, TypeEnum type) {
-    return fromJsonDisplayModel(json, type);
+    return DisplayModel(
+        id: getField(json, PropertyEnum.id),
+        percent: getFieldDouble(json, PropertyEnum.percent),
+        title: getFieldList(json, PropertyEnum.titleProperties),
+        release: getFieldList(json, PropertyEnum.dateProperties),
+        image: getImage(json, PropertyEnum.poster),
+        cover: getField(json, PropertyEnum.cover),
+        tagline: getField(json, PropertyEnum.tagline),
+        type: type);
   }
 
   @override
