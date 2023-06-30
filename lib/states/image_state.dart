@@ -13,11 +13,13 @@ abstract class ImageState<T extends StatefulWidget> extends State<T> {
       this.mainColor = mainColor;
     });
   }
+
   _updateImageLoading(bool imageLoading) {
     setState(() {
       this.imageLoading = imageLoading;
     });
   }
+
   _updateCoverImage(Image coverImage) {
     setState(() {
       this.coverImage = coverImage;
@@ -28,7 +30,7 @@ abstract class ImageState<T extends StatefulWidget> extends State<T> {
   void init() async {}
 
   bool isLoading() {
-    return this.imageLoading;
+    return this.imageLoading || mainColor == null;
   }
 
   @override
@@ -38,7 +40,7 @@ abstract class ImageState<T extends StatefulWidget> extends State<T> {
   }
 
   void preloadImage(image) {
-    if(image == null || image == '') {
+    if (image == null || image == '') {
       _updateImageLoading(false);
       return;
     }
@@ -52,40 +54,39 @@ abstract class ImageState<T extends StatefulWidget> extends State<T> {
       ),
     );
   }
+
   /// Preloads the specified image to prevent flickering
-  /// 
+  ///
   /// [Image] image - image to preload
   /// [Function] setLoading - function to update loading variable
   /// [Function] callback - function to use the loaded image
   void preloadImageWithColor(image) {
-    if(image == null || image == '') {
+    if (image == null || image == '') {
       _updateMainColor(AppColors.theme.primary!);
       return;
     }
     var loadedImage = Image.network(image);
-    loadedImage.image.resolve(ImageConfiguration()).addListener(
-      ImageStreamListener(
-        (info, call) {
-          calcMainColor(loadedImage);
-        },
-      ),
-    );
+    loadedImage.image.resolve(ImageConfiguration()).addListener(ImageStreamListener((info, call) {
+      calcMainColor(loadedImage);
+    }));
   }
+
   /// Check the color if too bright make it darker
-  ///  
+  ///
   /// [Color] color - the color to check
   void checkColor(Color color) async {
     bool isLight = ThemeData.estimateBrightnessForColor(color) == Brightness.light;
-    if(isLight) {
+    if (isLight) {
       darken(color, _updateMainColor);
     }
   }
+
   /// Calculate the main color from the cover image
-  /// 
+  ///
   /// [Image] image - the to calculate the main color
   /// [Color] color - variable to update with the main color
   void calcMainColor(Image? image) async {
-    if(image != null) {
+    if (image != null) {
       var color = await getImagePalette(image.image);
       _updateMainColor(color);
       this.checkColor(color);

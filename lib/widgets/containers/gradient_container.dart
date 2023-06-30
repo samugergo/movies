@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:movies/theme/app_colors.dart';
 
-const Color grad1 = Color(0xff0B1433);
-const Color grad2 = Color(0xff332F57);
-
 class GradientContainer extends StatelessWidget {
   final Widget child;
   final Color? color;

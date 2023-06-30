@@ -109,11 +109,7 @@ class _GridViewState extends State<_GridView> {
     final itemCount = appState.grid.value;
     final list = appState.catalogList;
 
-    final width = MediaQuery.of(context).size.width;
-    const crossSpacing = 10.0;
-    const mainSpacing = 10.0;
-    final itemWidth = width / itemCount - itemCount * crossSpacing;
-    final itemHeight = itemWidth * 1.5;
+    final gridModel = getGridViewModel(context, itemCount);
 
     return NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -133,9 +129,9 @@ class _GridViewState extends State<_GridView> {
               physics: BouncingScrollPhysics(),
               shrinkWrap: true,
               crossAxisCount: itemCount,
-              mainAxisSpacing: mainSpacing,
-              crossAxisSpacing: crossSpacing,
-              childAspectRatio: itemWidth / itemHeight,
+              mainAxisSpacing: gridModel.mainSpacing,
+              crossAxisSpacing: gridModel.crossSpacing,
+              childAspectRatio: gridModel.aspectRatio!,
               children: list
                   .map<Widget>((pair) => ImageCard(
                       model: pair,
@@ -158,29 +154,26 @@ class _SearchField extends StatelessWidget {
     final locale = getAppLocale(context);
 
     return TextField(
-      textInputAction: TextInputAction.search,
-      readOnly: true,
-      onTap: () => goTo(context, SearchPage()),
-      style: TextStyle(color: Colors.white),
-      decoration: InputDecoration(
-          filled: true,
-          fillColor: theme.primaryLight,
-          suffixIcon: Icon(
-            Icons.search,
-            color: theme.unselected!,
-          ),
-          hintText: locale.search,
-          hintStyle: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.normal),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.transparent),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.transparent),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          contentPadding: EdgeInsets.only(left: 15),
-          constraints: BoxConstraints(maxHeight: 40)),
-    );
+        textInputAction: TextInputAction.search,
+        readOnly: true,
+        onTap: () => goTo(context, SearchPage()),
+        style: TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+            filled: true,
+            fillColor: theme.primaryLight,
+            suffixIcon: Icon(
+              Icons.search,
+              color: theme.unselected!,
+            ),
+            hintText: locale.search,
+            hintStyle: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.normal),
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.transparent),
+                borderRadius: BorderRadius.circular(10)),
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.transparent),
+                borderRadius: BorderRadius.circular(10)),
+            contentPadding: EdgeInsets.only(left: 15),
+            constraints: BoxConstraints(maxHeight: 40)));
   }
 }
