@@ -11,6 +11,7 @@ import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
 import 'package:movies/widgets/loaders/color_loader.dart';
 import 'package:movies/widgets/others/results/result_card.dart';
+import 'package:movies/widgets/others/results/result_person_card.dart';
 import 'package:movies/widgets/sheets/search_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -247,37 +248,6 @@ class _SearchPageState extends State<SearchPage> {
           builder: (context) => SearchSheet(type: typeValue, function: setTypeValue));
     }
 
-    /// This function determines which [Widget] needs to be rendered on the screen.
-    /// /// If there was with no results then the [NoResults] widget will be rendered.
-    /// If there was a search and it has results then it will render the [ResultList] widget.
-    /// Otherwise the [HistoryList].
-    renderBody() {
-      final searched = searchValue != "";
-      final hasResults = results.isNotEmpty;
-      if (_loading) {
-        return ColorLoader(color: theme.primary!);
-      } else if (searched && !hasResults) {
-        return NoResult();
-      } else if (searched && hasResults) {
-        return ResultList(
-            controller: _scrollController,
-            results: results,
-            total: total,
-            goTo: (model) {
-              final Widget to =
-                  TypeEnum.isMovie(model.type) ? MoviePage(id: model.id) : ShowPage(id: model.id);
-              goTo(context, to);
-            },
-            horizontalPadding: horizontalPadding);
-      } else {
-        return HistoryList(
-            history: history,
-            controller: _controller,
-            search: searchWithoutType,
-            delete: deleteFromHistory);
-      }
-    }
-
     return GradientContainer(
         color: theme.primaryLight,
         child: Scaffold(
@@ -300,7 +270,7 @@ class _SearchPageState extends State<SearchPage> {
                       onPressed: showSearchSheet),
                   SizedBox(width: 10)
                 ]),
-            body: renderBody(),
+            body: contentBuilder(theme, horizontalPadding),
             floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
             floatingActionButton: AnimatedOpacity(
                 duration: Duration(milliseconds: 300),
@@ -316,19 +286,26 @@ class _SearchPageState extends State<SearchPage> {
                     child: Icon(Icons.arrow_upward, color: Colors.white)))));
   }
 
-  // Widget contentBuilder(AppColors theme, double horizontalPadding) {
-  //   final searched = searchValue != "";
-  //   final hasResults = results.isNotEmpty;
-  //   if (_loading) {
-  //     return ColorLoader(color: theme.primary!);
-  //   } else if (searched && !hasResults) {
-  //     return NoResult();
-  //   } else if (searched && hasResults) {
-  //
-  //   } else {
-  //     historyBuilder();
-  //   }
-  // }
+  Widget contentBuilder(AppColors theme, double horizontalPadding) {
+    final searched = searchValue != "";
+    final hasResults = results.isNotEmpty;
+    if (_loading) {
+      return ColorLoader(color: theme.primary!);
+    }
+    if (searched && !hasResults) {
+      return NoResult();
+    }
+    if (searched && hasResults) {
+      return ResultList(
+          results: results,
+          total: total,
+          horizontalPadding: horizontalPadding,
+          goTo: goTo,
+          controller: _scrollController,
+          type: typeValue);
+    }
+    return historyBuilder();
+  }
 
   Widget resultBuilder(double horizontalPadding) {
     return ResultList(
@@ -337,10 +314,11 @@ class _SearchPageState extends State<SearchPage> {
         total: total,
         goTo: (model) {
           final Widget to =
-          TypeEnum.isMovie(model.type) ? MoviePage(id: model.id) : ShowPage(id: model.id);
+              TypeEnum.isMovie(model.type) ? MoviePage(id: model.id) : ShowPage(id: model.id);
           goTo(context, to);
         },
-        horizontalPadding: horizontalPadding);
+        horizontalPadding: horizontalPadding,
+        type: typeValue);
   }
 
   Widget historyBuilder() {
@@ -419,11 +397,13 @@ class ResultList extends StatefulWidget {
     required double horizontalPadding,
     required Function goTo,
     required ScrollController controller,
+    required TypeEnum type,
   })  : _results = results,
         _total = total,
         _horizontalPadding = horizontalPadding,
         _goTo = goTo,
-        _controller = controller;
+        _controller = controller,
+        _type = type;
 
   /// This contains the results from the api it is stored on page level.
   final List _results;
@@ -439,6 +419,8 @@ class ResultList extends StatefulWidget {
 
   /// A function to call when the user click on a result element.
   final Function _goTo;
+
+  final TypeEnum _type;
 
   @override
   State<ResultList> createState() => _ResultListState();
@@ -457,16 +439,23 @@ class _ResultListState extends State<ResultList> {
           child: Text(locale.results(widget._total),
               style: TextStyle(color: Colors.white, fontStyle: FontStyle.italic))),
       SizedBox(height: 15),
-      ...widget._results.map((e) => Padding(
+      ...widget._results.map((model) => Padding(
           padding: EdgeInsets.only(
               left: widget._horizontalPadding, right: widget._horizontalPadding, bottom: 16),
           child: InkWell(
               splashColor: Colors.transparent,
               borderRadius: BorderRadius.circular(10),
-              onTap: () => widget._goTo(e),
-              child: ResultCard(
-                  image: e.image, title: e.title, release: e.release, percent: e.percent))))
+              onTap: () => widget._goTo(model),
+              child: childBuilder(model, widget._type))))
     ]);
+  }
+
+  Widget childBuilder(model, type) {
+    if (type == TypeEnum.person) {
+      return DisplayPersonCard(model: model);
+    }
+    return ResultCard(
+        image: model.image, title: model.title, release: model.release, percent: model.percent);
   }
 }
 

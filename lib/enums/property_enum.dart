@@ -32,7 +32,8 @@ enum PropertyEnum {
   length(key: 'runtime', defaultVal: 0),
   belongsToCollection(key: 'belongs_to_collection'),
   seasons(key: 'seasons'),
-  knownFor(key: 'knownFor'),
+  knownFor(key: 'known_for_department'),
+  gender(key: 'gender', defaultVal: 2),
   ;
 
   const PropertyEnum({

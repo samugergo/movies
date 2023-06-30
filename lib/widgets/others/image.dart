@@ -7,13 +7,15 @@ class XImage extends StatelessWidget {
   final double width;
   final double height;
   final double radius;
+  final String? defaultImage;
 
   XImage(
       {super.key,
       required this.url,
       required this.width,
       required this.height,
-      required this.radius});
+      required this.radius,
+      this.defaultImage});
 
   static Widget customRadius(String url, double width, double height, BorderRadius radius) {
     return ClipRRect(
@@ -53,6 +55,11 @@ class XImage extends StatelessWidget {
                     height: height,
                     fadeInDuration: Duration(milliseconds: 200),
                     fit: BoxFit.cover)
-                : Image.asset('assets/images/default.png', height: height, fit: BoxFit.fill)));
+                : defaultImageBuilder()));
+  }
+
+  Widget defaultImageBuilder() {
+    final image = 'assets/images/${defaultImage ?? 'default.png'}';
+    return Image.asset(image, height: height, fit: BoxFit.fill);
   }
 }

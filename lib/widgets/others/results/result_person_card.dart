@@ -1,70 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:movies/utils/common_util.dart';
-import 'package:movies/widgets/others/image.dart';
+import 'package:movies/widgets/others/results/base_card.dart';
 
-class ResultCard extends StatelessWidget {
-  final String image;
-  final String title;
-  final String release;
-  final double percent;
-  final List? genres;
+import '../../../models/base/display_person_model.dart';
 
-  ResultCard({
-    required this.image,
-    required this.title,
-    required this.release,
-    required this.percent,
-    this.genres,
-  });
+class DisplayPersonCard extends StatelessWidget {
+  DisplayPersonCard({required this.model});
+
+  final DisplayPersonModel model;
 
   @override
   Widget build(BuildContext context) {
-    final List? list = genres != null && genres!.length > 3 ? genres!.sublist(0, 3) : genres;
-    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      XImage(url: image, width: 100, height: 150, radius: 10),
-      Flexible(
-          child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Text(title,
-                        style: GoogleFonts.bebasNeue(
-                            textStyle: TextStyle(
-                                color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16)))),
-                Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Text(dateFormat(release),
-                        style: TextStyle(color: Colors.white38, fontSize: 12))),
-                SizedBox(height: 10),
-                Padding(
-                    padding: EdgeInsets.only(left: 8.0),
-                    child: Row(children: [
-                      Icon(Icons.star_rate, color: Colors.yellow, size: 15),
-                      SizedBox(width: 5),
-                      Text(percent.toStringAsFixed(1),
-                          style: TextStyle(color: Colors.white, fontSize: 12))
-                    ])),
-                SizedBox(height: 10),
-                Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Wrap(
-                        children: genres != null
-                            ? list!
-                            .map((e) => Card(
-                            shape:
-                            RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                            elevation: 0,
-                            color: Colors.white38,
-                            child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Text(e,
-                                    style: TextStyle(fontSize: 12, color: Colors.black87)))))
-                            .toList()
-                            : [SizedBox()]))
-              ]))
-    ]);
+    return BaseCard(
+        image: model.image,
+        defaultImage: model.gender.image,
+        title: model.name,
+        horizontalPadding: 10,
+        children: [
+          if (model.knownFor != '')
+            Text(model.knownFor, style: TextStyle(color: Colors.white38, fontSize: 12))
+        ]);
   }
 }
