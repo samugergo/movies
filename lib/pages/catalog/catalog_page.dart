@@ -26,24 +26,28 @@ class _CatalogPageState extends State<CatalogPage> {
   bool _showBtn = false;
   double showOffset = 200;
 
+  _setShowBtn(bool showBtn) {
+    setState(() {
+      _showBtn = showBtn;
+    });
+  }
+
+  _controllerListener() async {
+    if (_showBtn && _controller.position.pixels < showOffset) {
+      _setShowBtn(false);
+    }
+    if (!_showBtn && _controller.position.pixels > showOffset) {
+      _setShowBtn(true);
+    }
+    if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+      await widget.load();
+    }
+  }
+
   @override
   void initState() {
     _controller = ScrollController();
-    _controller.addListener(() async {
-      if (_showBtn && _controller.position.pixels < showOffset) {
-        setState(() {
-          _showBtn = false;
-        });
-      }
-      if (!_showBtn && _controller.position.pixels > showOffset) {
-        setState(() {
-          _showBtn = true;
-        });
-      }
-      if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-        await widget.load();
-      }
-    });
+    _controller.addListener(_controllerListener);
     super.initState();
   }
 
@@ -65,12 +69,8 @@ class _CatalogPageState extends State<CatalogPage> {
         child: GradientContainer(
             child: Scaffold(
                 body: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: _GridView(
-                    load: appState.loadCatalog,
-                    controller: _controller,
-                  ),
-                ),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: _GridView(load: appState.loadCatalog, controller: _controller)),
                 floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
                 floatingActionButton: AnimatedOpacity(
                     duration: Duration(milliseconds: 300),
@@ -161,10 +161,7 @@ class _SearchField extends StatelessWidget {
         decoration: InputDecoration(
             filled: true,
             fillColor: theme.primaryLight,
-            suffixIcon: Icon(
-              Icons.search,
-              color: theme.unselected!,
-            ),
+            suffixIcon: Icon(Icons.search, color: theme.unselected!),
             hintText: locale.search,
             hintStyle: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.normal),
             enabledBorder: OutlineInputBorder(

@@ -15,9 +15,7 @@ import 'package:movies/widgets/sections/common/section_title.dart';
 import 'package:movies/states/image_state.dart';
 
 class CollectionPage extends StatefulWidget {
-  CollectionPage({
-    required this.id,
-  });
+  CollectionPage({required this.id});
 
   final int id;
 
@@ -103,7 +101,6 @@ class _CollectionPageState extends ImageState<CollectionPage> {
                                             .map((pair) => ImageCard(model: pair, goTo: go))
                                             .toList(),
                                       )
-                                    ])))))),
-              ));
+                                    ]))))))));
   }
 }
