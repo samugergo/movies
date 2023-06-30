@@ -12,6 +12,7 @@ import 'package:movies/models/detailed/movie_detailed_model.dart';
 import 'package:movies/models/detailed/show_detailed_model.dart';
 
 import '../models/base/display_model.dart';
+import '../models/base/display_person_model.dart';
 import '../utils/common_util.dart';
 
 final resource = MovieDBResource();
@@ -101,12 +102,28 @@ fetchTrailer(int id, TypeEnum type) async {
 }
 
 search(int page, TypeEnum type, String query) async {
+  if(type == TypeEnum.person) {
+    return searchPerson(page, query);
+  }
+
   var result = await resource.doApiCall('search/${type.value}', [
     PathParameter(key: ParamEnum.QUERY, value: query),
     PathParameter(key: ParamEnum.PAGE, value: page + 1)
   ]);
   return ListResponse(
       list: result['results'].map((r) => DisplayModel.fromJson(r, type)).toList(),
+      page: result['page'],
+      total: result['total_results'],
+      pages: result['total_pages']);
+}
+
+searchPerson(int page, String query) async {
+  var result = await resource.doApiCall('search/person', [
+    PathParameter(key: ParamEnum.QUERY, value: query),
+    PathParameter(key: ParamEnum.PAGE, value: page + 1)
+  ]);
+  return ListResponse(
+      list: result['results'].map((r) => DisplayPersonModel.fromJson(r)).toList(),
       page: result['page'],
       total: result['total_results'],
       pages: result['total_pages']);

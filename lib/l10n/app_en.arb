@@ -28,5 +28,6 @@
   "results": "Results: {num}",
   "noResult": "No results in the selected category!",
   "images": "Images",
-  "filterAndSort": "Filter and sort"
+  "filterAndSort": "Filter and sort",
+  "person": "Person"
 }

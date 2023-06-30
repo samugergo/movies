@@ -28,5 +28,6 @@
   "results": "Találatok száma: {num}",
   "noResult": "Nincs találat a választott kategóriában!",
   "images": "Képek",
-  "filterAndSort": "Szűrés és rendezés"
+  "filterAndSort": "Szűrés és rendezés",
+  "person": "Ember"
 }

@@ -1,13 +1,13 @@
+// TODO(Use only one key do not need both of them)
 enum TypeEnum {
-  movie(title: 'Filmek', value: 'movie', localeKey: 'movies'),
-  show(title: 'Sorozatok', value: 'tv', localeKey: 'shows');
+  movie(value: 'movie', localeKey: 'movies'),
+  show(value: 'tv', localeKey: 'shows'),
+  person(value: 'person', localeKey: 'person');
 
-  final String title; 
   final String value;
   final String localeKey;
 
   const TypeEnum({
-    required this.title,
     required this.value,
     required this.localeKey,
   });
@@ -20,7 +20,7 @@ enum TypeEnum {
     return TypeEnum.values.firstWhere((element) => element.value == value);
   }
 
-  static List<String> titles() {
-    return TypeEnum.values.map((e) => e.title).toList();
+  static List<TypeEnum> catalogTypes() {
+    return [TypeEnum.movie, TypeEnum.show];
   }
 }

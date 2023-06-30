@@ -13,16 +13,15 @@ class DisplayModel {
   final String tagline;
   final TypeEnum type;
 
-  DisplayModel({
-    required this.id,
-    required this.title,
-    required this.release,
-    required this.percent,
-    required this.image,
-    required this.cover,
-    required this.tagline,
-    required this.type,
-  });
+  DisplayModel(
+      {required this.id,
+      required this.title,
+      required this.release,
+      required this.percent,
+      required this.image,
+      required this.cover,
+      required this.tagline,
+      required this.type});
 
   factory DisplayModel.fromJson(Map<String, dynamic> json, TypeEnum type) {
     return DisplayModel(

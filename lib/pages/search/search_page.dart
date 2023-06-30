@@ -4,12 +4,13 @@ import 'package:movies/models/base/list_response.dart';
 import 'package:movies/pages/movie/movie_page.dart';
 import 'package:movies/pages/show/show_page.dart';
 import 'package:movies/services/service.dart';
+import 'package:movies/theme/app_colors.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/utils/locale_util.dart';
 import 'package:movies/utils/navigation_util.dart';
 import 'package:movies/widgets/containers/gradient_container.dart';
 import 'package:movies/widgets/loaders/color_loader.dart';
-import 'package:movies/widgets/others/result_card.dart';
+import 'package:movies/widgets/others/results/result_card.dart';
 import 'package:movies/widgets/sheets/search_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -281,25 +282,24 @@ class _SearchPageState extends State<SearchPage> {
         color: theme.primaryLight,
         child: Scaffold(
             appBar: AppBar(
-              elevation: 0,
-              scrolledUnderElevation: 0,
-              titleSpacing: 0,
-              backgroundColor: theme.primaryLight,
-              leading: IconButton(
-                  icon: Icon(Icons.arrow_back_rounded),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  color: Colors.white),
-              title:
-                  SearchField(controller: _controller, search: searchWithoutType, type: typeValue),
-              actions: [
-                IconButton(
-                    icon: const Icon(Icons.settings, color: Colors.white),
-                    onPressed: showSearchSheet),
-                SizedBox(width: 10)
-              ],
-            ),
+                elevation: 0,
+                scrolledUnderElevation: 0,
+                titleSpacing: 0,
+                backgroundColor: theme.primaryLight,
+                leading: IconButton(
+                    icon: Icon(Icons.arrow_back_rounded),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    color: Colors.white),
+                title: SearchField(
+                    controller: _controller, search: searchWithoutType, type: typeValue),
+                actions: [
+                  IconButton(
+                      icon: const Icon(Icons.settings, color: Colors.white),
+                      onPressed: showSearchSheet),
+                  SizedBox(width: 10)
+                ]),
             body: renderBody(),
             floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
             floatingActionButton: AnimatedOpacity(
@@ -314,6 +314,41 @@ class _SearchPageState extends State<SearchPage> {
                     mini: true,
                     backgroundColor: theme.primary,
                     child: Icon(Icons.arrow_upward, color: Colors.white)))));
+  }
+
+  // Widget contentBuilder(AppColors theme, double horizontalPadding) {
+  //   final searched = searchValue != "";
+  //   final hasResults = results.isNotEmpty;
+  //   if (_loading) {
+  //     return ColorLoader(color: theme.primary!);
+  //   } else if (searched && !hasResults) {
+  //     return NoResult();
+  //   } else if (searched && hasResults) {
+  //
+  //   } else {
+  //     historyBuilder();
+  //   }
+  // }
+
+  Widget resultBuilder(double horizontalPadding) {
+    return ResultList(
+        controller: _scrollController,
+        results: results,
+        total: total,
+        goTo: (model) {
+          final Widget to =
+          TypeEnum.isMovie(model.type) ? MoviePage(id: model.id) : ShowPage(id: model.id);
+          goTo(context, to);
+        },
+        horizontalPadding: horizontalPadding);
+  }
+
+  Widget historyBuilder() {
+    return HistoryList(
+        history: history,
+        controller: _controller,
+        search: searchWithoutType,
+        delete: deleteFromHistory);
   }
 }
 
@@ -361,20 +396,15 @@ class SearchField extends StatelessWidget {
         decoration: InputDecoration(
             filled: true,
             fillColor: Colors.transparent,
-            prefixIcon: Icon(
-              Icons.search,
-              color: theme.unselected!,
-            ),
+            prefixIcon: Icon(Icons.search, color: theme.unselected!),
             hintText: hint(),
             hintStyle: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.normal),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.circular(10),
-            ),
+                borderSide: BorderSide(color: Colors.transparent),
+                borderRadius: BorderRadius.circular(10)),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.circular(10),
-            ),
+                borderSide: BorderSide(color: Colors.transparent),
+                borderRadius: BorderRadius.circular(10)),
             contentPadding: EdgeInsets.only(left: 15),
             constraints: BoxConstraints(maxHeight: 50)));
   }
@@ -435,7 +465,7 @@ class _ResultListState extends State<ResultList> {
               borderRadius: BorderRadius.circular(10),
               onTap: () => widget._goTo(e),
               child: ResultCard(
-                  image: e.poster, title: e.title, release: e.release, percent: e.percent))))
+                  image: e.image, title: e.title, release: e.release, percent: e.percent))))
     ]);
   }
 }

@@ -10,7 +10,6 @@ import 'package:movies/utils/locale_util.dart';
 import 'package:movies/widgets/others/chip_list.dart';
 
 class FilterSheet extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     final appState = getAppState(context);
@@ -18,14 +17,9 @@ class FilterSheet extends StatelessWidget {
     final locale = getAppLocale(context);
 
     groupTitle(String groupTitle) {
-      return Text(
-        groupTitle,
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: theme.primaryTextColor
-        ),
-      );
+      return Text(groupTitle,
+          style:
+              TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: theme.primaryTextColor));
     }
 
     titlesType() {
@@ -37,44 +31,37 @@ class FilterSheet extends StatelessWidget {
     }
 
     return SizedBox(
-      height: 350,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-        child: Column(
-          children: [
-            groupTitle(locale.filterAndSort),
-            SizedBox(height: 20),
-            DropdownSelect(
-              icon: Icons.theaters,
-              titles: titlesType(),
-              setValue: appState.setType,
-              value: appState.type,
-              values: TypeEnum.values,
-            ),
-            SizedBox(height: 12),
-            groupTitle(locale.order),
-            SizedBox(height: 10),
-            DropdownSelect(
-              icon: Icons.star_rate,
-              titles: titlesOrder(),
-              setValue: appState.setOrder,
-              value: appState.order,
-              values: OrderEnum.orders(),
-            ),
-            SizedBox(height: 12),
-            groupTitle(locale.layout),
-            SizedBox(height: 10),
-            DropdownSelect(
-              icon: Icons.apps,
-              value: appState.grid, 
-              values: GridEnum.values, 
-              titles: GridEnum.titles(), 
-              setValue: appState.setGrid
-            ),
-          ],
-        ),
-      ),
-    );
+        height: 350,
+        child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            child: Column(children: [
+              groupTitle(locale.filterAndSort),
+              SizedBox(height: 20),
+              DropdownSelect(
+                  icon: Icons.theaters,
+                  titles: titlesType(),
+                  setValue: appState.setType,
+                  value: appState.type,
+                  values: TypeEnum.catalogTypes()),
+              SizedBox(height: 12),
+              groupTitle(locale.order),
+              SizedBox(height: 10),
+              DropdownSelect(
+                  icon: Icons.star_rate,
+                  titles: titlesOrder(),
+                  setValue: appState.setOrder,
+                  value: appState.order,
+                  values: OrderEnum.orders()),
+              SizedBox(height: 12),
+              groupTitle(locale.layout),
+              SizedBox(height: 10),
+              DropdownSelect(
+                  icon: Icons.apps,
+                  value: appState.grid,
+                  values: GridEnum.values,
+                  titles: GridEnum.titles(),
+                  setValue: appState.setGrid)
+            ])));
   }
 }
 
@@ -99,43 +86,28 @@ class DropdownSelect<T> extends StatelessWidget {
     final theme = getAppTheme(context);
 
     return DecoratedBox(
-      decoration: BoxDecoration(
-        color: theme.primaryLight,
-        borderRadius: BorderRadius.circular(50),
-      ),
-  
-      child: Padding(
-        padding: const EdgeInsets.only(right: 12),
-        child: DropdownButtonFormField(
-          dropdownColor: theme.primaryLight,
-          value: value,
-          items: titles.asMap().entries.map((entry) => 
-              DropdownMenuItem(
-                value: values[entry.key],
-                child: Text(entry.value),
-              )
-            ).toList(),
-          onChanged: setValue,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18
-          ),
-          decoration: InputDecoration(
-            prefixIcon: icon != null 
-            ? Icon(icon) 
-            : SizedBox(),
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent)
-            ),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent)
-            ),
-            border: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent)
-            ),
-          ),
-        ),
-      ),
-    );
+        decoration:
+            BoxDecoration(color: theme.primaryLight, borderRadius: BorderRadius.circular(50)),
+        child: Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: DropdownButtonFormField(
+                dropdownColor: theme.primaryLight,
+                value: value,
+                items: titles
+                    .asMap()
+                    .entries
+                    .map((entry) =>
+                        DropdownMenuItem(value: values[entry.key], child: Text(entry.value)))
+                    .toList(),
+                onChanged: setValue,
+                style: TextStyle(color: Colors.white, fontSize: 18),
+                decoration: InputDecoration(
+                    prefixIcon: icon != null ? Icon(icon) : SizedBox(),
+                    enabledBorder:
+                        UnderlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
+                    focusedBorder:
+                        UnderlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
+                    border:
+                        UnderlineInputBorder(borderSide: BorderSide(color: Colors.transparent))))));
   }
-} 
+}

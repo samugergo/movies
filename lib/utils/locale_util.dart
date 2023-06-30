@@ -8,6 +8,8 @@ String getTypeLocale(TypeEnum type, AppLocalizations locale) {
       return locale.movies;
     case TypeEnum.show:
       return locale.shows;
+    case TypeEnum.person:
+      return locale.person;
   }
 }
 

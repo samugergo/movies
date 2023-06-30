@@ -9,7 +9,7 @@ import 'package:movies/widgets/buttons/trailer_button.dart';
 import 'package:movies/widgets/containers/animated_contaner.dart';
 import 'package:movies/widgets/loaders/color_loader.dart';
 import 'package:movies/widgets/appbars/image_app_bar.dart';
-import 'package:movies/widgets/others/detail_card.dart';
+import 'package:movies/widgets/others/results/detail_card.dart';
 import 'package:movies/widgets/sections/collection_section.dart';
 import 'package:movies/widgets/sections/images_section.dart';
 import 'package:movies/widgets/sections/provider_section.dart';

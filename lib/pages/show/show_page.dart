@@ -8,7 +8,7 @@ import 'package:movies/utils/common_util.dart';
 import 'package:movies/widgets/buttons/trailer_button.dart';
 import 'package:movies/widgets/containers/animated_contaner.dart';
 import 'package:movies/widgets/loaders/color_loader.dart';
-import 'package:movies/widgets/others/detail_card.dart';
+import 'package:movies/widgets/others/results/detail_card.dart';
 import 'package:movies/widgets/sections/season_section.dart';
 import 'package:movies/widgets/appbars/image_app_bar.dart';
 import 'package:movies/widgets/sections/cast_section.dart';
