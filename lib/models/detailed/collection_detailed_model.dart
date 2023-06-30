@@ -25,7 +25,7 @@ class CollectionDetailedModel {
         title: getField(json, PropertyEnum.name),
         description: getField(json, PropertyEnum.description),
         image: getImage(json, PropertyEnum.poster),
-        cover: getImage(json, PropertyEnum.cover),
+        cover: getField(json, PropertyEnum.cover),
         modelList: json[PropertyEnum.parts.key]
             ?.map((p) => DisplayModel.fromJson(p, TypeEnum.movie))
             .toList());
