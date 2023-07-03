@@ -29,5 +29,7 @@
   "noResult": "No results in the selected category!",
   "images": "Images",
   "filterAndSort": "Filter and sort",
-  "person": "Person"
+  "person": "Person",
+  "noData": "No {type} found for this person!",
+  "searchTypeTitle": "Search type"
 }

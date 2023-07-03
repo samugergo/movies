@@ -23,21 +23,28 @@ class _SearchSheetState extends State<SearchSheet> {
   @override
   Widget build(BuildContext context) {
     final locale = getAppLocale(context);
+    final theme = getAppTheme(context);
 
     titlesType() {
       return TypeEnum.values.map((type) => getTypeLocale(type, locale)).toList();
     }
 
     return SizedBox(
-        height: 120,
+        height: 150,
         child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
             child: Center(
-                child: DropdownSelect(
-                    icon: Icons.theaters,
-                    titles: titlesType(),
-                    setValue: widget.function,
-                    value: widget.type,
-                    values: TypeEnum.values))));
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
+              Text(locale.searchTypeTitle,
+                  style: TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold, color: theme.primaryTextColor)),
+              SizedBox(height: 10),
+              DropdownSelect(
+                  icon: Icons.theaters,
+                  titles: titlesType(),
+                  setValue: widget.function,
+                  value: widget.type,
+                  values: TypeEnum.values)
+            ]))));
   }
 }

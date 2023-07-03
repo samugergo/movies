@@ -6,6 +6,8 @@ import 'package:movies/utils/locale_util.dart';
 import 'package:movies/widgets/others/image.dart';
 import 'package:movies/widgets/sections/social_medial_section.dart';
 
+import '../../theme/app_colors.dart';
+
 class ProfileAppBar extends SliverPersistentHeaderDelegate {
   ProfileAppBar({required this.model, required this.color, required this.controller});
 
@@ -65,7 +67,7 @@ class ProfileAppBar extends SliverPersistentHeaderDelegate {
 
       children.add(Positioned(bottom: -8, left: 0, right: 0, child: Divider(color: color)));
 
-      children.add(Align(alignment: Alignment.bottomCenter, child: tabBuilder(locale)));
+      children.add(Align(alignment: Alignment.bottomCenter, child: tabBuilder(theme, locale)));
 
       return Container(
           decoration: BoxDecoration(
@@ -81,27 +83,30 @@ class ProfileAppBar extends SliverPersistentHeaderDelegate {
         style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold));
   }
 
-  tabBuilder(locale) {
-    return Container(
-        color: Colors.black12,
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-        height: 40,
-        child: TabBar(
-            controller: controller,
-            indicatorSize: TabBarIndicatorSize.tab,
-            dividerColor: Colors.transparent,
-            labelColor: Colors.white,
-            indicator:
-                BoxDecoration(color: Colors.white10, borderRadius: BorderRadius.circular(10)),
-            tabs:
-                TypeEnum.catalogTypes().map((type) => Text(getTypeLocale(type, locale))).toList()));
+  tabBuilder(AppColors theme, locale) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      child: Container(
+          decoration: BoxDecoration(color: Colors.black12, borderRadius: BorderRadius.circular(10)),
+          height: 30,
+          child: TabBar(
+              controller: controller,
+              indicatorSize: TabBarIndicatorSize.tab,
+              dividerColor: Colors.transparent,
+              labelColor: Colors.white,
+              unselectedLabelColor: theme.unselected,
+              indicator:
+                  BoxDecoration(color: theme.primaryLight, borderRadius: BorderRadius.circular(10)),
+              tabs:
+                  TypeEnum.catalogTypes().map((type) => Text(getTypeLocale(type, locale))).toList())),
+    );
   }
 
   @override
-  double get maxExtent => 400;
+  double get maxExtent => 350;
 
   @override
-  double get minExtent => kToolbarHeight + 25;
+  double get minExtent => kToolbarHeight + 30;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => false;

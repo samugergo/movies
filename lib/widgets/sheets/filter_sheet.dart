@@ -33,10 +33,10 @@ class FilterSheet extends StatelessWidget {
     return SizedBox(
         height: 350,
         child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
             child: Column(children: [
               groupTitle(locale.filterAndSort),
-              SizedBox(height: 20),
+              SizedBox(height: 10),
               DropdownSelect(
                   icon: Icons.theaters,
                   titles: titlesType(),

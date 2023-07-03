@@ -29,5 +29,7 @@
   "noResult": "Nincs találat a választott kategóriában!",
   "images": "Képek",
   "filterAndSort": "Szűrés és rendezés",
-  "person": "Ember"
+  "person": "Ember",
+  "noData": "Nem tartoznak {type} ehhez a személyhez!",
+  "searchTypeTitle": "Keresés típusa"
 }
