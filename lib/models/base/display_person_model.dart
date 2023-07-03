@@ -1,4 +1,5 @@
 import 'package:movies/enums/gender_enum.dart';
+import 'package:movies/enums/type_enum.dart';
 
 import '../../enums/property_enum.dart';
 import '../../utils/json_util.dart';
@@ -16,6 +17,7 @@ class DisplayPersonModel {
   final String knownFor;
   final String image;
   final GenderEnum gender;
+  final TypeEnum type = TypeEnum.person;
 
   factory DisplayPersonModel.fromJson(Map<String, dynamic> json) {
     return DisplayPersonModel(

@@ -113,7 +113,7 @@ class _ShowPageState extends DetailState<ShowPage> {
                               Padding(
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                                  child: SocialMediaSection(externalIds: externalIds!))
+                                  child: SocialMediaSection(externalIds: externalIds!, padding: 25))
                             ])))))));
   }
 }

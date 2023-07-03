@@ -4,6 +4,7 @@ import 'package:movies/enums/order_enum.dart';
 import 'package:movies/enums/resource/param_enum.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/models/base/list_response.dart';
+import 'package:movies/models/detailed/person_detailed_model.dart';
 import 'package:movies/models/others/cast_model.dart';
 import 'package:movies/models/others/external_id_model.dart';
 import 'package:movies/models/others/providers_model.dart';
@@ -67,9 +68,9 @@ fetchCollection(int id) async {
   return CollectionDetailedModel.fromJson(result);
 }
 
-fetchPerform(int id, String type) async {
-  var result = await resource.doApiCall('person/$id/${type}_credits', []);
-  return result['cast'].map((r) => DisplayModel.fromJson(r, TypeEnum.fromValue(type))).toList();
+fetchPerform(int id, TypeEnum type) async {
+  var result = await resource.doApiCall('person/$id/${type.value}_credits', []);
+  return result['cast'].map((r) => DisplayModel.fromJson(r, type)).toList();
 }
 
 fetchExternalIds(int id, TypeEnum type) async {
@@ -99,6 +100,13 @@ fetchTrailer(int id, TypeEnum type) async {
     return trailer['key'];
   }
   return '';
+}
+
+fetchPerson(int id) async {
+  var result = await resource.doApiCall('/person/$id', [
+    PathParameter(key: ParamEnum.APPEND, value: 'external_ids')
+  ]);
+  return PersonDetailedModel.fromJson(result);
 }
 
 search(int page, TypeEnum type, String query) async {

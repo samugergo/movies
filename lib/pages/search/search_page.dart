@@ -15,6 +15,8 @@ import 'package:movies/widgets/others/results/result_person_card.dart';
 import 'package:movies/widgets/sheets/search_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../person/person_page.dart';
+
 class SearchPage extends StatefulWidget {
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -176,7 +178,7 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
-  /// This function set the valaue of the [loading] variable to display the loading screen
+  /// This function set the value of the [loading] variable to display the loading screen
   /// while the app is waiting for the results.
   ///
   /// [bool] the value of the [loading] variable
@@ -192,8 +194,8 @@ class _SearchPageState extends State<SearchPage> {
     _controller = TextEditingController();
   }
 
-  /// Initilaze the [ScrollController] which is responsible for a custom scroll behaviour
-  /// (the scoll up button and the pagination).
+  /// Initialize the [ScrollController] which is responsible for a custom scroll behaviour
+  /// (the scroll up button and the pagination).
   initScrollController() {
     _scrollController = ScrollController();
     _scrollController.addListener(() async {
@@ -248,6 +250,12 @@ class _SearchPageState extends State<SearchPage> {
           builder: (context) => SearchSheet(type: typeValue, function: setTypeValue));
     }
 
+    go(model) {
+      final Widget to =
+      TypeEnum.isMovie(model.type) ? MoviePage(id: model.id) : ShowPage(id: model.id);
+      goTo(context, to);
+    }
+
     return GradientContainer(
         color: theme.primaryLight,
         child: Scaffold(
@@ -296,15 +304,20 @@ class _SearchPageState extends State<SearchPage> {
       return NoResult();
     }
     if (searched && hasResults) {
-      return ResultList(
-          results: results,
-          total: total,
-          horizontalPadding: horizontalPadding,
-          goTo: goTo,
-          controller: _scrollController,
-          type: typeValue);
+      return resultBuilder(horizontalPadding);
     }
     return historyBuilder();
+  }
+
+  Widget getTo(TypeEnum type, int id) {
+    switch(type) {
+      case TypeEnum.movie:
+        return MoviePage(id: id);
+      case TypeEnum.show:
+        return ShowPage(id: id);
+      case TypeEnum.person:
+        return PersonPage(id: id);
+    }
   }
 
   Widget resultBuilder(double horizontalPadding) {
@@ -313,8 +326,7 @@ class _SearchPageState extends State<SearchPage> {
         results: results,
         total: total,
         goTo: (model) {
-          final Widget to =
-              TypeEnum.isMovie(model.type) ? MoviePage(id: model.id) : ShowPage(id: model.id);
+          Widget to = getTo(model.type, model.id);
           goTo(context, to);
         },
         horizontalPadding: horizontalPadding,

@@ -3,7 +3,7 @@ import 'package:movies/enums/type_enum.dart';
 
 import '../../enums/property_enum.dart';
 
-class DisplayModel {
+class DisplayModel implements Comparable<DisplayModel> {
   final int id;
   final String title;
   final String release;
@@ -38,5 +38,10 @@ class DisplayModel {
   @override
   String toString() {
     return '$id $title $release';
+  }
+
+  @override
+  int compareTo(DisplayModel other) {
+    return release.compareTo(other.release);
   }
 }

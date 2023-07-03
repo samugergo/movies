@@ -10,6 +10,7 @@ enum ParamEnum {
   INSTAGRAM_URL(value: 'INSTAGRAM_URL'),
   TWITTER_URL(value: 'TWITTER_URL'),
   IMDB_URL(value: 'IMDB_URL'),
+  APPEND(value: 'append_to_response'),
   ;
 
   const ParamEnum({

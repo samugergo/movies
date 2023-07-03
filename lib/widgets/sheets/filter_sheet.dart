@@ -23,7 +23,7 @@ class FilterSheet extends StatelessWidget {
     }
 
     titlesType() {
-      return TypeEnum.values.map((type) => getTypeLocale(type, locale)).toList();
+      return TypeEnum.catalogTypes().map((type) => getTypeLocale(type, locale)).toList();
     }
 
     titlesOrder() {

@@ -34,6 +34,7 @@ enum PropertyEnum {
   seasons(key: 'seasons'),
   knownFor(key: 'known_for_department'),
   gender(key: 'gender', defaultVal: 2),
+  externalIds(key: 'external_ids'),
   ;
 
   const PropertyEnum({
