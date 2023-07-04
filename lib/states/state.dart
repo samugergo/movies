@@ -17,6 +17,8 @@ class AppState extends ChangeNotifier {
   OrderEnum order = OrderEnum.popular;
   GridEnum grid = GridEnum.Nx3;
 
+  bool _loading = false;
+
   AppState() {
     init();
     loadPreferences();
@@ -71,7 +73,7 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  // --- load fuctions ---
+  // --- load functions ---
 
   /// Load the preferences from disk
   /// 
@@ -84,8 +86,12 @@ class AppState extends ChangeNotifier {
   }
 
   loadCatalog() async {
-    final list = await fetch(catalogPage, type, order);
-    updateCatalog(list);
+    if (!_loading) {
+      _loading = true;
+      final list = await fetch(catalogPage, type, order);
+      updateCatalog(list);
+      _loading = false;
+    }
   }
 
   @protected
