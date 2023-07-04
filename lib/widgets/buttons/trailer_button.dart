@@ -21,7 +21,7 @@ class TrailerButton extends StatelessWidget {
 
     return _id != ''
         ? ElevatedButton.icon(
-            onPressed: () => _onClick(),
+            onPressed: () => _onClick(_id),
             style: ElevatedButton.styleFrom(
                 elevation: 0,
                 padding: EdgeInsets.all(12),

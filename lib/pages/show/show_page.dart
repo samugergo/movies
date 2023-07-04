@@ -87,7 +87,7 @@ class _ShowPageState extends DetailState<ShowPage> {
                               Padding(
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                                  child: TrailerButton(id: trailer!, onclick: launchTrailer)),
+                                  child: TrailerButton(id: show!.trailer, onclick: launchTrailer)),
                               Padding(
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: horizontalPadding),
@@ -103,17 +103,18 @@ class _ShowPageState extends DetailState<ShowPage> {
                               Padding(
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                                  child: CastSection(cast: cast!)),
+                                  child: CastSection(cast: show!.cast)),
                               Padding(
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: horizontalPadding),
                                   child: ImagesSection(
-                                    images: images!,
+                                    images: show!.images,
                                   )),
                               Padding(
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                                  child: SocialMediaSection(externalIds: externalIds!, padding: 25))
+                                  child: SocialMediaSection(
+                                      externalIds: show!.externalIds, padding: 25))
                             ])))))));
   }
 }

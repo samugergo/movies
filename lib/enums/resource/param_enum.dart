@@ -11,6 +11,7 @@ enum ParamEnum {
   TWITTER_URL(value: 'TWITTER_URL'),
   IMDB_URL(value: 'IMDB_URL'),
   APPEND(value: 'append_to_response'),
+  IMAGE_LANG(value: 'include_image_language'),
   ;
 
   const ParamEnum({

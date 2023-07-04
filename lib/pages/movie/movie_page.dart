@@ -87,7 +87,7 @@ class _MoviePageState extends DetailState<MoviePage> {
                               Padding(
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                                  child: TrailerButton(id: trailer!, onclick: launchTrailer)),
+                                  child: TrailerButton(id: movie!.trailer, onclick: launchTrailer)),
                               Padding(
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: horizontalPadding),
@@ -103,15 +103,15 @@ class _MoviePageState extends DetailState<MoviePage> {
                               Padding(
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                                  child: CastSection(cast: cast!)),
+                                  child: CastSection(cast: movie!.cast)),
                               Padding(
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                                  child: ImagesSection(images: images!)),
+                                  child: ImagesSection(images: movie!.images)),
                               Padding(
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                                  child: SocialMediaSection(externalIds: externalIds!, padding: 25))
+                                  child: SocialMediaSection(externalIds: movie!.externalIds, padding: 25))
                             ])))))));
   }
 }

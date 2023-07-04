@@ -25,7 +25,10 @@ fetch(int page, TypeEnum type, OrderEnum order) async {
 }
 
 fetchById(int id, TypeEnum type) async {
-  var result = await resource.doApiCall('${type.value}/$id', []);
+  var result = await resource.doApiCall('${type.value}/$id', [
+    PathParameter(key: ParamEnum.APPEND, value: 'images,external_ids,videos,credits'),
+    PathParameter(key: ParamEnum.IMAGE_LANG, value: 'en,hu')
+  ]);
   return TypeEnum.isMovie(type)
       ? MovieDetailedModel.fromJson(result)
       : ShowDetailedModel.fromJson(result);
@@ -37,14 +40,6 @@ fetchProviders(int id, TypeEnum type) async {
     return Providers.fromJson(result["results"]["HU"]);
   }
   return Providers();
-}
-
-fetchCast(int id, TypeEnum type) async {
-  var result = await resource.doApiCall('${type.value}/$id/credits', []);
-  if (result["cast"] != null) {
-    return sublist(result['cast'].map((c) => CastModel.fromJson(c)).toList(), 10);
-  }
-  return [];
 }
 
 fetchRecommendations(int id, TypeEnum type) async {
@@ -73,44 +68,14 @@ fetchPerform(int id, TypeEnum type) async {
   return result['cast'].map((r) => DisplayModel.fromJson(r, type)).toList();
 }
 
-fetchExternalIds(int id, TypeEnum type) async {
-  var result = await resource.doApiCall('${type.value}/$id/external_ids', []);
-  return ExternalIdModel.fromJson(result);
-}
-
-fetchImages(int id, TypeEnum type) async {
-  var result = await resource.doApiCallOnlyApiKey('${type.value}/$id/images', []);
-  if (result['backdrops'] != null && result['backdrops'].isNotEmpty) {
-    return sublist(result['backdrops'], 5).map((e) => e['file_path']).toList();
-  }
-  return [];
-}
-
-fetchTrailer(int id, TypeEnum type) async {
-  var result = await resource.doApiCall('${type.value}/$id/videos', []);
-  if (result['results'].isNotEmpty) {
-    var trailer = result['results'].firstWhere(
-        (t) => t['type'] == 'Trailer' && t['official'] && t['site'] == 'YouTube',
-        orElse: () => null);
-    if (trailer == null) {
-      trailer = result['results']
-          .firstWhere((t) => t['type'] == 'Trailer' && t['site'] == 'YouTube', orElse: () => null);
-      return trailer != null ? trailer['key'] : '';
-    }
-    return trailer['key'];
-  }
-  return '';
-}
-
 fetchPerson(int id) async {
-  var result = await resource.doApiCall('/person/$id', [
-    PathParameter(key: ParamEnum.APPEND, value: 'external_ids')
-  ]);
+  var result = await resource
+      .doApiCall('/person/$id', [PathParameter(key: ParamEnum.APPEND, value: 'external_ids')]);
   return PersonDetailedModel.fromJson(result);
 }
 
 search(int page, TypeEnum type, String query) async {
-  if(type == TypeEnum.person) {
+  if (type == TypeEnum.person) {
     return searchPerson(page, query);
   }
 

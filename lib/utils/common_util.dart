@@ -134,3 +134,18 @@ GridViewModel getGridViewModel(BuildContext context, int itemCount) {
       itemWidth: width / itemCount - itemCount * crossSpacing,
       itemHeight: itemHeight);
 }
+
+String getTrailer(json) {
+  if (json['results'].isNotEmpty) {
+    var trailer = json['results'].firstWhere(
+            (t) => t['type'] == 'Trailer' && t['official'] && t['site'] == 'YouTube',
+        orElse: () => null);
+    if (trailer == null) {
+      trailer = json['results']
+          .firstWhere((t) => t['type'] == 'Trailer' && t['site'] == 'YouTube', orElse: () => null);
+      return trailer != null ? trailer['key'] : '';
+    }
+    return trailer['key'];
+  }
+  return '';
+}
