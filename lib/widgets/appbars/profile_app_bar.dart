@@ -88,7 +88,7 @@ class ProfileAppBar extends SliverPersistentHeaderDelegate {
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       child: Container(
           decoration: BoxDecoration(color: Colors.black12, borderRadius: BorderRadius.circular(10)),
-          height: 30,
+          height: 35,
           child: TabBar(
               controller: controller,
               indicatorSize: TabBarIndicatorSize.tab,

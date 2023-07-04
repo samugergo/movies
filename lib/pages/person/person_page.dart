@@ -131,7 +131,7 @@ class _PersonPageState extends State<PersonPage> with SingleTickerProviderStateM
                               Expanded(
                                   child: TabBarView(controller: tabController, children: [
                                 tabBuilder(context, allMovies!, TypeEnum.movie, locale),
-                                tabBuilder(context, allShows!, TypeEnum.show, locale),
+                                tabBuilder(context, allShows!, TypeEnum.show, locale)
                               ]))
                             ])),
                         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
