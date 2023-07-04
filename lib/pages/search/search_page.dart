@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies/enums/search_prefix_enum.dart';
 import 'package:movies/enums/type_enum.dart';
 import 'package:movies/models/base/list_response.dart';
 import 'package:movies/pages/movie/movie_page.dart';
@@ -105,14 +106,22 @@ class _SearchPageState extends State<SearchPage> {
   /// [bool] It determines that we want to save the history or not.
   searchWithType(String value, TypeEnum type, bool needSave) async {
     setLoading(true);
-    searchValue = value;
     page = 0;
     total = 0;
-    if (needSave) {
-      saveHistory(value);
-    }
-    ListResponse response = await search(page, type, value);
+
+    final split = value.split(':');
+    final sType = split.length > 1 ? (SearchPrefixEnum.fromValue(split[0]) ?? type) : type;
+    final sValue = split.length > 1 ? split[1] : value;
+
+    ListResponse response = await search(page, sType, sValue);
     setResults(response);
+
+    if (needSave) {
+      saveHistory(sValue);
+    }
+
+    searchValue = sValue;
+    setType(sType);
     setLoading(false);
   }
 
@@ -143,14 +152,18 @@ class _SearchPageState extends State<SearchPage> {
   /// [TypeEnum] the new typeValue (movie or show) the user selected.
   setTypeValue(type) {
     if (typeValue != type) {
-      setState(() {
-        typeValue = type;
-      });
+      setType(type);
       if (searchValue != '') {
         searchWithType(searchValue, typeValue, false);
       }
     }
     Navigator.pop(context);
+  }
+
+  setType(type) {
+    setState(() {
+      typeValue = type;
+    });
   }
 
   /// Set the values of the [results], [total] and [page] variables.
@@ -252,7 +265,7 @@ class _SearchPageState extends State<SearchPage> {
 
     go(model) {
       final Widget to =
-      TypeEnum.isMovie(model.type) ? MoviePage(id: model.id) : ShowPage(id: model.id);
+          TypeEnum.isMovie(model.type) ? MoviePage(id: model.id) : ShowPage(id: model.id);
       goTo(context, to);
     }
 
@@ -310,7 +323,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget getTo(TypeEnum type, int id) {
-    switch(type) {
+    switch (type) {
       case TypeEnum.movie:
         return MoviePage(id: id);
       case TypeEnum.show:

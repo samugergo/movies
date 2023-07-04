@@ -40,7 +40,7 @@ class DetailCard extends StatelessWidget {
 
   Widget genreBuilder(String genre) {
     return Card(
-        margin: EdgeInsets.only(right: 6),
+        margin: EdgeInsets.only(right: 6, bottom: 6),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
         elevation: 0,
         color: Colors.white24,
