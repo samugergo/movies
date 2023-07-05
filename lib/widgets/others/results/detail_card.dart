@@ -22,14 +22,13 @@ class DetailCard extends StatelessWidget {
         children: [
           Wrap(children: list.map((genre) => genreBuilder(genre)).toList()),
           Padding(
-            padding: const EdgeInsets.only(left: 2),
-            child: Row(children: [
-              Text(timeFormat(model.length, locale),
-                  style: TextStyle(color: Colors.white70, fontSize: 12)),
-              SizedBox(width: 20),
-              Text(year(model.release), style: TextStyle(color: Colors.white70, fontSize: 12))
-            ]),
-          ),
+              padding: const EdgeInsets.only(left: 2),
+              child: Row(children: [
+                Text(timeFormat(model.length, locale),
+                    style: TextStyle(color: Colors.white70, fontSize: 12)),
+                SizedBox(width: 20),
+                Text(year(model.release), style: TextStyle(color: Colors.white70, fontSize: 12))
+              ])),
           Row(children: [
             Icon(Icons.star_rate, color: Colors.yellow, size: 15),
             SizedBox(width: 5),

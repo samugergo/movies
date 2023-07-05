@@ -7,8 +7,10 @@ import 'package:movies/states/detail_state.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:movies/widgets/buttons/trailer_button.dart';
 import 'package:movies/widgets/containers/animated_contaner.dart';
+import 'package:movies/widgets/containers/detail_container.dart';
 import 'package:movies/widgets/loaders/color_loader.dart';
 import 'package:movies/widgets/others/results/detail_card.dart';
+import 'package:movies/widgets/sections/director_section.dart';
 import 'package:movies/widgets/sections/season_section.dart';
 import 'package:movies/widgets/appbars/image_app_bar.dart';
 import 'package:movies/widgets/sections/cast_section.dart';
@@ -30,7 +32,7 @@ class _ShowPageState extends DetailState<ShowPage> {
   // init
   @override
   void init() async {
-    var s = await fetchById(widget.id, TypeEnum.show);
+    var s = await fetchById(widget.id, widget.type);
     setState(() {
       show = s;
     });
@@ -58,63 +60,20 @@ class _ShowPageState extends DetailState<ShowPage> {
         statusbar: isLoading() ? theme.primary : mainColor,
         child: isLoading()
             ? ColorLoader(color: theme.primary!)
-            : Container(
-                color: mainColor,
-                child: SafeArea(
-                    child: NestedScrollView(
-                        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-                          return [
-                            SliverPersistentHeader(
-                                pinned: true,
-                                delegate: ImageAppBar(
-                                    title: show!.title,
-                                    onlyTitle: false,
-                                    cover: coverImage,
-                                    color: mainColor,
-                                    horizontalPadding: horizontalPadding,
-                                    child: DetailCard(model: show!)))
-                          ];
-                        },
-                        body: Container(
-                            decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    stops: [0.1, 1],
-                                    colors: [mainColor!, Colors.black45])),
-                            child: Scaffold(
-                                body: ListView(children: [
-                              Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                                  child: TrailerButton(id: show!.trailer, onclick: launchTrailer)),
-                              Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                                  child: ProviderSection(providers: providers)),
-                              Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                                  child: StorySection(description: show!.description)),
-                              Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                                  child: SeasonSection(list: show!.seasons)),
-                              Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                                  child: CastSection(cast: show!.cast)),
-                              Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                                  child: ImagesSection(
-                                    images: show!.images,
-                                  )),
-                              Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                                  child: SocialMediaSection(
-                                      externalIds: show!.externalIds, padding: 25))
-                            ])))))));
+            : DetailContainer(
+                mainColor: mainColor!,
+                coverImage: coverImage!,
+                horizontalPadding: horizontalPadding,
+                model: show!,
+                children: [
+                    TrailerButton(id: show!.trailer, onclick: launchTrailer),
+                    ProviderSection(providers: providers),
+                    StorySection(description: show!.description),
+                    SeasonSection(list: show!.seasons),
+                    DirectorSection(model: show!.director),
+                    CastSection(cast: show!.cast),
+                    ImagesSection(images: show!.images),
+                    SocialMediaSection(externalIds: show!.externalIds, padding: 25)
+                  ]));
   }
 }
