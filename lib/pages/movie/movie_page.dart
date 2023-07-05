@@ -17,6 +17,8 @@ import 'package:movies/widgets/sections/cast_section.dart';
 import 'package:movies/widgets/sections/social_medial_section.dart';
 import 'package:movies/widgets/sections/story_section.dart';
 
+import '../../widgets/sections/director_section.dart';
+
 class MoviePage extends DetailPage {
   MoviePage({required super.id}) : super(type: TypeEnum.movie);
 
@@ -30,10 +32,13 @@ class _MoviePageState extends DetailState<MoviePage> {
   // init
   @override
   void init() async {
-    var m = await fetchById(widget.id, widget.type);
+    MovieDetailedModel m = await fetchById(widget.id, widget.type);
     setState(() {
       movie = m;
     });
+
+    print(m.cast
+        .firstWhere((element) => element.role.toLowerCase() == 'director', orElse: () => null));
 
     super.fetchCommonData();
 
@@ -103,6 +108,10 @@ class _MoviePageState extends DetailState<MoviePage> {
                               Padding(
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: horizontalPadding),
+                                  child: DirectorSection(model: movie!.director)),
+                              Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: horizontalPadding),
                                   child: CastSection(cast: movie!.cast)),
                               Padding(
                                   padding:
@@ -111,7 +120,8 @@ class _MoviePageState extends DetailState<MoviePage> {
                               Padding(
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                                  child: SocialMediaSection(externalIds: movie!.externalIds, padding: 25))
+                                  child: SocialMediaSection(
+                                      externalIds: movie!.externalIds, padding: 25))
                             ])))))));
   }
 }

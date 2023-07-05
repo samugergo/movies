@@ -31,5 +31,6 @@
   "filterAndSort": "Szűrés és rendezés",
   "person": "Ember",
   "noData": "Nem tartoznak {type} ehhez a személyhez!",
-  "searchTypeTitle": "Keresés típusa"
+  "searchTypeTitle": "Keresés típusa",
+  "director": "Rendező"
 }

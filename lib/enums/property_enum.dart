@@ -35,6 +35,18 @@ enum PropertyEnum {
   knownFor(key: 'known_for_department'),
   gender(key: 'gender', defaultVal: 2),
   externalIds(key: 'external_ids'),
+  results(key: 'results'),
+  type(key: 'type'),
+  site(key: 'site'),
+  official(key: 'official'),
+  trailerKey(key: 'key'),
+  images(key: 'images'),
+  credits(key: 'credits'),
+  cast(key: 'cast'),
+  backdrops(key: 'backdrops'),
+  filePath(key: 'file_path'),
+  videos(key: 'videos'),
+  crew(key: 'crew'),
   ;
 
   const PropertyEnum({

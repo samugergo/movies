@@ -31,5 +31,6 @@
   "filterAndSort": "Filter and sort",
   "person": "Person",
   "noData": "No {type} found for this person!",
-  "searchTypeTitle": "Search type"
+  "searchTypeTitle": "Search type",
+  "director": "Director"
 }

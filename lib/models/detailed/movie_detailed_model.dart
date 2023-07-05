@@ -24,6 +24,7 @@ class MovieDetailedModel extends DetailedModel {
       required List cast,
       required String trailer,
       required List images,
+      required CastModel? director,
       required this.collection})
       : super(
             id: id,
@@ -37,6 +38,7 @@ class MovieDetailedModel extends DetailedModel {
             length: length,
             externalIds: externalIds,
             cast: cast,
+            director: director,
             trailer: trailer,
             images: images);
 
@@ -50,17 +52,12 @@ class MovieDetailedModel extends DetailedModel {
         cover: getField(json, PropertyEnum.cover),
         description: getField(json, PropertyEnum.description),
         length: getField(json, PropertyEnum.length),
-        genres: json[PropertyEnum.genres.key].map((g) => g[PropertyEnum.name.key]).toList(),
-        collection: json[PropertyEnum.belongsToCollection.key] != null
-            ? CollectionModel.fromJson(json[PropertyEnum.belongsToCollection.key])
-            : null,
         externalIds: ExternalIdModel.fromJson(json[PropertyEnum.externalIds.key]),
-        cast: json['credits'] != null && json['credits']['cast'] != null
-            ? sublist(json['credits']['cast'].map((c) => CastModel.fromJson(c)).toList(), 10)
-            : [],
-        trailer: getTrailer(json['videos']),
-        images: json['images']['backdrops'] != null && json['images']['backdrops'].isNotEmpty
-            ? sublist(json['images']['backdrops'], 5).map((e) => e['file_path']).toList()
-            : []);
+        trailer: getTrailer(json[PropertyEnum.videos.key]),
+        genres: getGenres(json),
+        cast: getCast(json),
+        director: getDirector(json),
+        images: getImages(json),
+        collection: getCollection(json));
   }
 }

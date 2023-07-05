@@ -24,6 +24,7 @@ class ShowDetailedModel extends DetailedModel {
       required List cast,
       required String trailer,
       required List images,
+      required CastModel? director,
       required this.seasons})
       : super(
             id: id,
@@ -37,11 +38,13 @@ class ShowDetailedModel extends DetailedModel {
             length: length,
             externalIds: externalIds,
             cast: cast,
+            director: director,
             trailer: trailer,
             images: images);
 
   factory ShowDetailedModel.fromJson(Map<String, dynamic> json) {
-    return ShowDetailedModel(id: getField(json, PropertyEnum.id),
+    return ShowDetailedModel(
+        id: getField(json, PropertyEnum.id),
         title: getFieldList(json, PropertyEnum.titleProperties),
         release: getField(json, PropertyEnum.releaseDate),
         raw: getFieldDouble(json, PropertyEnum.percent),
@@ -49,15 +52,12 @@ class ShowDetailedModel extends DetailedModel {
         cover: getField(json, PropertyEnum.cover),
         description: getField(json, PropertyEnum.description),
         length: getField(json, PropertyEnum.length),
-        genres: json[PropertyEnum.genres.key].map((g) => g[PropertyEnum.name.key]).toList(),
-        seasons: json[PropertyEnum.seasons.key].map((s) => SeasonModel.fromJson(s)).toList(),
         externalIds: ExternalIdModel.fromJson(json[PropertyEnum.externalIds.key]),
-        cast: json['credits'] != null && json['credits']['cast'] != null
-            ? sublist(json['credits']['cast'].map((c) => CastModel.fromJson(c)).toList(), 10)
-            : [],
-        trailer: getTrailer(json['videos']),
-        images: json['images']['backdrops'] != null && json['images']['backdrops'].isNotEmpty
-            ? sublist(json['images']['backdrops'], 5).map((e) => e['file_path']).toList()
-            : []);
+        cast: getCast(json),
+        director: getDirector(json),
+        genres: getGenres(json),
+        trailer: getTrailer(json[PropertyEnum.videos.key]),
+        images: getImages(json),
+        seasons: getSeasons(json));
   }
 }

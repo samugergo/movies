@@ -12,21 +12,11 @@ class StorySection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = getAppLocale(context);
-    return description == '' 
-    ? SizedBox()
-    : Section(
-      title: locale.story, 
-      children: [
-        Text(
-          description,
-          textAlign: TextAlign.justify,
-          style: TextStyle(
-            color: Colors.white70,
-            fontSize: 12,
-          ),
-        )
-      ]
-    );
+    return description == ''
+        ? SizedBox()
+        : Section(title: locale.story, children: [
+            Text(description,
+                textAlign: TextAlign.justify, style: TextStyle(color: Colors.white70, fontSize: 12))
+          ]);
   }
-
 }
