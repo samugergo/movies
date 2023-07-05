@@ -28,12 +28,10 @@ class CollectionSection extends StatelessWidget {
                             borderRadius: BorderRadius.circular(16)),
                         child: ClipRRect(
                             borderRadius: BorderRadius.circular(16),
-                            child: ColorFiltered(
-                                colorFilter: ColorFilter.mode(Colors.white60, BlendMode.modulate),
-                                child: model!.cover != ''
-                                    ? Image.network(originalImageLink(model!.cover),
-                                        fit: BoxFit.cover, height: 180)
-                                    : SizedBox(height: 180)))))
+                            child: model!.cover != ''
+                                ? Image.network(originalImageLink(model!.cover),
+                                    fit: BoxFit.cover, height: 180)
+                                : SizedBox(height: 180))))
               ]),
               Positioned.fill(
                   child: Align(
@@ -42,7 +40,7 @@ class CollectionSection extends StatelessWidget {
                           onPressed: () => goTo(context, CollectionPage(id: model!.id)),
                           style: ButtonStyle(
                               backgroundColor:
-                                  MaterialStateProperty.all<Color>(Colors.black.withAlpha(120)),
+                                  MaterialStateProperty.all<Color>(Colors.black.withAlpha(140)),
                               padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                                   EdgeInsets.symmetric(horizontal: 20)),
                               foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
