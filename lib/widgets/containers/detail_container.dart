@@ -13,7 +13,7 @@ class DetailContainer extends StatelessWidget {
       required this.children});
 
   final Color mainColor;
-  final Image coverImage;
+  final Image? coverImage;
   final double horizontalPadding;
   final DetailedModel model;
   final List<Widget> children;

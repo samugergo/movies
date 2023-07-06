@@ -62,7 +62,7 @@ class _ShowPageState extends DetailState<ShowPage> {
             ? ColorLoader(color: theme.primary!)
             : DetailContainer(
                 mainColor: mainColor!,
-                coverImage: coverImage!,
+                coverImage: coverImage,
                 horizontalPadding: horizontalPadding,
                 model: show!,
                 children: [

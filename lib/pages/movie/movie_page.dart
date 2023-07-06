@@ -61,7 +61,7 @@ class _MoviePageState extends DetailState<MoviePage> {
             ? ColorLoader(color: theme.primary!)
             : DetailContainer(
                 mainColor: mainColor!,
-                coverImage: coverImage!,
+                coverImage: coverImage,
                 horizontalPadding: horizontalPadding,
                 model: movie!,
                 children: [
