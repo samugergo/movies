@@ -5,11 +5,12 @@ import '../appbars/image_app_bar.dart';
 import '../others/results/detail_card.dart';
 
 class DetailContainer extends StatelessWidget {
-  DetailContainer({required this.mainColor,
-    required this.coverImage,
-    required this.horizontalPadding,
-    required this.model,
-    required this.children});
+  DetailContainer(
+      {required this.mainColor,
+      required this.coverImage,
+      required this.horizontalPadding,
+      required this.model,
+      required this.children});
 
   final Color mainColor;
   final Image coverImage;
@@ -19,8 +20,9 @@ class DetailContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> paddingChildren = children.map((e) =>
-        Padding(padding: EdgeInsets.symmetric(horizontal: horizontalPadding), child: e)).toList();
+    final List<Widget> paddingChildren = children
+        .map((e) => Padding(padding: EdgeInsets.symmetric(horizontal: horizontalPadding), child: e))
+        .toList();
     return Container(
         color: mainColor,
         child: SafeArea(
