@@ -30,7 +30,7 @@ class XImage extends StatelessWidget {
                     height: height,
                     fadeInDuration: Duration(milliseconds: 200),
                     fit: BoxFit.cover)
-                : Image.asset('assets/images/default.png', height: height, fit: BoxFit.fill)));
+                : Image.asset('assets/images/default.jpg', height: height, fit: BoxFit.fill)));
   }
 
   static Widget custom(String url) {
@@ -38,7 +38,7 @@ class XImage extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         child: url != ''
             ? CachedNetworkImage(imageUrl: url, fit: BoxFit.cover)
-            : Image.asset('assets/images/default.png', fit: BoxFit.fill));
+            : Image.asset('assets/images/default.jpg', fit: BoxFit.fill));
   }
 
   @override

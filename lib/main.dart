@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:movies/pages/catalog/catalog_page.dart';
 import 'package:movies/states/state.dart';
 import 'package:movies/theme/app_colors.dart';
