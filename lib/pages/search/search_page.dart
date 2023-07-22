@@ -399,7 +399,6 @@ class SearchField extends StatelessWidget {
         decoration: InputDecoration(
             filled: true,
             fillColor: Colors.transparent,
-            prefixIcon: Icon(Icons.search, color: theme.unselected!),
             hintText: hint(),
             hintStyle: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.normal),
             enabledBorder: OutlineInputBorder(
@@ -408,7 +407,7 @@ class SearchField extends StatelessWidget {
             focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.transparent),
                 borderRadius: BorderRadius.circular(10)),
-            contentPadding: EdgeInsets.only(left: 15),
+            contentPadding: EdgeInsets.only(left: 0),
             constraints: BoxConstraints(maxHeight: 50)));
   }
 }
