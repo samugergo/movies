@@ -1,8 +1,14 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
 import 'package:movies/pages/catalog/catalog_page.dart';
+<<<<<<< HEAD
 import 'package:movies/states/state.dart';
+=======
+import 'package:movies/router/router.dart';
+import 'package:movies/state.dart';
+>>>>>>> new-route
 import 'package:movies/theme/app_colors.dart';
 import 'package:movies/utils/common_util.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +35,7 @@ class MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
+<<<<<<< HEAD
         create: (context) => AppState(),
         child: MaterialApp(
           theme: ThemeData(
@@ -46,13 +53,49 @@ class MainAppState extends State<MainApp> {
           supportedLocales: [Locale('en'), Locale('hu')],
           home: Scaffold(body: _MainContainer()),
         ));
+=======
+      create: (context) => AppState(),
+      child: MaterialApp.router(
+        routerConfig: router,
+        theme: ThemeData(
+          useMaterial3: true,
+          scaffoldBackgroundColor: Colors.transparent,
+          bottomSheetTheme: BottomSheetThemeData(backgroundColor: Color(0xff343643)),
+          extensions: [
+            AppColors.theme
+          ],
+        ),
+        localizationsDelegates: [
+          AppLocalizations.delegate, // Add this line
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [
+          Locale('en'), 
+          Locale('hu'), 
+        ],
+      ),
+    );
+>>>>>>> new-route
   }
 }
 
-class _MainContainer extends StatelessWidget {
+class MainContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState = getAppState(context);
+<<<<<<< HEAD
     return SafeArea(child: CatalogPage(load: appState.loadCatalog));
+=======
+
+    return Scaffold(
+      body: SafeArea(
+        child: CatalogPage(
+          load: appState.loadCatalog
+        ),
+      ),
+    );
+>>>>>>> new-route
   }
 }
