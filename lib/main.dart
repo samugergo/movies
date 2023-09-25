@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:go_router/go_router.dart';
 import 'package:movies/pages/catalog/catalog_page.dart';
 import 'package:movies/states/state.dart';
 import 'package:movies/theme/app_colors.dart';
@@ -28,24 +29,23 @@ class MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => AppState(),
-      child: MaterialApp(
-        theme: ThemeData(
-            useMaterial3: true,
-            scaffoldBackgroundColor: Colors.transparent,
-            bottomSheetTheme:
-                BottomSheetThemeData(backgroundColor: Color(0xff292A37), elevation: 0),
-            extensions: [AppColors.theme]),
-        localizationsDelegates: [
-          AppLocalizations.delegate, // Add this line
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate
-        ],
-        supportedLocales: [Locale('en'), Locale('hu')],
-        home: Scaffold(body: _MainContainer()),
-      ),
-    );
+        create: (context) => AppState(),
+        child: MaterialApp(
+          theme: ThemeData(
+              useMaterial3: true,
+              scaffoldBackgroundColor: Colors.transparent,
+              bottomSheetTheme:
+                  BottomSheetThemeData(backgroundColor: Color(0xff292A37), elevation: 0),
+              extensions: [AppColors.theme]),
+          localizationsDelegates: [
+            AppLocalizations.delegate, // Add this line
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate
+          ],
+          supportedLocales: [Locale('en'), Locale('hu')],
+          home: Scaffold(body: _MainContainer()),
+        ));
   }
 }
 
