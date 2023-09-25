@@ -30,7 +30,7 @@ abstract class DetailState<T extends DetailPage> extends ImageState<T> {
   }
 
   void _fetchProviders() async {
-    var p = await fetchProviders(widget.id, widget.type);
+    var p = await getProviders(widget.id, widget.type);
     setState(() {
       providers = p;
     });

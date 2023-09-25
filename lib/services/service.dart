@@ -18,13 +18,13 @@ import '../utils/common_util.dart';
 
 final resource = MovieDBResource();
 
-fetch(int page, TypeEnum type, OrderEnum order) async {
+get(int page, TypeEnum type, OrderEnum order) async {
   var result = await resource.doApiCall(
       '${type.value}/${order.value}', [PathParameter(key: ParamEnum.PAGE, value: page + 1)]);
   return result['results'].map((r) => DisplayModel.fromJson(r, type)).toList();
 }
 
-fetchById(int id, TypeEnum type) async {
+getById(int id, TypeEnum type) async {
   var result = await resource.doApiCall('${type.value}/$id', [
     PathParameter(key: ParamEnum.APPEND, value: 'images,external_ids,videos,credits'),
     PathParameter(key: ParamEnum.IMAGE_LANG, value: 'en,hu')
@@ -34,7 +34,7 @@ fetchById(int id, TypeEnum type) async {
       : ShowDetailedModel.fromJson(result);
 }
 
-fetchProviders(int id, TypeEnum type) async {
+getProviders(int id, TypeEnum type) async {
   var result = await resource.doApiCall('${type.value}/$id/watch/providers', []);
   if (result["results"]["HU"] != null) {
     return Providers.fromJson(result["results"]["HU"]);
@@ -42,7 +42,7 @@ fetchProviders(int id, TypeEnum type) async {
   return Providers();
 }
 
-fetchRecommendations(int id, TypeEnum type) async {
+getRecommendations(int id, TypeEnum type) async {
   var result = await resource.doApiCall('${type.value}/$id/recommendations', []);
   if (result["results"] != null) {
     return result['results'].map((c) => DisplayModel.fromJson(c, type)).toList();
@@ -50,7 +50,7 @@ fetchRecommendations(int id, TypeEnum type) async {
   return [];
 }
 
-fetchSimilar(int id, TypeEnum type) async {
+getSimilar(int id, TypeEnum type) async {
   var result = await resource.doApiCall('${type.value}/$id/similar', []);
   if (result["results"] != null) {
     return result['results'].map((c) => DisplayModel.fromJson(c, type)).toList();
@@ -58,17 +58,17 @@ fetchSimilar(int id, TypeEnum type) async {
   return [];
 }
 
-fetchCollection(int id) async {
+getCollection(int id) async {
   var result = await resource.doApiCall('collection/$id', []);
   return CollectionDetailedModel.fromJson(result);
 }
 
-fetchPerform(int id, TypeEnum type) async {
+getPerform(int id, TypeEnum type) async {
   var result = await resource.doApiCall('person/$id/${type.value}_credits', []);
   return result['cast'].map((r) => DisplayModel.fromJson(r, type)).toList();
 }
 
-fetchPerson(int id) async {
+getPerson(int id) async {
   var result = await resource
       .doApiCall('/person/$id', [PathParameter(key: ParamEnum.APPEND, value: 'external_ids')]);
   return PersonDetailedModel.fromJson(result);

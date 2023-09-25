@@ -31,7 +31,7 @@ class _MoviePageState extends DetailState<MoviePage> {
   // init
   @override
   void init() async {
-    MovieDetailedModel m = await fetchById(widget.id, widget.type);
+    MovieDetailedModel m = await getById(widget.id, widget.type);
     setState(() {
       movie = m;
     });

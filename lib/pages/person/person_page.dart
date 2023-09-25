@@ -54,7 +54,7 @@ class _PersonPageState extends State<PersonPage> with SingleTickerProviderStateM
     _controller.addListener(_controllerListener);
 
     tabController = TabController(length: TypeEnum.catalogTypes().length, vsync: this);
-    final p = await fetchPerson(widget.id);
+    final p = await getPerson(widget.id);
     setState(() {
       model = p;
     });
@@ -63,7 +63,7 @@ class _PersonPageState extends State<PersonPage> with SingleTickerProviderStateM
   }
 
   fetchMovies() async {
-    final movies = await fetchPerform(model!.id, TypeEnum.movie);
+    final movies = await getPerform(model!.id, TypeEnum.movie);
     movies.sort();
     setState(() {
       allMovies = List.from(movies.reversed);
@@ -71,7 +71,7 @@ class _PersonPageState extends State<PersonPage> with SingleTickerProviderStateM
   }
 
   fetchShows() async {
-    final shows = await fetchPerform(model!.id, TypeEnum.show);
+    final shows = await getPerform(model!.id, TypeEnum.show);
     shows.sort();
     setState(() {
       allShows = List.from(shows.reversed);

@@ -28,7 +28,7 @@ class _CollectionPageState extends ImageState<CollectionPage> {
 
   @override
   init() async {
-    var c = await fetchCollection(widget.id);
+    var c = await getCollection(widget.id);
     setState(() {
       collection = c;
     });

@@ -32,7 +32,7 @@ class _ShowPageState extends DetailState<ShowPage> {
   // init
   @override
   void init() async {
-    var s = await fetchById(widget.id, widget.type);
+    var s = await getById(widget.id, widget.type);
     setState(() {
       show = s;
     });

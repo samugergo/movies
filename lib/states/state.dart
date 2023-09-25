@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:movies/enums/grid_enum.dart';
 import 'package:movies/enums/order_enum.dart';
 import 'package:movies/enums/type_enum.dart';
-import 'package:movies/main.dart';
 import 'package:movies/services/service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -88,7 +87,7 @@ class AppState extends ChangeNotifier {
   loadCatalog() async {
     if (!_loading) {
       _loading = true;
-      final list = await fetch(catalogPage, type, order);
+      final list = await get(catalogPage, type, order);
       updateCatalog(list);
       _loading = false;
     }
